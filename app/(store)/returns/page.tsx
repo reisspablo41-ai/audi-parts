@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Returns Policy',
-  description: 'ToyotaParts Direct returns and refund policy. 30-day returns on unused, uninstalled parts. Core charge and exchange information.',
+  description: 'AudiParts Direct returns and refund policy. 30-day returns on unused, uninstalled parts. Core charge and exchange information.',
 }
 
 const SECTIONS = [
@@ -72,10 +72,12 @@ export default function ReturnsPage() {
   return (
     <div className="bg-white">
       {/* Header */}
-      <div className="bg-gray-900 text-white py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-black mb-3">Returns & Refund Policy</h1>
-          <p className="text-gray-300">
+      <div className="brushed-dark text-white py-14 relative overflow-hidden">
+        <div className="absolute inset-0 blueprint-grid opacity-30" aria-hidden />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="eyebrow text-audi-red mb-3">Policy</p>
+          <h1 className="text-3xl lg:text-4xl font-bold mb-3">Returns &amp; refund policy</h1>
+          <p className="text-audi-silver">
             Last updated: April 2026. We aim to make returns as straightforward as possible.
           </p>
         </div>
@@ -89,21 +91,21 @@ export default function ReturnsPage() {
             { icon: '📦', title: 'Original Packaging', sub: 'Must be unused & uninstalled' },
             { icon: '💳', title: 'Full Refund', sub: 'To original payment method' },
           ].map((item) => (
-            <div key={item.title} className="bg-gray-50 rounded-2xl p-5 text-center border border-gray-100">
+            <div key={item.title} className="bg-audi-mist rounded-lg p-5 text-center border border-audi-fog">
               <div className="text-3xl mb-2">{item.icon}</div>
-              <p className="font-bold text-gray-900 text-sm">{item.title}</p>
-              <p className="text-xs text-gray-500 mt-1">{item.sub}</p>
+              <p className="font-bold text-audi-anthracite text-sm">{item.title}</p>
+              <p className="text-xs text-audi-steel mt-1">{item.sub}</p>
             </div>
           ))}
         </div>
 
         {/* TOC */}
-        <nav className="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-10">
-          <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-3">Contents</p>
+        <nav className="bg-audi-mist border border-audi-fog rounded-lg p-5 mb-10">
+          <p className="text-xs font-semibold text-audi-slate uppercase tracking-wide mb-3">Contents</p>
           <ul className="space-y-1">
             {SECTIONS.map((s) => (
               <li key={s.id}>
-                <a href={`#${s.id}`} className="text-sm text-blue-700 hover:text-blue-900 hover:underline">
+                <a href={`#${s.id}`} className="text-sm text-audi-slate hover:text-audi-anthracite hover:underline">
                   {s.icon} {s.title}
                 </a>
               </li>
@@ -115,13 +117,13 @@ export default function ReturnsPage() {
         <div className="space-y-10">
           {SECTIONS.map((section) => (
             <section key={section.id} id={section.id}>
-              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-audi-anthracite mb-4 flex items-center gap-2">
                 <span>{section.icon}</span> {section.title}
               </h2>
               <ul className="space-y-2">
                 {section.content.map((line, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-gray-600 leading-relaxed">
-                    <span className="text-gray-300 mt-0.5 flex-shrink-0">—</span>
+                  <li key={i} className="flex items-start gap-3 text-sm text-audi-steel leading-relaxed">
+                    <span className="text-audi-silver mt-0.5 flex-shrink-0">—</span>
                     <span>{line}</span>
                   </li>
                 ))}
@@ -131,14 +133,14 @@ export default function ReturnsPage() {
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-12 bg-gray-50 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 bg-audi-mist rounded-lg p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <p className="font-bold text-gray-900">Need to start a return?</p>
-            <p className="text-sm text-gray-500 mt-1">Contact us and we will provide your RMA number within 4 hours.</p>
+            <p className="font-bold text-audi-anthracite">Need to start a return?</p>
+            <p className="text-sm text-audi-steel mt-1">Contact us and we will provide your RMA number within 4 hours.</p>
           </div>
           <Link
             href="/contact"
-            className="flex-shrink-0 inline-flex h-11 px-6 bg-toyota-red text-white font-bold rounded-xl items-center hover:bg-toyota-red-dark transition-colors text-sm"
+            className="flex-shrink-0 inline-flex h-11 px-6 bg-audi-red text-white font-bold rounded-xl items-center hover:bg-audi-red-dark transition-colors text-sm"
           >
             Request RMA
           </Link>

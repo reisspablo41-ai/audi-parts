@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { RingsMark } from '@/components/BrandMark'
 
 const BREADCRUMBS: Record<string, string> = {
   '/admin': 'Dashboard',
@@ -91,28 +92,26 @@ export default function AdminHeader() {
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 flex-shrink-0">
+    <header className="bg-white border-b border-audi-fog flex-shrink-0">
       {/* Main header row */}
       <div className="h-14 flex items-center justify-between px-4 lg:px-6">
         {/* Logo (mobile only) + title */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 lg:hidden">
-            <div className="w-7 h-7 bg-toyota-red rounded flex items-center justify-center">
-              <span className="text-white font-black text-xs">T</span>
-            </div>
+            <RingsMark className="h-3.5 w-auto text-audi-anthracite" />
           </div>
-          <h1 className="text-sm font-bold text-gray-900">{title}</h1>
+          <h1 className="text-sm font-bold text-audi-anthracite">{title}</h1>
         </div>
 
         <div className="flex items-center gap-2">
           {/* Avatar */}
-          <div className="w-8 h-8 rounded-full bg-toyota-red flex items-center justify-center text-white font-bold text-xs">
+          <div className="w-8 h-8 rounded-full bg-audi-red flex items-center justify-center text-white font-bold text-xs">
             A
           </div>
           {/* Logout */}
           <button
             onClick={handleLogout}
-            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"
+            className="w-8 h-8 flex items-center justify-center text-audi-titanium hover:text-red-500 transition-colors"
             title="Log out"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,7 +122,7 @@ export default function AdminHeader() {
       </div>
 
       {/* Mobile sub-nav — hidden on desktop (sidebar handles nav there) */}
-      <nav className="lg:hidden flex overflow-x-auto border-t border-gray-100 bg-gray-950 no-scrollbar">
+      <nav className="lg:hidden flex overflow-x-auto border-t border-audi-fog bg-audi-anthracite no-scrollbar">
         {NAV.map((item) => {
           const active = isActive(item.href)
           return (
@@ -132,8 +131,8 @@ export default function AdminHeader() {
               href={item.href}
               className={`flex flex-col items-center gap-1 px-4 py-2.5 text-[10px] font-semibold whitespace-nowrap flex-shrink-0 border-b-2 transition-colors ${
                 active
-                  ? 'border-toyota-red text-toyota-red'
-                  : 'border-transparent text-gray-400 hover:text-white'
+                  ? 'border-audi-red text-audi-red'
+                  : 'border-transparent text-audi-titanium hover:text-white'
               }`}
             >
               {item.icon}

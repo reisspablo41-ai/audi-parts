@@ -21,16 +21,16 @@ interface FormState {
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-        {label}{required && <span className="text-toyota-red ml-1">*</span>}
+      <label className="block text-xs font-semibold text-audi-steel mb-1.5 uppercase tracking-wide">
+        {label}{required && <span className="text-audi-red ml-1">*</span>}
       </label>
       {children}
     </div>
   )
 }
 
-const inputCls = 'w-full h-10 px-3 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-toyota-red focus:ring-1 focus:ring-toyota-red/20 transition-colors'
-const textareaCls = 'w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-toyota-red focus:ring-1 focus:ring-toyota-red/20 transition-colors resize-none'
+const inputCls = 'w-full h-10 px-3 border border-audi-fog rounded-lg text-sm bg-white focus:outline-none focus:border-audi-red focus:ring-1 focus:ring-audi-red/20 transition-colors'
+const textareaCls = 'w-full px-3 py-2.5 border border-audi-fog rounded-lg text-sm bg-white focus:outline-none focus:border-audi-red focus:ring-1 focus:ring-audi-red/20 transition-colors resize-none'
 
 export default function CategoryForm({ initialData, mode }: CategoryFormProps) {
   const router = useRouter()
@@ -101,7 +101,7 @@ export default function CategoryForm({ initialData, mode }: CategoryFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-5">
+      <div className="bg-white rounded-lg border border-audi-fog p-6 space-y-5">
         <div className="grid sm:grid-cols-2 gap-5">
           <Field label="Category Name" required>
             <input
@@ -134,7 +134,7 @@ export default function CategoryForm({ initialData, mode }: CategoryFormProps) {
               onChange={(e) => set('id', e.target.value.toLowerCase().replace(/\s+/g, '-'))}
               placeholder="engine"
               disabled={mode === 'edit'}
-              className={`${inputCls} font-mono ${mode === 'edit' ? 'bg-gray-50 text-gray-400' : ''}`}
+              className={`${inputCls} font-mono ${mode === 'edit' ? 'bg-audi-mist text-audi-titanium' : ''}`}
             />
           </Field>
 
@@ -168,23 +168,23 @@ export default function CategoryForm({ initialData, mode }: CategoryFormProps) {
         </Field>
       </div>
 
-      <div className="flex items-center justify-between bg-white border border-gray-200 p-4 rounded-2xl">
+      <div className="flex items-center justify-between bg-white border border-audi-fog p-4 rounded-lg">
         <div className="flex-1">
           {error && <p className="text-sm text-red-600 flex items-center gap-1.5"><span className="w-1 h-1 bg-red-600 rounded-full" /> {error}</p>}
-          {saved && <p className="text-sm text-green-600 flex items-center gap-1.5"><span className="w-1 h-1 bg-green-600 rounded-full" /> Changes saved!</p>}
+          {saved && <p className="text-sm text-audi-success flex items-center gap-1.5"><span className="w-1 h-1 bg-audi-success rounded-full" /> Changes saved!</p>}
         </div>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => router.push('/admin/categories')}
-            className="h-10 px-5 border border-gray-200 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+            className="h-10 px-5 border border-audi-fog rounded-lg text-sm font-semibold text-audi-steel hover:bg-audi-mist transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving || saved}
-            className="h-10 px-6 bg-gray-900 text-white font-bold rounded-lg text-sm hover:bg-black transition-colors disabled:opacity-60 flex items-center gap-2"
+            className="h-10 px-6 bg-audi-anthracite text-white font-bold rounded-lg text-sm hover:bg-black transition-colors disabled:opacity-60 flex items-center gap-2"
           >
             {saving ? 'Saving…' : mode === 'create' ? 'Create Category' : 'Save Changes'}
           </button>

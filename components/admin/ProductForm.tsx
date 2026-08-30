@@ -56,17 +56,17 @@ interface FormState {
 function Field({ label, required, hint, children }: { label: string; required?: boolean; hint?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-        {label}{required && <span className="text-toyota-red ml-1">*</span>}
+      <label className="block text-xs font-semibold text-audi-steel mb-1.5 uppercase tracking-wide">
+        {label}{required && <span className="text-audi-red ml-1">*</span>}
       </label>
       {children}
-      {hint && <p className="text-xs text-gray-400 mt-1">{hint}</p>}
+      {hint && <p className="text-xs text-audi-titanium mt-1">{hint}</p>}
     </div>
   )
 }
 
-const inputCls = 'w-full h-10 px-3 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-toyota-red focus:ring-1 focus:ring-toyota-red/20 transition-colors'
-const textareaCls = 'w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-toyota-red focus:ring-1 focus:ring-toyota-red/20 transition-colors resize-none'
+const inputCls = 'w-full h-10 px-3 border border-audi-fog rounded-lg text-sm bg-white focus:outline-none focus:border-audi-red focus:ring-1 focus:ring-audi-red/20 transition-colors'
+const textareaCls = 'w-full px-3 py-2.5 border border-audi-fog rounded-lg text-sm bg-white focus:outline-none focus:border-audi-red focus:ring-1 focus:ring-audi-red/20 transition-colors resize-none'
 
 export default function ProductForm({ initialData, mode }: ProductFormProps) {
   const router = useRouter()
@@ -122,7 +122,7 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
     const base = form.name.slice(0, 3).toUpperCase().replace(/\s/g, '')
     const pn = form.partNumber.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(0, 6)
     const rand = Math.random().toString(36).slice(2, 5).toUpperCase()
-    set('sku', `TYT-${base}-${pn || rand}`)
+    set('sku', `AUD-${base}-${pn || rand}`)
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -196,8 +196,8 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-8 max-w-5xl">
       {/* ── Section: Basic Info ────────────────────────────────── */}
-      <section className="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 className="text-base font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">
+      <section className="bg-white rounded-lg border border-audi-fog p-6">
+        <h2 className="text-base font-bold text-audi-anthracite mb-5 pb-3 border-b border-audi-fog">
           Basic Information
         </h2>
         <div className="grid sm:grid-cols-2 gap-5">
@@ -206,7 +206,7 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
               <input
                 value={form.name}
                 onChange={(e) => set('name', e.target.value)}
-                placeholder="e.g. Water Pump Assembly – 1ZZ-FE Engine"
+                placeholder="e.g. Water Pump &amp; Thermostat Module – 2.0 TFSI EA888"
                 className={inputCls}
               />
             </Field>
@@ -221,15 +221,15 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
               <input
                 value={form.sku}
                 onChange={(e) => set('sku', e.target.value.toUpperCase())}
-                placeholder="TYT-WP-1ZZFE-OEM"
+                placeholder="AUD-WP-EA888-OEM"
                 disabled={mode === 'edit'}
-                className={`${inputCls} font-mono flex-1 ${mode === 'edit' ? 'bg-gray-50 text-gray-400' : ''}`}
+                className={`${inputCls} font-mono flex-1 ${mode === 'edit' ? 'bg-audi-mist text-audi-titanium' : ''}`}
               />
               {mode === 'create' && (
                 <button
                   type="button"
                   onClick={generateSku}
-                  className="h-10 px-3 border border-gray-200 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors whitespace-nowrap"
+                  className="h-10 px-3 border border-audi-fog rounded-lg text-xs font-semibold text-audi-steel hover:bg-audi-mist transition-colors whitespace-nowrap"
                 >
                   Auto-generate
                 </button>
@@ -237,11 +237,11 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
             </div>
           </Field>
 
-          <Field label="Part Number" required hint="Toyota OEM part number (e.g. 16100-29085)">
+          <Field label="Part Number" required hint="Audi/VAG part number (e.g. 06L 121 111 I)">
             <input
               value={form.partNumber}
               onChange={(e) => set('partNumber', e.target.value)}
-              placeholder="16100-29085"
+              placeholder="06L 121 111 I"
               className={`${inputCls} font-mono`}
             />
           </Field>
@@ -250,7 +250,7 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
             <input
               value={form.oemCrossReference}
               onChange={(e) => set('oemCrossReference', e.target.value)}
-              placeholder="16100-29085, 16100-29086"
+              placeholder="06L 121 111 H, 06L 121 111 G"
               className={inputCls}
             />
           </Field>
@@ -285,14 +285,14 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
       </section>
 
       {/* ── Section: Pricing & Inventory ──────────────────────── */}
-      <section className="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 className="text-base font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">
+      <section className="bg-white rounded-lg border border-audi-fog p-6">
+        <h2 className="text-base font-bold text-audi-anthracite mb-5 pb-3 border-b border-audi-fog">
           Pricing & Inventory
         </h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <Field label="Sale Price (USD)" required>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-audi-titanium text-sm">$</span>
               <input
                 type="number"
                 min="0"
@@ -307,7 +307,7 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
 
           <Field label="Compare-at Price" hint="Original / RRP price (shows strikethrough)">
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-audi-titanium text-sm">$</span>
               <input
                 type="number"
                 min="0"
@@ -349,13 +349,13 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
               role="switch"
               aria-checked={form.inStock}
               onClick={() => set('inStock', !form.inStock)}
-              className={`relative w-11 h-6 rounded-full transition-colors ${form.inStock ? 'bg-green-500' : 'bg-gray-300'}`}
+              className={`relative w-11 h-6 rounded-full transition-colors ${form.inStock ? 'bg-audi-success' : 'bg-audi-silver'}`}
             >
               <span
                 className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.inStock ? 'translate-x-5' : 'translate-x-0'}`}
               />
             </button>
-            <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+            <span className="text-sm font-medium text-audi-slate group-hover:text-audi-anthracite">
               Mark as In Stock
             </span>
           </label>
@@ -363,8 +363,8 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
       </section>
 
       {/* ── Section: Technical Details ─────────────────────────── */}
-      <section className="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 className="text-base font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">
+      <section className="bg-white rounded-lg border border-audi-fog p-6">
+        <h2 className="text-base font-bold text-audi-anthracite mb-5 pb-3 border-b border-audi-fog">
           Technical Details
         </h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -374,23 +374,23 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
           <Field label="Material" hint="e.g. Cast aluminium, steel">
             <input value={form.material} onChange={(e) => set('material', e.target.value)} placeholder="Cast aluminium impeller, steel housing" className={inputCls} />
           </Field>
-          <Field label="Tags" hint="Comma-separated: engine, OEM, celica">
-            <input value={form.tags} onChange={(e) => set('tags', e.target.value)} placeholder="engine, OEM, celica, timing" className={inputCls} />
+          <Field label="Tags" hint="Comma-separated: engine, OEM, a4, tfsi">
+            <input value={form.tags} onChange={(e) => set('tags', e.target.value)} placeholder="engine, OEM, a4, tfsi, timing" className={inputCls} />
           </Field>
           <div className="sm:col-span-2 lg:col-span-3">
             <Field label="Related SKUs" hint="Comma-separated SKUs for 'Often replaced together'">
-              <input value={form.relatedSkus} onChange={(e) => set('relatedSkus', e.target.value)} placeholder="TYT-GK-1ZZFE-OEM, TYT-BELT-1ZZFE-OEM" className={`${inputCls} font-mono`} />
+              <input value={form.relatedSkus} onChange={(e) => set('relatedSkus', e.target.value)} placeholder="AUD-TCK-EA888-OEM, AUD-THERM-EA888-OEM" className={`${inputCls} font-mono`} />
             </Field>
           </div>
         </div>
       </section>
 
       {/* ── Section: Images ────────────────────────────────────── */}
-      <section className="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 className="text-base font-bold text-gray-900 mb-1 pb-0">
+      <section className="bg-white rounded-lg border border-audi-fog p-6">
+        <h2 className="text-base font-bold text-audi-anthracite mb-1 pb-0">
           Product Images
         </h2>
-        <p className="text-xs text-gray-400 mb-5">
+        <p className="text-xs text-audi-titanium mb-5">
           The first image is used as the primary listing photo. Drag to reorder via the star button.
           {' '}In production, images upload directly to Supabase Storage.
         </p>
@@ -398,9 +398,9 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
       </section>
 
       {/* ── Section: Vehicle Fitment ───────────────────────────── */}
-      <section className="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 className="text-base font-bold text-gray-900 mb-1">Vehicle Fitment</h2>
-        <p className="text-xs text-gray-400 mb-5">
+      <section className="bg-white rounded-lg border border-audi-fog p-6">
+        <h2 className="text-base font-bold text-audi-anthracite mb-1">Vehicle Fitment</h2>
+        <p className="text-xs text-audi-titanium mb-5">
           Select every vehicle this part is confirmed to fit. Customers will see a green ✓ for their selected vehicle.
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -410,20 +410,20 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
               <label
                 key={v.id}
                 className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-colors ${
-                  checked ? 'border-toyota-red bg-red-50' : 'border-gray-100 hover:border-gray-300'
+                  checked ? 'border-audi-red bg-red-50' : 'border-audi-fog hover:border-audi-silver'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={checked}
                   onChange={() => toggleFitment(v.id)}
-                  className="mt-0.5 accent-toyota-red"
+                  className="mt-0.5 accent-audi-red"
                 />
                 <div className="min-w-0">
-                  <p className={`text-sm font-semibold truncate ${checked ? 'text-toyota-red' : 'text-gray-800'}`}>
-                    {v.year} Toyota {v.model}
+                  <p className={`text-sm font-semibold truncate ${checked ? 'text-audi-red' : 'text-audi-graphite'}`}>
+                    {v.year} Audi {v.model}
                   </p>
-                  <p className="text-xs text-gray-400 truncate">{v.engine}</p>
+                  <p className="text-xs text-audi-titanium truncate">{v.engine}</p>
                 </div>
               </label>
             )
@@ -432,7 +432,7 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
       </section>
 
       {/* ── Sticky save bar ───────────────────────────────────── */}
-      <div className="sticky bottom-0 bg-white border-t border-gray-200 -mx-6 -mb-6 px-6 py-4 flex items-center justify-between rounded-b-2xl">
+      <div className="sticky bottom-0 bg-white border-t border-audi-fog -mx-6 -mb-6 px-6 py-4 flex items-center justify-between rounded-b-2xl">
         <div className="flex-1">
           {error && (
             <div className="flex items-center gap-2 text-sm text-red-600">
@@ -443,7 +443,7 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
             </div>
           )}
           {saved && (
-            <div className="flex items-center gap-2 text-sm text-green-600">
+            <div className="flex items-center gap-2 text-sm text-audi-success">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
               </svg>
@@ -455,14 +455,14 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
           <button
             type="button"
             onClick={() => router.push('/admin/products')}
-            className="h-10 px-5 border border-gray-200 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+            className="h-10 px-5 border border-audi-fog rounded-lg text-sm font-semibold text-audi-steel hover:bg-audi-mist transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving || saved}
-            className="h-10 px-6 bg-toyota-red text-white font-bold rounded-lg text-sm hover:bg-toyota-red-dark transition-colors disabled:opacity-60 flex items-center gap-2"
+            className="h-10 px-6 bg-audi-red text-white font-bold rounded-lg text-sm hover:bg-audi-red-dark transition-colors disabled:opacity-60 flex items-center gap-2"
           >
             {saving ? (
               <>

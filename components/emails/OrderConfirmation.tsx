@@ -40,12 +40,12 @@ export const OrderConfirmationEmail = ({
 }: OrderConfirmationEmailProps) => (
   <Html>
     <Head />
-    <Preview>Order Confirmation - ToyotaParts Direct #{orderNumber}</Preview>
+    <Preview>Order Confirmation - AudiParts Direct #{orderNumber}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={header}>
           <Heading style={logo}>
-            Toyota<span style={{ color: '#EB0A1E' }}>Parts</span> Direct
+            Audi<span style={{ color: '#a6192e' }}>Parts</span> Direct
           </Heading>
         </Section>
         
@@ -130,7 +130,7 @@ export const OrderConfirmationEmail = ({
           
           <Text style={footerText}>
             If you have any questions, please reply to this email or visit our{' '}
-            <Link href="https://toyotacelicaautostore.com/contact" style={link}>
+            <Link href="https://audipartsdirect.com/contact" style={link}>
               contact page
             </Link>.
           </Text>
@@ -138,7 +138,7 @@ export const OrderConfirmationEmail = ({
         
         <Section style={footer}>
           <Text style={footerCopy}>
-            © {new Date().getFullYear()} ToyotaParts Direct. All rights reserved.
+            © {new Date().getFullYear()} AudiParts Direct. All rights reserved.
           </Text>
         </Section>
       </Container>
@@ -162,7 +162,7 @@ const container = {
 }
 
 const header = {
-  backgroundColor: '#111827',
+  backgroundColor: '#101317',
   padding: '30px',
   textAlign: 'center' as const,
 }
@@ -170,7 +170,7 @@ const header = {
 const logo = {
   color: '#ffffff',
   fontSize: '24px',
-  fontWeight: '900',
+  fontWeight: '700',
   margin: '0',
   letterSpacing: '-1px',
 }
@@ -209,8 +209,8 @@ const orderLabel = {
 
 const orderValue = {
   fontSize: '18px',
-  fontWeight: '900',
-  color: '#111827',
+  fontWeight: '700',
+  color: '#101317',
   margin: '5px 0 0',
 }
 
@@ -218,7 +218,7 @@ const headingSmall = {
   fontSize: '14px',
   fontWeight: '700',
   textTransform: 'uppercase' as const,
-  color: '#111827',
+  color: '#101317',
   margin: '30px 0 15px',
 }
 
@@ -246,7 +246,7 @@ const itemName = {
   fontSize: '14px',
   fontWeight: '700',
   margin: '0',
-  color: '#111827',
+  color: '#101317',
 }
 
 const itemMeta = {
@@ -273,21 +273,21 @@ const totalLabel = {
 
 const totalValue = {
   fontSize: '14px',
-  color: '#111827',
+  color: '#101317',
   margin: '5px 0',
 }
 
 const totalLabelBold = {
   fontSize: '16px',
   fontWeight: '700',
-  color: '#111827',
+  color: '#101317',
   margin: '10px 0',
 }
 
 const totalValueBold = {
   fontSize: '18px',
-  fontWeight: '900',
-  color: '#EB0A1E',
+  fontWeight: '700',
+  color: '#a6192e',
   margin: '10px 0',
 }
 
@@ -302,7 +302,7 @@ const hrTiny = {
 }
 
 const link = {
-  color: '#EB0A1E',
+  color: '#a6192e',
   textDecoration: 'underline',
 }
 

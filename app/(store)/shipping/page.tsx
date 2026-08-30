@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Shipping Policy',
-  description: 'ToyotaParts Direct shipping information. Next-day, standard, and international delivery options for Toyota spare parts.',
+  description: 'AudiParts Direct shipping information. Next-day, standard, and international delivery options for Audi spare parts.',
 }
 
 const SHIPPING_OPTIONS = [
@@ -47,20 +47,23 @@ const SHIPPING_OPTIONS = [
 
 const HEAVY_ITEMS = [
   'Engines and long-block assemblies',
-  'Complete gearboxes and transfer cases',
-  'Radiators (large format)',
-  'Large body panels (bonnets, door skins, boot lids)',
-  'Exhaust systems and catalytic converters',
+  'S tronic and multitronic gearboxes, quattro transfer cases',
+  'Radiators, intercoolers, and condenser packs',
+  'Body panels — bonnets, door skins, tailgates, Singleframe grille assemblies',
+  'Exhaust systems, downpipes, and catalytic converters',
+  'Adaptive air suspension struts and complete strut assemblies',
 ]
 
 export default function ShippingPage() {
   return (
     <div className="bg-white">
       {/* Header */}
-      <div className="bg-gray-900 text-white py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-black mb-3">Shipping Policy</h1>
-          <p className="text-gray-300">
+      <div className="brushed-dark text-white py-14 relative overflow-hidden">
+        <div className="absolute inset-0 blueprint-grid opacity-30" aria-hidden />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="eyebrow text-audi-red mb-3">Policy</p>
+          <h1 className="text-3xl lg:text-4xl font-bold mb-3">Shipping policy</h1>
+          <p className="text-audi-silver">
             Last updated: April 2026. All times are business-day estimates from the date of dispatch.
           </p>
         </div>
@@ -70,24 +73,24 @@ export default function ShippingPage() {
 
         {/* Shipping options grid */}
         <section>
-          <h2 className="text-xl font-black text-gray-900 mb-6">Delivery Options</h2>
+          <h2 className="text-xl font-bold text-audi-anthracite mb-6">Delivery Options</h2>
           <div className="grid sm:grid-cols-2 gap-5">
             {SHIPPING_OPTIONS.map((opt) => (
-              <div key={opt.name} className="border-2 border-gray-200 rounded-2xl p-5 hover:border-toyota-red transition-colors">
+              <div key={opt.name} className="border-2 border-audi-fog rounded-lg p-5 hover:border-audi-red transition-colors">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl">{opt.icon}</span>
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">{opt.name}</p>
-                      <p className="text-xs text-gray-500">{opt.time}</p>
+                      <p className="font-bold text-audi-anthracite text-sm">{opt.name}</p>
+                      <p className="text-xs text-audi-steel">{opt.time}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-gray-900">{opt.price}</p>
-                    {opt.free && <p className="text-xs text-green-600 font-medium">{opt.free}</p>}
+                    <p className="font-bold text-audi-anthracite">{opt.price}</p>
+                    {opt.free && <p className="text-xs text-audi-success font-medium">{opt.free}</p>}
                   </div>
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed">{opt.description}</p>
+                <p className="text-xs text-audi-steel leading-relaxed">{opt.description}</p>
               </div>
             ))}
           </div>
@@ -95,15 +98,15 @@ export default function ShippingPage() {
 
         {/* Dispatch times */}
         <section>
-          <h2 className="text-xl font-black text-gray-900 mb-4">📅 Order & Dispatch Times</h2>
-          <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-            <ul className="space-y-3 text-sm text-gray-700">
+          <h2 className="text-xl font-bold text-audi-anthracite mb-4">Order & Dispatch Times</h2>
+          <div className="bg-audi-mist rounded-lg p-6 border border-audi-fog">
+            <ul className="space-y-3 text-sm text-audi-slate">
               <li className="flex items-start gap-3">
-                <span className="text-green-500 mt-0.5">✓</span>
+                <span className="text-audi-success mt-0.5">✓</span>
                 <span><strong>Same-day dispatch:</strong> In-stock orders placed before 2:00 PM (EST), Monday to Friday.</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-green-500 mt-0.5">✓</span>
+                <span className="text-audi-success mt-0.5">✓</span>
                 <span><strong>Next business day dispatch:</strong> Orders placed after 2:00 PM, or on Saturday/Sunday.</span>
               </li>
               <li className="flex items-start gap-3">
@@ -111,7 +114,7 @@ export default function ShippingPage() {
                 <span><strong>Back-ordered items:</strong> If any item in your order is on back-order, we will contact you by email within 24 hours with an estimated lead time.</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-blue-500 mt-0.5">ℹ</span>
+                <span className="text-audi-titanium mt-0.5">ℹ</span>
                 <span><strong>Public holidays:</strong> Our warehouse is closed on public holidays. Orders placed on these days will dispatch the next business day.</span>
               </li>
             </ul>
@@ -120,20 +123,20 @@ export default function ShippingPage() {
 
         {/* Heavy items */}
         <section>
-          <h2 className="text-xl font-black text-gray-900 mb-4">🏋️ Oversized & Heavy Items</h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <h2 className="text-xl font-bold text-audi-anthracite mb-4">Oversized & Heavy Items</h2>
+          <p className="text-sm text-audi-steel mb-4">
             The following product types are classified as oversized or heavy freight and may attract
             a handling surcharge. Next-day express is not available for these items. Delivery
             estimates for heavy freight are 5–10 business days domestically.
           </p>
           <ul className="space-y-2">
             {HEAVY_ITEMS.map((item) => (
-              <li key={item} className="flex items-center gap-2 text-sm text-gray-700">
-                <span className="text-gray-400">—</span> {item}
+              <li key={item} className="flex items-center gap-2 text-sm text-audi-slate">
+                <span className="text-audi-titanium">—</span> {item}
               </li>
             ))}
           </ul>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-audi-steel mt-4">
             Heavy freight requires a delivery address where someone can sign for the shipment.
             Liftgate/tailgate delivery is available on request for an additional fee. Contact us
             before ordering if you need special delivery arrangements.
@@ -142,8 +145,8 @@ export default function ShippingPage() {
 
         {/* International */}
         <section>
-          <h2 className="text-xl font-black text-gray-900 mb-4">🌏 International Shipping Notes</h2>
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-3 text-sm text-amber-900">
+          <h2 className="text-xl font-bold text-audi-anthracite mb-4">International Shipping Notes</h2>
+          <div className="bg-audi-mist border-l-2 border-audi-red rounded-r-lg p-5 space-y-3 text-sm text-audi-steel">
             <p>
               <strong>Import duties and taxes:</strong> International customers are responsible for
               all import duties, taxes, and customs clearance fees levied by their country.
@@ -164,8 +167,8 @@ export default function ShippingPage() {
 
         {/* Tracking */}
         <section>
-          <h2 className="text-xl font-black text-gray-900 mb-4">📍 Tracking Your Order</h2>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <h2 className="text-xl font-bold text-audi-anthracite mb-4">Tracking Your Order</h2>
+          <p className="text-sm text-audi-steel leading-relaxed">
             A tracking number and carrier link will be emailed to you as soon as your order is
             dispatched. If you have not received a dispatch notification within 2 business days
             of placing your order, please check your spam folder first, then contact us.
@@ -173,16 +176,16 @@ export default function ShippingPage() {
         </section>
 
         {/* Questions */}
-        <div className="bg-gray-50 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-audi-mist rounded-lg p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <p className="font-bold text-gray-900">Questions about your shipment?</p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="font-bold text-audi-anthracite">Questions about your shipment?</p>
+            <p className="text-sm text-audi-steel mt-1">
               We respond to all shipping inquiries within 4 business hours.
             </p>
           </div>
           <Link
             href="/contact"
-            className="flex-shrink-0 inline-flex h-11 px-6 bg-toyota-red text-white font-bold rounded-xl items-center hover:bg-toyota-red-dark transition-colors text-sm"
+            className="flex-shrink-0 inline-flex h-11 px-6 bg-audi-red text-white font-bold rounded-xl items-center hover:bg-audi-red-dark transition-colors text-sm"
           >
             Contact Support
           </Link>

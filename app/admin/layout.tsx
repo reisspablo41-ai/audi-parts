@@ -4,14 +4,14 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import AdminGuard from '@/components/admin/AdminGuard'
 
 export const metadata: Metadata = {
-  title: { template: '%s | Admin – ToyotaParts Direct', default: 'Admin – ToyotaParts Direct' },
+  title: { template: '%s | Admin – AudiParts Direct', default: 'Admin – AudiParts Direct' },
   robots: 'noindex, nofollow',
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <AdminGuard>
-      <div className="flex min-h-screen bg-gray-100">
+      <div className="flex min-h-screen bg-audi-fog">
         <div className="hidden lg:flex">
           <AdminSidebar />
         </div>

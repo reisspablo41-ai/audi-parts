@@ -21,19 +21,19 @@ export default async function EditCategoryPage({ params }: Props) {
 
   return (
     <div>
-      <nav className="flex items-center gap-2 text-sm text-gray-400 mb-6">
-        <Link href="/admin/categories" className="hover:text-gray-700 transition-colors">
+      <nav className="flex items-center gap-2 text-sm text-audi-titanium mb-6">
+        <Link href="/admin/categories" className="hover:text-audi-slate transition-colors">
           Categories
         </Link>
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
-        <span className="text-gray-700 font-medium">{category.name}</span>
+        <span className="text-audi-slate font-medium">{category.name}</span>
       </nav>
 
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">Edit Category</h1>
-        <p className="text-sm text-gray-500 mt-1">Update category details and organization.</p>
+        <h1 className="text-xl font-bold text-audi-anthracite">Edit Category</h1>
+        <p className="text-sm text-audi-steel mt-1">Update category details and organization.</p>
       </div>
 
       <CategoryForm mode="edit" initialData={category} />

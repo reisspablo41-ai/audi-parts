@@ -3,18 +3,29 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { submitNewsletter } from '@/app/actions/newsletter'
+import { RingsMark } from './BrandMark'
+import { motion, AnimatePresence, EASE } from './motion'
 
-const MODEL_LINKS = [
+const CATEGORY_LINKS = [
   { label: 'Engine Components', href: '/shop?category=engine' },
-  { label: 'Brakes & Rotors', href: '/shop?category=brakes' },
+  { label: 'Brakes & Discs', href: '/shop?category=brakes' },
   { label: 'Suspension & Steering', href: '/shop?category=suspension' },
   { label: 'Electrical & Sensors', href: '/shop?category=electrical' },
   { label: 'Cooling System', href: '/shop?category=cooling' },
   { label: 'Fuel System', href: '/shop?category=fuel' },
-  { label: 'Transmission', href: '/shop?category=transmission' },
+  { label: 'Transmission & quattro', href: '/shop?category=transmission' },
   { label: 'Body & Exterior', href: '/shop?category=body' },
 ]
 
+/** A4 generations, the way owners search for them. */
+const GENERATION_LINKS = [
+  { label: 'A4 B9 · 2016–2024', model: 'A4', year: 2018 },
+  { label: 'A4 B8.5 · 2013–2015', model: 'A4', year: 2014 },
+  { label: 'A4 B8 · 2008–2012', model: 'A4', year: 2010 },
+  { label: 'A4 B7 · 2005–2008', model: 'A4', year: 2006 },
+  { label: 'A4 B6 · 2001–2005', model: 'A4', year: 2003 },
+  { label: 'A4 B5 · 1995–2001', model: 'A4', year: 1998 },
+]
 
 const INFO_LINKS = [
   { label: 'About Us', href: '/about' },
@@ -24,83 +35,105 @@ const INFO_LINKS = [
   { label: 'Shop All Parts', href: '/shop' },
 ]
 
-export default function Footer() {
+const TRUST_BADGES = [
+  'SSL-secured payments',
+  'OEM quality guaranteed',
+  'Next-day dispatch available',
+  'Hassle-free 30-day returns',
+]
 
+export default function Footer() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
   async function handleNewsletter(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
-    const formData = new FormData(e.currentTarget)
+    const form = e.currentTarget
+    const formData = new FormData(form)
     const result = await submitNewsletter(formData)
     setLoading(false)
     if (result.success) {
       setSuccess(true)
-      e.currentTarget.reset()
+      form.reset()
     }
   }
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className="bg-audi-anthracite text-audi-titanium">
       {/* Newsletter */}
-      <div className="bg-toyota-red">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="border-b border-white/8 relative overflow-hidden">
+        <div className="absolute inset-0 blueprint-grid opacity-25" aria-hidden />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <h3 className="text-xl font-bold text-white">
-                {success ? "You're on the list!" : "Stay in the know"}
+              <h3 className="text-lg font-semibold text-white">
+                {success ? "You're on the list" : 'Parts alerts and technical notes'}
               </h3>
-              <p className="text-red-100 text-sm mt-1">
-                {success 
-                  ? "Thanks for subscribing. We'll be in touch soon." 
-                  : "Get part alerts, Toyota news, and exclusive deals straight to your inbox."
-                }
+              <p className="text-sm mt-1.5 max-w-md leading-relaxed">
+                {success
+                  ? "Thanks for subscribing — we'll be in touch when something relevant lands."
+                  : 'Occasional emails on restocks, revised part numbers, and known-issue bulletins for the Audi range.'}
               </p>
             </div>
-            {!success && (
-              <form className="flex gap-2 w-full md:w-auto" onSubmit={handleNewsletter}>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="Your email address"
-                  className="flex-1 md:w-72 h-11 px-4 rounded-lg text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-white"
-                />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="h-11 px-6 bg-white text-toyota-red font-semibold rounded-lg text-sm hover:bg-gray-100 transition-colors whitespace-nowrap disabled:opacity-50"
+
+            <AnimatePresence mode="wait">
+              {!success && (
+                <motion.form
+                  key="newsletter"
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25, ease: EASE }}
+                  className="flex gap-2 w-full md:w-auto"
+                  onSubmit={handleNewsletter}
                 >
-                  {loading ? 'Subscribing...' : 'Subscribe'}
-                </button>
-              </form>
-            )}
+                  <label htmlFor="newsletter-email" className="sr-only">
+                    Email address
+                  </label>
+                  <input
+                    id="newsletter-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="Your email address"
+                    className="flex-1 md:w-72 h-11 px-4 rounded-md bg-white/5 border border-white/12 text-white placeholder:text-audi-steel text-sm focus:outline-none focus:border-audi-red focus:bg-white/8 transition-colors"
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="h-11 px-6 bg-audi-red text-white font-semibold rounded-md text-sm hover:bg-audi-red-dark transition-colors whitespace-nowrap disabled:opacity-50"
+                  >
+                    {loading ? 'Subscribing…' : 'Subscribe'}
+                  </button>
+                </motion.form>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
-      {/* Main footer content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* Link columns */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-toyota-red rounded flex items-center justify-center">
-                <span className="text-white font-black text-sm">T</span>
-              </div>
-              <span className="font-black text-white text-lg">ToyotaParts<span className="text-toyota-red">Direct</span></span>
+            <div className="flex items-center gap-2.5 mb-5">
+              <RingsMark className="h-4 w-auto text-white" />
+              <span className="font-bold text-white text-[15px] tracking-tight">
+                Audi<span className="text-audi-red">Parts</span>{' '}
+                <span className="eyebrow text-audi-titanium text-[9px]">Direct</span>
+              </span>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              Specialists in genuine OEM and quality aftermarket spare parts for all Toyota models. Fitment-guaranteed by year, model, and engine.
+            <p className="text-sm leading-relaxed">
+              Specialists in genuine OEM and vetted aftermarket spare parts for the full Audi range.
+              Fitment guaranteed by year, model, and engine code.
             </p>
-            {/* Social */}
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-2 mt-5">
               {['FB', 'IG', 'YT', 'X'].map((s) => (
                 <a
                   key={s}
                   href="#"
-                  className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-300 hover:bg-toyota-red hover:text-white transition-colors"
+                  aria-label={s}
+                  className="w-8 h-8 rounded-md border border-white/12 flex items-center justify-center text-[10px] font-semibold hover:bg-audi-red hover:border-audi-red hover:text-white transition-colors"
                 >
                   {s}
                 </a>
@@ -108,13 +141,12 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* By Category */}
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Shop by Category</h4>
-            <ul className="space-y-2">
-              {MODEL_LINKS.map((link) => (
+            <h4 className="eyebrow text-white mb-4">Shop by system</h4>
+            <ul className="space-y-2.5">
+              {CATEGORY_LINKS.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link href={link.href} className="text-sm hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -122,56 +154,57 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Celica Years */}
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Celica by Year</h4>
-            <ul className="space-y-2">
-              {[2000, 2001, 2002, 2003, 2004, 2005, 2006].map((year) => (
-                <li key={year}>
-                  <Link href={`/shop?model=Celica&year=${year}`} className="text-sm text-gray-400 hover:text-white transition-colors">
-                    {year} Toyota Celica
+            <h4 className="eyebrow text-white mb-4">A4 by generation</h4>
+            <ul className="space-y-2.5">
+              {GENERATION_LINKS.map((gen) => (
+                <li key={gen.label}>
+                  <Link
+                    href={`/shop?model=${gen.model}&year=${gen.year}`}
+                    className="text-sm hover:text-white transition-colors"
+                  >
+                    {gen.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Info */}
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Information</h4>
-            <ul className="space-y-2">
+            <h4 className="eyebrow text-white mb-4">Information</h4>
+            <ul className="space-y-2.5">
               {INFO_LINKS.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link href={link.href} className="text-sm hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
 
-            {/* Trust badges */}
-            <div className="mt-6 space-y-2">
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Trust & Security</h4>
-              {[
-                '🔒 SSL Secure Payments',
-                '✅ OEM Quality Guaranteed',
-                '🚚 Next-Day Shipping Available',
-                '↩️ Hassle-Free Returns',
-              ].map((badge) => (
-                <div key={badge} className="text-xs text-gray-400 flex items-center gap-1">
+            <h4 className="eyebrow text-white mt-8 mb-3">Trust &amp; security</h4>
+            <ul className="space-y-2">
+              {TRUST_BADGES.map((badge) => (
+                <li key={badge} className="text-xs flex items-start gap-2">
+                  <svg className="w-3.5 h-3.5 mt-px text-audi-red flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
                   {badge}
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} ToyotaParts Direct. All rights reserved.</p>
-          <p>Toyota® is a registered trademark of Toyota Motor Corporation. We are an independent parts retailer, not affiliated with TMC.</p>
+      <div className="border-t border-white/8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-audi-steel">
+          <p>© {new Date().getFullYear()} AudiParts Direct. All rights reserved.</p>
+          <p className="text-center sm:text-right max-w-xl leading-relaxed">
+            Audi® and quattro® are registered trademarks of AUDI AG. We are an independent parts
+            retailer and are not affiliated with, authorised by, or endorsed by AUDI AG.
+          </p>
         </div>
       </div>
     </footer>

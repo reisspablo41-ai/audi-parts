@@ -30,10 +30,10 @@ export default function ShopPagination({ currentPage, totalPages }: Props) {
 
   if (totalPages <= 1) return null
 
-  const btnBase = 'inline-flex items-center justify-center h-9 min-w-[2.25rem] px-2 rounded-lg text-sm font-medium transition-colors'
-  const btnActive = 'bg-toyota-red text-white'
-  const btnIdle = 'text-gray-600 hover:bg-gray-100'
-  const btnDisabled = 'text-gray-300 pointer-events-none'
+  const btnBase = 'inline-flex items-center justify-center h-9 min-w-[2.25rem] px-2 rounded-md text-sm font-medium transition-colors'
+  const btnActive = 'bg-audi-anthracite text-white'
+  const btnIdle = 'text-audi-steel hover:bg-audi-mist hover:text-audi-anthracite'
+  const btnDisabled = 'text-audi-silver pointer-events-none'
 
   return (
     <nav className="flex items-center justify-center gap-1 mt-10" aria-label="Pagination">
@@ -49,7 +49,7 @@ export default function ShopPagination({ currentPage, totalPages }: Props) {
 
       {pageWindow(currentPage, totalPages).map((p, i) =>
         p === '…' ? (
-          <span key={`ellipsis-${i}`} className="px-1 text-gray-400 text-sm select-none">…</span>
+          <span key={`ellipsis-${i}`} className="px-1 text-audi-titanium text-sm select-none">…</span>
         ) : (
           <Link
             key={p}

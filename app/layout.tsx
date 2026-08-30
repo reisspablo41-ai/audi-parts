@@ -1,34 +1,45 @@
 import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
+import { CartProvider } from '@/lib/cart-store'
+import { MotionProvider } from '@/components/motion'
 
 const geist = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
 })
 
+// Used for part numbers, SKUs and engine codes, where tabular figures and an
+// unmistakable 0/O distinction actually matter.
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+})
+
 export const metadata: Metadata = {
   title: {
-    template: '%s | ToyotaParts Direct',
-    default: 'ToyotaParts Direct – Genuine & Aftermarket Toyota Spare Parts',
+    template: '%s | AudiParts Direct',
+    default: 'AudiParts Direct – Genuine & Aftermarket Audi Spare Parts',
   },
   description:
-    'Find the exact Toyota spare part for your vehicle. Guaranteed fitment by year, model, and engine. OEM and aftermarket options for Camry, Celica, Hilux, Corolla, Land Cruiser, and more.',
-  keywords: 'Toyota spare parts, OEM Toyota parts, Toyota Celica parts, Toyota Camry parts, Toyota Hilux parts, genuine Toyota',
+    'Find the exact Audi spare part for your car. Guaranteed fitment by year, model, and engine code. Genuine OEM and vetted aftermarket options for the A3, A4, A5, A6, Q5, Q7, TT, and more.',
+  keywords:
+    'Audi spare parts, OEM Audi parts, Audi A4 parts, Audi A3 parts, Audi Q5 parts, TFSI parts, TDI parts, genuine Audi',
 }
-
-import { CartProvider } from '@/lib/cart-store'
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-gray-900">
-        <CartProvider>
-          {children}
-        </CartProvider>
+    <html
+      lang="en"
+      className={`${geist.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col bg-white text-audi-anthracite">
+        <MotionProvider>
+          <CartProvider>{children}</CartProvider>
+        </MotionProvider>
         <Script src="//code.jivosite.com/widget/L6O6sgHrsT" strategy="afterInteractive" />
       </body>
     </html>

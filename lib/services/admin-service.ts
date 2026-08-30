@@ -174,14 +174,36 @@ export async function getCategoryById(id: string) {
   return data ? mapCategory(data) : null
 }
 
+/**
+ * Set once we learn the database has no `reviews` table, so the probe is
+ * attempted at most once per process instead of on every render. PostgREST
+ * reports an unknown relation as PGRST205.
+ */
+let reviewsTableMissing = false
+
 export async function getAllReviews() {
   if (!supabaseAdmin) throw new Error('Supabase admin client not initialized')
+  if (reviewsTableMissing) return []
 
   const { data, error } = await supabaseAdmin
     .from('reviews')
     .select('*, parts(name)')
     .order('created_at', { ascending: false })
 
-  if (error) throw error
+  if (error) {
+    if (error.code === 'PGRST205') {
+      // Expected on a database that has not run the reviews section of
+      // supabase-schema.sql. Not a fault: note it once, then stop probing.
+      // The moderation table renders empty rather than failing the page.
+      reviewsTableMissing = true
+      console.info(
+        '[getAllReviews] reviews table not present \u2014 showing an empty ' +
+          'moderation list. Apply supabase-schema.sql to enable reviews.',
+      )
+      return []
+    }
+    throw error
+  }
+
   return data || []
 }

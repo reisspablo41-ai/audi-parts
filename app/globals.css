@@ -1,19 +1,60 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────────
+   AudiParts Direct — "Anthracite & Titanium" design system
+   A matured, German-engineering palette: deep anthracite structure,
+   brushed titanium metallics, and a single deep Audi red accent
+   reserved for precision highlights and calls to action.
+   ────────────────────────────────────────────────────────────── */
+
 :root {
   --background: #ffffff;
-  --foreground: #111827;
-  --toyota-red: #EB0A1E;
-  --toyota-red-dark: #c8091a;
-  --toyota-dark: #1a1a2e;
+  --foreground: #101317;
+
+  /* Accent — deep, desaturated Audi red */
+  --audi-red: #a6192e;
+  --audi-red-dark: #7e1223;
+  --audi-red-soft: #f7eef0;
+
+  /* Structure — anthracite through slate */
+  --audi-anthracite: #101317;
+  --audi-graphite: #1c2127;
+  --audi-slate: #2e353d;
+  --audi-steel: #4a545f;
+
+  /* Metallics */
+  --audi-titanium: #98a2ad;
+  --audi-silver: #c9d0d8;
+  --audi-mist: #f2f4f6;
+  --audi-fog: #e6e9ed;
+
+  /* Semantic */
+  --audi-success: #1f7a53;
+  --audi-success-soft: #eaf5f0;
+  --audi-warning: #8a6212;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-toyota-red: var(--toyota-red);
-  --color-toyota-red-dark: var(--toyota-red-dark);
-  --color-toyota-dark: var(--toyota-dark);
+
+  --color-audi-red: var(--audi-red);
+  --color-audi-red-dark: var(--audi-red-dark);
+  --color-audi-red-soft: var(--audi-red-soft);
+
+  --color-audi-anthracite: var(--audi-anthracite);
+  --color-audi-graphite: var(--audi-graphite);
+  --color-audi-slate: var(--audi-slate);
+  --color-audi-steel: var(--audi-steel);
+
+  --color-audi-titanium: var(--audi-titanium);
+  --color-audi-silver: var(--audi-silver);
+  --color-audi-mist: var(--audi-mist);
+  --color-audi-fog: var(--audi-fog);
+
+  --color-audi-success: var(--audi-success);
+  --color-audi-success-soft: var(--audi-success-soft);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -22,35 +63,113 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Tighter, more engineered headline tracking */
+h1, h2, h3 {
+  letter-spacing: -0.022em;
+}
+
+/* Part numbers, SKUs and other technical strings */
+.technical {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* Small all-caps label used across section headers */
+.eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ── Surfaces ──────────────────────────────────────────────── */
+
+/* Brushed-metal sheen for dark sections */
+.brushed-dark {
+  background-color: var(--audi-anthracite);
+  background-image:
+    radial-gradient(120% 90% at 78% 0%, rgba(152, 162, 173, 0.16) 0%, transparent 58%),
+    radial-gradient(70% 60% at 0% 100%, rgba(166, 25, 46, 0.16) 0%, transparent 60%),
+    repeating-linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.022) 0px,
+      rgba(255, 255, 255, 0.022) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+}
+
+/* Faint technical grid, used behind hero + CTA blocks */
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(152, 162, 173, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(152, 162, 173, 0.09) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Thin metallic hairline used as a section divider */
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(152, 162, 173, 0.5) 18%,
+    rgba(152, 162, 173, 0.5) 82%,
+    transparent
+  );
+}
+
+/* ── Scrollbars ────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--audi-mist);
 }
 ::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background: var(--audi-silver);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--toyota-red);
+  background: var(--audi-titanium);
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
-/* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── Focus ─────────────────────────────────────────────────── */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--audi-red);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Motion ────────────────────────────────────────────────── */
+/* Framer Motion is driven by MotionConfig reducedMotion="user", this
+   covers the remaining CSS transitions and marquee-style animations. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

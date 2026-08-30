@@ -1,40 +1,48 @@
+-- =============================================================================
+-- AudiParts Direct – Product Gallery Assignment
+--
+-- Attaches a multi-image gallery to individual parts. Image URLs below are
+-- placeholders following the /parts/<platform>/<oe-part-number>.jpg convention;
+-- swap them for your own hosted asset URLs before running against production.
+-- Re-runnable: existing images for these SKUs are cleared first.
+-- =============================================================================
+
 BEGIN;
 
--- CLEANUP: Remove any existing images for these specific parts to ensure a clean gallery setup
+-- CLEANUP: clear existing images for these SKUs so the gallery order is deterministic.
 DELETE FROM part_images WHERE sku IN (
-  'TYT-CEL-23209-74100',
-  'TYT-CEL-88320-2B230',
-  'TYT-CEL-81510-20790',
-  'TYT-CEL-82121-2B580',
-  'TYT-CEL-82711-2B600'
+  'AUD-WP-EA888-OEM',
+  'AUD-TCK-EA888-OEM',
+  'AUD-BP-B9-FRONT-OEM',
+  'AUD-DISC-B9-FRONT-OEM',
+  'AUD-ALT-EA888-AFT'
 );
 
--- 1. Fuel Injector Assembly (TYT-CEL-23209-74100)
+-- 1. Water Pump & Thermostat Module – 2.0 TFSI EA888
 INSERT INTO part_images (sku, url, alt_text, is_primary, sort_order) VALUES
-('TYT-CEL-23209-74100', 'https://www.toyotapartsdeal.com/resources/encry/actual-picture/tpd/large/936a77517670731a5472852230676442/0d29f029094052069cc3a365f5431634.jpg', 'Fuel Injector Assembly - Main View', TRUE, 0),
-('TYT-CEL-23209-74100', 'https://www.picclickimg.com/d/l400/pict/264423851025_/Genuine-Toyota-Fuel-Injector-23209-74100.jpg', 'Fuel Injector Assembly - Connector Angle', FALSE, 1),
-('TYT-CEL-23209-74100', 'https://www.picclickimg.com/d/l400/pict/255012345678_/Toyota-Fuel-Injector-Nozzle-View.jpg', 'Fuel Injector Assembly - Nozzle Detail', FALSE, 2);
+('AUD-WP-EA888-OEM', '/parts/ea888/06L-121-111-I-main.jpg',      'Water Pump & Thermostat Module – main view',        TRUE,  0),
+('AUD-WP-EA888-OEM', '/parts/ea888/06L-121-111-I-housing.jpg',   'Water Pump & Thermostat Module – housing detail',   FALSE, 1),
+('AUD-WP-EA888-OEM', '/parts/ea888/06L-121-111-I-impeller.jpg',  'Water Pump & Thermostat Module – impeller detail',  FALSE, 2);
 
--- 2. Cooler Compressor Assembly (TYT-CEL-88320-2B230)
+-- 2. Timing Chain Kit – 2.0 TFSI EA888 Gen3
 INSERT INTO part_images (sku, url, alt_text, is_primary, sort_order) VALUES
-('TYT-CEL-88320-2B230', 'https://www.toyotapartsdeal.com/resources/encry/actual-picture/tpd/large/f18285511090332835261053412585b/895f5779207869632835261053412585.jpg', 'A/C Compressor - Front View', TRUE, 0),
-('TYT-CEL-88320-2B230', 'https://img.amayama.com/225/110/644/883202b230_1.jpg', 'A/C Compressor - Side Profile', FALSE, 1),
-('TYT-CEL-88320-2B230', 'https://i.ebayimg.com/images/g/Y8AAAOSwXUBlU0S3/s-l1600.jpg', 'A/C Compressor - Connector and Pulley', FALSE, 2);
+('AUD-TCK-EA888-OEM', '/parts/ea888/06K-109-158-AB-main.jpg',      'Timing Chain Kit – complete kit',            TRUE,  0),
+('AUD-TCK-EA888-OEM', '/parts/ea888/06K-109-158-AB-tensioner.jpg', 'Timing Chain Kit – revised tensioner',       FALSE, 1),
+('AUD-TCK-EA888-OEM', '/parts/ea888/06K-109-158-AB-guides.jpg',    'Timing Chain Kit – guide rails',             FALSE, 2);
 
--- 3. Front Turn Signal Lamp RH (TYT-CEL-81510-20790)
+-- 3. Front Brake Pad Set – A4 B9
 INSERT INTO part_images (sku, url, alt_text, is_primary, sort_order) VALUES
-('TYT-CEL-81510-20790', 'https://www.toyotapartsdeal.com/resources/encry/actual-picture/tpd/large/94356b4676104968c928135835694211/35222091c6e293118485063089858732.jpg', 'Front Turn Signal Lamp RH - Main View', TRUE, 0),
-('TYT-CEL-81510-20790', 'https://img.amayama.com/225/110/644/8151020790_1.jpg', 'Front Turn Signal Lamp RH - Housing Detail', FALSE, 1);
+('AUD-BP-B9-FRONT-OEM', '/parts/a4-b9/8W0-698-151-AG-main.jpg',   'Front Brake Pad Set – full set',              TRUE,  0),
+('AUD-BP-B9-FRONT-OEM', '/parts/a4-b9/8W0-698-151-AG-sensor.jpg', 'Front Brake Pad Set – wear sensor cut-out',   FALSE, 1);
 
--- 4. Engine Wire Harness (TYT-CEL-82121-2B580)
+-- 4. Front Brake Disc – A4 B9 320 mm Vented
 INSERT INTO part_images (sku, url, alt_text, is_primary, sort_order) VALUES
-('TYT-CEL-82121-2B580', 'https://www.toyotapartsdeal.com/resources/encry/actual-picture/tpd/large/e1122091c6e293118485063089858732/90356b4676104968c928135835694211.jpg', 'Engine Wire Harness - Overall Layout', TRUE, 0),
-('TYT-CEL-82121-2B580', 'https://img.amayama.com/resized/600x600/catalogs/toyota/821212B580_01.jpg', 'Engine Wire Harness - Technical Diagram', FALSE, 1);
+('AUD-DISC-B9-FRONT-OEM', '/parts/a4-b9/8W0-615-301-F-main.jpg', 'Front Brake Disc – face view',        TRUE,  0),
+('AUD-DISC-B9-FRONT-OEM', '/parts/a4-b9/8W0-615-301-F-vane.jpg', 'Front Brake Disc – vane detail',      FALSE, 1);
 
--- 5. Wiring Harness Clamp (TYT-CEL-82711-2B600)
--- Note: Using images for 82711-2B660 which is the corresponding valid SKU
+-- 5. Alternator 180A – 2.0 TFSI (Aftermarket)
 INSERT INTO part_images (sku, url, alt_text, is_primary, sort_order) VALUES
-('TYT-CEL-82711-2B600', 'https://www.toyotapartsdeal.com/resources/encry/actual-picture/tpd/large/f2d89e5c0697a45a0ed037138f14f11b/b3164479207869632835261053412585.jpg', 'Wiring Harness Clamp - Close-up', TRUE, 0),
-('TYT-CEL-82711-2B600', 'https://parts.toyota.com/images/parts/toyota/fullsize/82711-2B660_1.jpg', 'Wiring Harness Clamp - Alternate View', FALSE, 1);
+('AUD-ALT-EA888-AFT', '/parts/ea888/06L-903-026-S-main.jpg',   'Alternator 180A – main view',          TRUE,  0),
+('AUD-ALT-EA888-AFT', '/parts/ea888/06L-903-026-S-pulley.jpg', 'Alternator 180A – clutch pulley',      FALSE, 1);
 
 COMMIT;

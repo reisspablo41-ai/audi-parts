@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import CategoryIcon from './CategoryIcon'
+import { motion, AnimatePresence, EASE } from './motion'
 
 interface SearchResult {
   sku: string
@@ -14,17 +16,17 @@ interface SearchResult {
   image: string | null
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  engine: '⚙️', brakes: '🔴', suspension: '🛞',
-  electrical: '⚡', cooling: '❄️', body: '🚗',
-  transmission: '🔧', fuel: '⛽',
-}
-
 interface Props {
   onClose: () => void
+  /**
+   * Take focus on mount. Off by default — the header renders this component
+   * inline on every page, and grabbing focus there would scroll the viewport
+   * and pop the mobile keyboard on load. The mobile menu opts in.
+   */
+  autoFocus?: boolean
 }
 
-export default function SearchOverlay({ onClose }: Props) {
+export default function SearchOverlay({ onClose, autoFocus = false }: Props) {
   const router = useRouter()
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
@@ -34,10 +36,9 @@ export default function SearchOverlay({ onClose }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Auto-focus when mounted
   useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
+    if (autoFocus) inputRef.current?.focus()
+  }, [autoFocus])
 
   // Close on click outside
   useEffect(() => {
@@ -99,15 +100,15 @@ export default function SearchOverlay({ onClose }: Props) {
             value={query}
             onChange={handleChange}
             onFocus={() => setFocused(true)}
-            placeholder="Search by part number, name, or keyword…"
-            className="w-full h-10 pl-4 pr-20 border-2 border-toyota-red rounded-lg text-sm focus:outline-none transition-colors bg-white"
+            placeholder="Search by part number, name, or engine code…"
+            className="w-full h-10 pl-4 pr-[76px] border border-audi-fog rounded-md text-sm text-audi-anthracite placeholder:text-audi-titanium focus:outline-none focus:border-audi-anthracite transition-colors bg-white"
           />
           {/* Clear button */}
           {query && (
             <button
               type="button"
               onClick={() => { setQuery(''); setResults([]); inputRef.current?.focus() }}
-              className="absolute right-11 top-0 h-10 w-8 flex items-center justify-center text-gray-400 hover:text-gray-600"
+              className="absolute right-11 top-0 h-10 w-8 flex items-center justify-center text-audi-titanium hover:text-audi-steel"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -116,7 +117,7 @@ export default function SearchOverlay({ onClose }: Props) {
           )}
           <button
             type="submit"
-            className="absolute right-0 top-0 h-10 w-11 flex items-center justify-center bg-toyota-red text-white rounded-r-lg hover:bg-toyota-red-dark transition-colors"
+            className="absolute right-0 top-0 h-10 w-11 flex items-center justify-center bg-audi-anthracite text-white rounded-r-md hover:bg-audi-red transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
@@ -126,16 +127,23 @@ export default function SearchOverlay({ onClose }: Props) {
       </form>
 
       {/* Dropdown */}
-      {showDropdown && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-100 z-[100] overflow-hidden">
+      <AnimatePresence>
+        {showDropdown && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: EASE }}
+            className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-md shadow-2xl shadow-audi-anthracite/20 border border-audi-fog z-[100] overflow-hidden"
+          >
           {loading ? (
-            <div className="flex items-center gap-3 px-4 py-5 text-sm text-gray-400">
-              <span className="w-4 h-4 border-2 border-gray-200 border-t-toyota-red rounded-full animate-spin flex-shrink-0" />
+            <div className="flex items-center gap-3 px-4 py-5 text-sm text-audi-titanium">
+              <span className="w-4 h-4 border-2 border-audi-fog border-t-audi-red rounded-full animate-spin flex-shrink-0" />
               Searching…
             </div>
           ) : results.length === 0 ? (
-            <div className="px-4 py-5 text-sm text-gray-400 text-center">
-              No parts found for <span className="font-semibold text-gray-600">"{query}"</span>
+            <div className="px-4 py-5 text-sm text-audi-titanium text-center">
+              No parts found for <span className="font-semibold text-audi-steel">&ldquo;{query}&rdquo;</span>
             </div>
           ) : (
             <>
@@ -145,28 +153,28 @@ export default function SearchOverlay({ onClose }: Props) {
                     <Link
                       href={`/product/${result.sku}`}
                       onClick={onClose}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-audi-mist transition-colors"
                     >
                       {/* Thumbnail */}
-                      <div className="w-12 h-12 rounded-lg bg-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-lg bg-audi-fog flex-shrink-0 overflow-hidden flex items-center justify-center">
                         {result.image ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={result.image} alt={result.name} className="w-full h-full object-cover" />
                         ) : (
-                          <span className="text-xl">{CATEGORY_ICONS[result.categoryId] ?? '🔧'}</span>
+                          <CategoryIcon categoryId={result.categoryId} className="w-5 h-5 text-audi-titanium" />
                         )}
                       </div>
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-gray-900 truncate">{result.name}</p>
-                        <p className="text-xs text-gray-400 font-mono mt-0.5">{result.partNumber}</p>
+                        <p className="text-sm font-semibold text-audi-anthracite truncate">{result.name}</p>
+                        <p className="technical text-[10px] text-audi-titanium mt-0.5">{result.partNumber}</p>
                       </div>
 
                       {/* Price + stock */}
                       <div className="text-right flex-shrink-0">
-                        <p className="text-sm font-bold text-gray-900">${result.price.toFixed(2)}</p>
-                        <p className={`text-[10px] font-semibold mt-0.5 ${result.inStock ? 'text-green-600' : 'text-red-500'}`}>
+                        <p className="text-sm font-bold text-audi-anthracite technical">${result.price.toFixed(2)}</p>
+                        <p className={`text-[10px] font-semibold mt-0.5 ${result.inStock ? 'text-audi-success' : 'text-audi-steel'}`}>
                           {result.inStock ? 'In Stock' : 'Out of Stock'}
                         </p>
                       </div>
@@ -176,22 +184,23 @@ export default function SearchOverlay({ onClose }: Props) {
               </ul>
 
               {/* Footer */}
-              <div className="border-t border-gray-100 px-4 py-2.5">
+              <div className="border-t border-audi-fog px-4 py-2.5">
                 <Link
                   href={`/shop?q=${encodeURIComponent(query)}`}
                   onClick={onClose}
-                  className="flex items-center gap-1 text-sm font-semibold text-toyota-red hover:underline"
+                  className="flex items-center gap-1 text-sm font-semibold text-audi-red hover:underline"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
                   </svg>
-                  See all results for "{query}"
+                  See all results for &ldquo;{query}&rdquo;
                 </Link>
               </div>
             </>
-          )}
-        </div>
-      )}
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

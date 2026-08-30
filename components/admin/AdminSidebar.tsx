@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { RingsMark } from '@/components/BrandMark'
 
 const NAV = [
   {
@@ -69,23 +70,21 @@ export default function AdminSidebar() {
   }
 
   return (
-    <aside className="w-60 bg-gray-950 flex flex-col flex-shrink-0 min-h-screen">
+    <aside className="w-60 bg-audi-anthracite flex flex-col flex-shrink-0 min-h-screen">
       {/* Brand */}
-      <div className="h-16 flex items-center px-5 border-b border-gray-800">
+      <div className="h-16 flex items-center px-5 border-b border-audi-graphite">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-toyota-red rounded flex items-center justify-center">
-            <span className="text-white font-black text-xs">T</span>
-          </div>
+          <RingsMark className="h-3.5 w-auto text-white" />
           <div className="leading-tight">
-            <p className="text-white font-bold text-sm">ToyotaParts</p>
-            <p className="text-gray-500 text-[10px] uppercase tracking-widest">Admin</p>
+            <p className="text-white font-bold text-sm">AudiParts</p>
+            <p className="text-audi-steel text-[10px] uppercase tracking-widest">Admin</p>
           </div>
         </div>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        <p className="text-[10px] font-semibold text-gray-600 uppercase tracking-widest px-3 mb-3">
+        <p className="text-[10px] font-semibold text-audi-steel uppercase tracking-widest px-3 mb-3">
           Management
         </p>
         {NAV.map((item) => (
@@ -94,8 +93,8 @@ export default function AdminSidebar() {
             href={item.href}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
               isActive(item.href)
-                ? 'bg-toyota-red text-white'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                ? 'bg-audi-red text-white'
+                : 'text-audi-titanium hover:text-white hover:bg-audi-graphite'
             }`}
           >
             {item.icon}
@@ -105,11 +104,11 @@ export default function AdminSidebar() {
       </nav>
 
       {/* Bottom: view store link */}
-      <div className="px-3 py-4 border-t border-gray-800 space-y-1">
+      <div className="px-3 py-4 border-t border-audi-graphite space-y-1">
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-audi-titanium hover:text-white hover:bg-audi-graphite transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />

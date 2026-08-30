@@ -57,7 +57,7 @@ export default function ReviewForm({ sku, productName }: ReviewFormProps) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-toyota-red transition-all shadow-xl shadow-gray-200 active:scale-[0.98]"
+        className="w-full sm:w-auto px-8 py-4 bg-audi-anthracite text-white rounded-lg font-bold text-sm uppercase tracking-widest hover:bg-audi-red transition-all shadow-xl shadow-audi-fog active:scale-[0.98]"
       >
         Write a Review
       </button>
@@ -65,36 +65,36 @@ export default function ReviewForm({ sku, productName }: ReviewFormProps) {
   }
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-gray-100 shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-white rounded-lg p-6 sm:p-8 border-2 border-audi-fog shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h3 className="text-xl font-black text-gray-900">Write a Review</h3>
-          <p className="text-sm text-gray-500 mt-1">Share your experience with {productName}</p>
+          <h3 className="text-xl font-bold text-audi-anthracite">Write a Review</h3>
+          <p className="text-sm text-audi-steel mt-1">Share your experience with {productName}</p>
         </div>
         <button
           onClick={() => setIsOpen(false)}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-2 hover:bg-audi-fog rounded-full transition-colors"
         >
-          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-audi-titanium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
 
       {success ? (
-        <div className="bg-green-50 border border-green-100 rounded-2xl p-8 text-center animate-in zoom-in-95 duration-300">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-audi-success-soft border border-audi-success/20 rounded-lg p-8 text-center animate-in zoom-in-95 duration-300">
+          <div className="w-16 h-16 bg-audi-success-soft rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-audi-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h4 className="text-xl font-black text-green-900 mb-2">Review Submitted!</h4>
-          <p className="text-green-700 font-medium">Thank you for sharing your feedback. It has been published.</p>
+          <h4 className="text-xl font-bold text-audi-success mb-2">Review Submitted!</h4>
+          <p className="text-audi-success font-medium">Thank you for sharing your feedback. It has been published.</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Overall Rating</label>
+            <label className="text-xs font-bold text-audi-titanium uppercase tracking-widest ml-1">Overall Rating</label>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -107,7 +107,7 @@ export default function ReviewForm({ sku, productName }: ReviewFormProps) {
                 >
                   <svg
                     className={`w-10 h-10 ${
-                      star <= (hoveredRating || rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-200 fill-gray-200'
+                      star <= (hoveredRating || rating) ? 'text-amber-500 fill-amber-400' : 'text-audi-fog fill-audi-fog'
                     } transition-colors`}
                     viewBox="0 0 24 24"
                   >
@@ -120,23 +120,23 @@ export default function ReviewForm({ sku, productName }: ReviewFormProps) {
 
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Your Name</label>
+              <label className="text-xs font-bold text-audi-titanium uppercase tracking-widest ml-1">Your Name</label>
               <input
                 required
                 type="text"
                 placeholder="e.g. John Doe"
-                className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent focus:border-toyota-red focus:bg-white rounded-2xl outline-none transition-all font-medium"
+                className="w-full px-5 py-4 bg-audi-mist border-2 border-transparent focus:border-audi-red focus:bg-white rounded-lg outline-none transition-all font-medium"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Review Title</label>
+              <label className="text-xs font-bold text-audi-titanium uppercase tracking-widest ml-1">Review Title</label>
               <input
                 required
                 type="text"
                 placeholder="Summarize your review"
-                className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent focus:border-toyota-red focus:bg-white rounded-2xl outline-none transition-all font-medium"
+                className="w-full px-5 py-4 bg-audi-mist border-2 border-transparent focus:border-audi-red focus:bg-white rounded-lg outline-none transition-all font-medium"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               />
@@ -144,12 +144,12 @@ export default function ReviewForm({ sku, productName }: ReviewFormProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Review Message</label>
+            <label className="text-xs font-bold text-audi-titanium uppercase tracking-widest ml-1">Review Message</label>
             <textarea
               required
               rows={4}
               placeholder="What did you think of this part?"
-              className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent focus:border-toyota-red focus:bg-white rounded-2xl outline-none transition-all font-medium resize-none"
+              className="w-full px-5 py-4 bg-audi-mist border-2 border-transparent focus:border-audi-red focus:bg-white rounded-lg outline-none transition-all font-medium resize-none"
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             />
@@ -165,7 +165,7 @@ export default function ReviewForm({ sku, productName }: ReviewFormProps) {
             <button
               disabled={isSubmitting}
               type="submit"
-              className="flex-1 bg-toyota-red text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-red-100 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+              className="flex-1 bg-audi-red text-white py-4 rounded-lg font-bold text-sm uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-red-100 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">
@@ -182,7 +182,7 @@ export default function ReviewForm({ sku, productName }: ReviewFormProps) {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="px-8 py-4 bg-gray-100 text-gray-600 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-[0.98]"
+              className="px-8 py-4 bg-audi-fog text-audi-steel rounded-lg font-bold text-sm uppercase tracking-widest hover:bg-audi-fog transition-all active:scale-[0.98]"
             >
               Cancel
             </button>

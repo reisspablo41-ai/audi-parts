@@ -29,12 +29,12 @@ export default async function AdminProductsPage({ searchParams }: Props) {
             initialCategory={catId} 
             categories={categories} 
           />
-          <span className="text-sm text-gray-500">{products.length} product{products.length !== 1 ? 's' : ''}</span>
+          <span className="text-sm text-audi-steel">{products.length} product{products.length !== 1 ? 's' : ''}</span>
         </div>
 
         <Link
           href="/admin/products/new"
-          className="flex items-center gap-2 h-9 px-4 bg-toyota-red text-white font-semibold rounded-lg text-sm hover:bg-toyota-red-dark transition-colors whitespace-nowrap"
+          className="flex items-center gap-2 h-9 px-4 bg-audi-red text-white font-semibold rounded-lg text-sm hover:bg-audi-red-dark transition-colors whitespace-nowrap"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -44,24 +44,24 @@ export default async function AdminProductsPage({ searchParams }: Props) {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-2xl border border-audi-fog overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Product</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">SKU / Part #</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Category</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Brand</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Price</th>
-                <th className="text-center px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Stock</th>
-                <th className="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
+              <tr className="bg-audi-mist border-b border-audi-fog">
+                <th className="text-left px-5 py-3 text-xs font-semibold text-audi-steel uppercase tracking-wide">Product</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-audi-steel uppercase tracking-wide">SKU / Part #</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-audi-steel uppercase tracking-wide">Category</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-audi-steel uppercase tracking-wide">Brand</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-audi-steel uppercase tracking-wide">Price</th>
+                <th className="text-center px-4 py-3 text-xs font-semibold text-audi-steel uppercase tracking-wide">Stock</th>
+                <th className="text-right px-5 py-3 text-xs font-semibold text-audi-steel uppercase tracking-wide">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-audi-mist">
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-16 text-center text-gray-400">
+                  <td colSpan={7} className="px-5 py-16 text-center text-audi-titanium">
                     <span className="text-4xl block mb-2">🔍</span>
                     No products match your search.
                   </td>
@@ -69,11 +69,11 @@ export default async function AdminProductsPage({ searchParams }: Props) {
               ) : (
                 products.map((part) => {
                   return (
-                    <tr key={part.sku} className="hover:bg-gray-50/60 transition-colors">
+                    <tr key={part.sku} className="hover:bg-audi-mist/60 transition-colors">
                       {/* Product */}
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0 border border-gray-100">
+                          <div className="w-10 h-10 rounded-lg bg-audi-fog flex items-center justify-center overflow-hidden flex-shrink-0 border border-audi-fog">
                             {part.images && part.images.length > 0 ? (
                               <img 
                                 src={part.images[0]} 
@@ -85,21 +85,21 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                             )}
                           </div>
                           <div className="min-w-0">
-                            <p className="font-semibold text-gray-900 truncate max-w-[220px]">{part.name}</p>
-                            <p className="text-xs text-gray-400">★ {part.rating} ({part.reviewCount})</p>
+                            <p className="font-semibold text-audi-anthracite truncate max-w-[220px]">{part.name}</p>
+                            <p className="text-xs text-audi-titanium">★ {part.rating} ({part.reviewCount})</p>
                           </div>
                         </div>
                       </td>
 
                       {/* SKU */}
                       <td className="px-4 py-3">
-                        <p className="font-mono text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded inline-block">{part.sku}</p>
-                        <p className="text-xs text-gray-400 mt-0.5">{part.partNumber}</p>
+                        <p className="font-mono text-xs text-audi-steel bg-audi-fog px-2 py-0.5 rounded inline-block">{part.sku}</p>
+                        <p className="text-xs text-audi-titanium mt-0.5">{part.partNumber}</p>
                       </td>
 
                       {/* Category */}
                       <td className="px-4 py-3">
-                        <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full uppercase tracking-tight font-medium">
+                        <span className="text-xs bg-audi-fog text-audi-steel px-2 py-1 rounded-full uppercase tracking-tight font-medium">
                           {part.category || part.categoryId}
                         </span>
                       </td>
@@ -117,9 +117,9 @@ export default async function AdminProductsPage({ searchParams }: Props) {
 
                       {/* Price */}
                       <td className="px-4 py-3 text-right">
-                        <p className="font-bold text-gray-900">${part.price.toFixed(2)}</p>
+                        <p className="font-bold text-audi-anthracite">${part.price.toFixed(2)}</p>
                         {part.compareAtPrice && (
-                          <p className="text-xs text-gray-400 line-through">${part.compareAtPrice.toFixed(2)}</p>
+                          <p className="text-xs text-audi-titanium line-through">${part.compareAtPrice.toFixed(2)}</p>
                         )}
                       </td>
 
@@ -141,7 +141,7 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                           <Link
                             href={`/product/${part.sku}`}
                             target="_blank"
-                            className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-audi-titanium hover:bg-audi-fog hover:text-audi-slate transition-colors"
                             title="View on store"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,7 +150,7 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                           </Link>
                           <Link
                             href={`/admin/products/${part.sku}/edit`}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-audi-titanium hover:bg-blue-50 hover:text-blue-600 transition-colors"
                             title="Edit"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

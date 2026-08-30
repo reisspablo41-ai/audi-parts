@@ -1,7 +1,7 @@
 export interface Vehicle {
   id: string
   year: number
-  make: 'Toyota'
+  make: 'Audi'
   model: string
   engine: string
   trim?: string
@@ -12,7 +12,10 @@ export interface Category {
   name: string
   slug: string
   description: string
+  /** Icon key resolved by <CategoryIcon>; leaves inherit their parent's. */
   icon: string
+  /** Null for top-level categories. */
+  parentId?: string | null
   partCount: number
 }
 

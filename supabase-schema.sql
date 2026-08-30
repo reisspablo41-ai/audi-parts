@@ -1,5 +1,5 @@
 -- =============================================================================
--- ToyotaParts Direct – Supabase Database Schema
+-- AudiParts Direct – Supabase Database Schema
 -- =============================================================================
 -- Run this in the Supabase SQL Editor to create all tables.
 -- Supabase automatically creates a "public" schema and enables Row Level
@@ -8,15 +8,15 @@
 
 -- -----------------------------------------------------------------------
 -- 1. VEHICLES
---    Canonical list of Toyota year/model/engine combinations.
+--    Canonical list of Audi year/model/engine combinations.
 -- -----------------------------------------------------------------------
 CREATE TABLE vehicles (
-  id            TEXT        PRIMARY KEY,  -- e.g. 'cel-2003-18-1zz'
+  id            TEXT        PRIMARY KEY,  -- e.g. 'a4-2018-20-ea888'
   year          SMALLINT    NOT NULL CHECK (year BETWEEN 1960 AND 2100),
-  make          TEXT        NOT NULL DEFAULT 'Toyota',
+  make          TEXT        NOT NULL DEFAULT 'Audi',
   model         TEXT        NOT NULL,
   engine        TEXT        NOT NULL,
-  engine_code   TEXT,                     -- e.g. '1ZZ-FE'
+  engine_code   TEXT,                     -- e.g. 'EA888'
   trim          TEXT,
   body_style    TEXT,                     -- e.g. 'Coupe', 'Sedan', 'Ute'
   region        TEXT,                     -- e.g. 'Global', 'JDM', 'USDM'
@@ -267,7 +267,7 @@ CREATE TABLE testimonials (
   id              BIGSERIAL   PRIMARY KEY,
   author_name     TEXT        NOT NULL,
   author_location TEXT,                       -- e.g. 'Atlanta, GA'
-  vehicle         TEXT        NOT NULL,       -- e.g. '2003 Toyota Celica GT'
+  vehicle         TEXT        NOT NULL,       -- e.g. '2018 Audi A4 B9 2.0 TFSI'
   rating          SMALLINT    NOT NULL DEFAULT 5 CHECK (rating BETWEEN 1 AND 5),
   quote           TEXT        NOT NULL,
   part_bought     TEXT,                       -- free-text summary of purchased item
@@ -292,12 +292,12 @@ CREATE POLICY "public_read_testimonials"
 
 -- Seed: matches lib/data.ts testimonials array
 INSERT INTO testimonials (author_name, author_location, vehicle, rating, quote, part_bought, avatar_initials, avatar_color, is_featured, is_approved, display_order, published_at) VALUES
-  ('Marcus T.',  'Atlanta, GA',    '2003 Toyota Celica GT',        5, 'I''ve been chasing the right water pump for my Celica for weeks. Every other site sent me the wrong part or couldn''t confirm fitment. ToyotaParts Direct had the exact OEM part number, confirmed it for my 1ZZ-FE, and it arrived next day.',                   'Water Pump Assembly – 1ZZ-FE',         'MT', '#EB0A1E', TRUE, TRUE, 1, '2026-03-01'),
-  ('Priya S.',   'Melbourne, AU',  '2020 Toyota Camry 2.5L',       5, 'Ordered the front brake pad and rotor set for my XV70 Camry. The fitment checker confirmed compatibility in seconds. Parts arrived well packaged, genuine Toyota box, exactly as described. Fitted them myself in under an hour.',                                   'Front Brake Pad + Rotor Set',           'PS', '#2563eb', TRUE, TRUE, 2, '2026-02-01'),
-  ('Ryan O.',    'Nairobi, KE',    '2022 Toyota Hilux Revo 2.8D',  5, 'Sourcing OEM struts for a Hilux Revo locally is a nightmare — everything is pattern-copy aftermarket. I ordered the genuine OEM front strut assembly here, shipped internationally. Arrived in 6 days, perfectly packaged.',                                       'Front Strut Assembly – Hilux Revo',     'RO', '#16a34a', TRUE, TRUE, 3, '2026-01-01'),
-  ('Claire W.',  'Houston, TX',    '2019 Toyota Corolla 1.8L',     5, 'The head gasket set for my Corolla was exactly right. I was nervous ordering online because a mismatched gasket is a disaster, but the fitment database showed confirmed compatibility. The support team replied in under 2 hours.',                               'Head Gasket Set – 1ZZ-FE',              'CW', '#7c3aed', TRUE, TRUE, 4, '2026-03-10'),
-  ('James P.',   'Toronto, CA',    '2020 Toyota Camry V6',         5, 'The aftermarket alternator saved me $140 versus the dealer price. It came with a 2-year warranty and fits perfectly. Sceptical about aftermarket, but the listing was honest and after 3 months it''s running flawlessly.',                                          'Alternator – 2AR-FE (Aftermarket)',     'JP', '#b45309', TRUE, TRUE, 5, '2025-12-01'),
-  ('Aiko N.',    'Osaka, JP',      '2003 Toyota Celica GT-S',      5, 'Found the 2ZZ-GE timing chain kit that I could not find anywhere in Japan at a reasonable price. Shipped to Japan and arrived in 5 business days. Genuine OEM — I can tell immediately from the Toyota packaging.',                                                 'Timing Chain Kit – 2ZZ-GE',             'AN', '#0891b2', TRUE, TRUE, 6, '2026-02-15');
+  ('Marcus T.',  'Atlanta, GA',    '2018 Audi A4 B9 2.0 TFSI',  5, 'I chased the right water pump module for my B9 for weeks. Every other site sent the pre-revision housing or couldn''t confirm which one my engine code took. AudiParts Direct listed the exact revised part number and it landed next day.', 'Water Pump & Thermostat Module – EA888', 'MT', '#a6192e', TRUE, TRUE, 1, '2026-03-01'),
+  ('Priya S.',   'Melbourne, AU',  '2020 Audi A4 B9 2.0 TDI',   5, 'Ordered the front pad and disc set for my B9. The fitment checker confirmed the 320 mm variant in seconds — that detail alone saved me a return. Parts arrived in genuine Audi packaging, exactly as described.',                       'Front Brake Pad + Disc Set – A4 B9',     'PS', '#2e353d', TRUE, TRUE, 2, '2026-02-01'),
+  ('Ryan O.',    'Nairobi, KE',    '2022 Audi Q7 4M 3.0 TDI',   5, 'Sourcing a genuine front air strut for a Q7 4M locally is close to impossible — everything on offer is a pattern copy. I ordered the OEM unit here and it shipped internationally in six days, no damage.',                          'Front Air Suspension Strut – Q7 4M',     'RO', '#4a545f', TRUE, TRUE, 3, '2026-01-01'),
+  ('Claire W.',  'Houston, TX',    '2019 Audi A3 2.0 TFSI',     5, 'The PCV valve for my A3 was exactly right. I was nervous ordering online because the wrong revision just brings the lean code straight back, but the fitment database matched it to my VIN and support replied in under two hours.',   'PCV Valve / Oil Separator – 2.0 TFSI',   'CW', '#7e1223', TRUE, TRUE, 4, '2026-03-10'),
+  ('James P.',   'Toronto, CA',    '2021 Audi Q5 2.0 TFSI',     5, 'The remanufactured 180 A alternator saved me well over $200 against the dealer price, and it came with a two-year warranty. The listing was honest about exactly what it was, and three months in it is running flawlessly.',        'Alternator 180A – 2.0 TFSI',             'JP', '#98a2ad', TRUE, TRUE, 5, '2025-12-01'),
+  ('Aiko N.',    'Osaka, JP',      '2018 Audi TT 2.5 TFSI',     5, 'Found the genuine coil pack set that I could not get at a sensible price anywhere in Japan. Shipped in five business days. Unmistakably genuine — the casting and the Audi part stamp match the ones I pulled out.',                'Ignition Coil Pack – TFSI (Set of 4)',   'AN', '#1c2127', TRUE, TRUE, 6, '2026-02-15');
 
 -- -----------------------------------------------------------------------
 -- 15. WISHLISTS
@@ -418,55 +418,65 @@ CREATE POLICY "public_read_reviews"     ON reviews     FOR SELECT USING (is_appr
 -- SAMPLE SEED DATA (matches lib/data.ts mock data)
 -- -----------------------------------------------------------------------
 INSERT INTO categories (id, name, slug, description, icon, sort_order) VALUES
-  ('engine',       'Engine',         'engine',       'Gaskets, timing belts, water pumps, oil filters, and all internal engine components.',     '⚙️', 1),
-  ('transmission', 'Transmission',   'transmission', 'Gearboxes, clutch kits, CVT belts, and drivetrain components.',                            '🔧', 2),
-  ('suspension',   'Suspension',     'suspension',   'Shock absorbers, struts, control arms, tie rods, and bushings.',                           '🛞', 3),
-  ('brakes',       'Brakes',         'brakes',       'Brake pads, rotors, calipers, brake lines, and master cylinders.',                         '🔴', 4),
-  ('electrical',   'Electrical',     'electrical',   'Alternators, starters, sensors, ECU modules, and wiring harnesses.',                       '⚡', 5),
-  ('body',         'Body & Exterior','body',         'Bumpers, panels, mirrors, grilles, and all exterior components.',                          '🚗', 6),
-  ('cooling',      'Cooling',        'cooling',      'Radiators, thermostats, coolant hoses, and fans.',                                         '❄️', 7),
-  ('fuel',         'Fuel System',    'fuel',         'Fuel pumps, injectors, filters, and fuel rails.',                                          '⛽', 8);
+  ('engine',       'Engine',         'engine',       'Timing chain kits, water pumps, PCV valves, oil separators, and internal engine components.',        '⚙️', 1),
+  ('transmission', 'Transmission',   'transmission', 'S tronic and multitronic components, clutch kits, quattro driveline, and mechatronic units.',        '🔧', 2),
+  ('suspension',   'Suspension',     'suspension',   'Adaptive dampers, air springs, control arms, tie rods, and bushings.',                               '🛞', 3),
+  ('brakes',       'Brakes',         'brakes',       'Brake pads, vented discs, calipers, wear sensors, and electronic parking brake motors.',             '🔴', 4),
+  ('electrical',   'Electrical',     'electrical',   'Alternators, ignition coils, MAF and NOx sensors, control modules, and wiring looms.',               '⚡', 5),
+  ('body',         'Body & Exterior','body',         'Bumpers, Singleframe grilles, mirrors, LED headlamp units, and exterior trim.',                      '🚗', 6),
+  ('cooling',      'Cooling',        'cooling',      'Radiators, thermostat housings, intercoolers, coolant hoses, and electric fans.',                    '❄️', 7),
+  ('fuel',         'Fuel System',    'fuel',         'High-pressure fuel pumps, injectors, filters, and fuel rails for TFSI and TDI engines.',             '⛽', 8);
 
 INSERT INTO vehicles (id, year, make, model, engine, engine_code) VALUES
-  ('cel-2003-18-1zz',  2003, 'Toyota', 'Celica',       '1.8L 4-Cylinder (1ZZ-FE)',    '1ZZ-FE'),
-  ('cel-2003-18-2zz',  2003, 'Toyota', 'Celica',       '1.8L 4-Cylinder (2ZZ-GE)',    '2ZZ-GE'),
-  ('cam-2020-25',      2020, 'Toyota', 'Camry',        '2.5L 4-Cylinder (2AR-FE)',    '2AR-FE'),
-  ('cam-2020-35v6',    2020, 'Toyota', 'Camry',        '3.5L V6 (2GR-FE)',            '2GR-FE'),
-  ('hil-2022-28d',     2022, 'Toyota', 'Hilux',        '2.8L Diesel (1GD-FTV)',       '1GD-FTV'),
-  ('cor-2019-18',      2019, 'Toyota', 'Corolla',      '1.8L 4-Cylinder (2ZR-FE)',    '2ZR-FE'),
-  ('lc-2021-45d',      2021, 'Toyota', 'Land Cruiser', '4.5L V8 Diesel (1VD-FTV)',   '1VD-FTV'),
-  ('rav-2022-25h',     2022, 'Toyota', 'RAV4',         '2.5L Hybrid',                 NULL);
+  ('a4-2018-20-ea888',  2018, 'Audi', 'A4', '2.0 TFSI (EA888 Gen3)', 'EA888'),
+  ('a4-2020-20d-ea288', 2020, 'Audi', 'A4', '2.0 TDI (EA288)',       'EA288'),
+  ('a4-2012-20-cdnc',   2012, 'Audi', 'A4', '2.0 TFSI (CDNC)',       'CDNC'),
+  ('a3-2019-20',        2019, 'Audi', 'A3', '2.0 TFSI (EA888 Gen3)', 'EA888'),
+  ('a6-2020-30t',       2020, 'Audi', 'A6', '3.0 TFSI V6 (EA839)',   'EA839'),
+  ('q5-2021-20',        2021, 'Audi', 'Q5', '2.0 TFSI (EA888 Gen3)', 'EA888'),
+  ('q7-2022-30d',       2022, 'Audi', 'Q7', '3.0 TDI V6 (CRCA)',     'CRCA'),
+  ('tt-2018-25t',       2018, 'Audi', 'TT', '2.5 TFSI 5-Cyl (DAZA)', 'DAZA'),
+  ('r8-2017-52',        2017, 'Audi', 'R8', '5.2 FSI V10 (CTPA)',    'CTPA');
 
 INSERT INTO parts (sku, name, description, price, compare_at_price, brand, category_id, part_number, oem_cross_ref, weight_kg, material, in_stock, stock_count) VALUES
-  ('TYT-WP-1ZZFE-OEM',     'Water Pump Assembly – 1ZZ-FE Engine',          'Genuine Toyota OEM water pump for the 1ZZ-FE engine.',      89.95,  119.00, 'Genuine OEM', 'engine',     '16100-29085', '16100-29085, 16100-29086', 1.2, 'Cast aluminium impeller, steel housing', TRUE,  23),
-  ('TYT-GK-1ZZFE-OEM',     'Head Gasket Set – 1ZZ-FE Engine',              'Complete multi-layer steel head gasket set.',               64.50,  NULL,   'Genuine OEM', 'engine',     '04111-22090', '04111-22090',              0.4, 'Multi-layer steel (MLS)',                TRUE,  15),
-  ('TYT-BELT-1ZZFE-OEM',   'Timing Chain Kit – 1ZZ-FE / 2ZZ-GE',          'OEM-spec timing chain kit for 1ZZ-FE and 2ZZ-GE engines.',  142.00, 185.00, 'Genuine OEM', 'engine',     '13506-22020', NULL,                       0.9, 'Hardened steel chain',                  TRUE,   8),
-  ('TYT-BP-CAM-FRONT-OEM', 'Front Brake Pad Set – Camry 2018–2024',        'Genuine Toyota front brake pads for the Camry XV70.',       54.90,  NULL,   'Genuine OEM', 'brakes',     '04465-06190', '04465-06190, 04465-AZ101', 0.7, 'Semi-metallic compound',                TRUE,  42),
-  ('TYT-ROTOR-CAM-FRONT',  'Front Brake Rotor – Camry 2018–2024',          'OEM-spec vented front brake rotor.',                       78.00,  95.00,  'Genuine OEM', 'brakes',     '43512-06220', NULL,                       5.1, 'Grey cast iron',                        TRUE,  19),
-  ('TYT-STRUT-HIL-FRONT',  'Front Strut Assembly – Hilux Revo 2015+',      'Complete front strut assembly for the Hilux Revo.',        219.00, NULL,   'Genuine OEM', 'suspension', '48520-09891', NULL,                       8.4, 'High-tensile steel',                    FALSE,  0),
-  ('TYT-ALT-2AR-AFT',      'Alternator – 2AR-FE Camry (Aftermarket)',      '130A alternator for Toyota Camry 2.5L models.',            169.00, 310.00, 'Aftermarket', 'electrical', '27060-0V150-84','27060-0V150',            3.8, 'Copper windings, aluminium housing',    TRUE,   6),
-  ('TYT-THERM-OEM',        'Engine Thermostat – 1ZZ / 2ZZ / 1NZ',         'Genuine Toyota thermostat and housing assembly.',           28.50,  NULL,   'Genuine OEM', 'cooling',    '90916-03129', NULL,                       0.2, 'Wax-element thermostat, brass housing', TRUE,  54);
+  ('AUD-WP-EA888-OEM',      'Water Pump & Thermostat Module – 2.0 TFSI EA888', 'Genuine Audi water pump with integrated thermostat housing, revised seal.', 189.95, 249.00, 'Genuine OEM', 'engine',     '06L 121 111 I',  '06L 121 111 H, 06L 121 111 G',  1.4, 'Reinforced composite housing, aluminium impeller', TRUE,  23),
+  ('AUD-TCK-EA888-OEM',     'Timing Chain Kit – 2.0 TFSI EA888 Gen3',          'Chain, revised hydraulic tensioner, guide rails, and hardware.',            328.00, 415.00, 'Genuine OEM', 'engine',     '06K 109 158 AB', '06K 109 158 P, 06H 109 467 AE', 1.1, 'Hardened steel chain, composite guides',           TRUE,   8),
+  ('AUD-PCV-EA888-OEM',     'PCV Valve / Oil Separator – 2.0 TFSI',            'Crankcase ventilation valve with integrated oil separator.',                 96.50, NULL,   'Genuine OEM', 'engine',     '06H 103 495 AE', '06H 103 495 AC, 06H 103 495 T', 0.5, 'Glass-filled nylon, silicone diaphragm',           TRUE,  15),
+  ('AUD-BP-B9-FRONT-OEM',   'Front Brake Pad Set – A4 B9 2016–2024',           'Low-dust ceramic-organic pads for the 320 mm front disc.',                  118.90, NULL,   'Genuine OEM', 'brakes',     '8W0 698 151 AG', '8W0 698 151 R, 8W0 698 151 AF', 2.9, 'Ceramic-organic compound',                         TRUE,  42),
+  ('AUD-DISC-B9-FRONT-OEM', 'Front Brake Disc – A4 B9 320 mm Vented',          'OEM-spec vented front disc, corrosion-coated hub face. Sold each.',          142.00, 179.00, 'Genuine OEM', 'brakes',     '8W0 615 301 F',  NULL,                            9.2, 'Grey cast iron, corrosion-protected',              TRUE,  19),
+  ('AUD-STRUT-Q7-FRONT',    'Front Air Suspension Strut – Q7 4M',              'Complete adaptive air strut: bellows, damper, and top mount.',               689.00, NULL,   'Genuine OEM', 'suspension', '4M0 616 039 AR', NULL,                            9.8, 'Reinforced rubber bellows, aluminium body',        FALSE,  0),
+  ('AUD-ALT-EA888-AFT',     'Alternator 180A – 2.0 TFSI (Aftermarket)',        'Remanufactured 180 A alternator, new bearings and regulator.',               289.00, 520.00, 'Aftermarket', 'electrical', '06L 903 026 S-RM','06L 903 026 S, 06L 903 026 F', 6.1, 'Copper windings, aluminium housing',               TRUE,   6),
+  ('AUD-COIL-EA888-OEM',    'Ignition Coil Pack – TFSI (Set of 4)',            'Latest-revision genuine coils, supplied as a matched set of four.',          168.00, NULL,   'Genuine OEM', 'electrical', '06L 905 110 K',  '06L 905 110 J, 06H 905 110 R',  0.8, 'Epoxy-encapsulated windings',                      TRUE,  54),
+  ('AUD-THERM-EA888-OEM',   'Thermostat Housing – 2.0 TFSI / 1.8 TFSI',        'Thermostat and housing with integrated coolant temperature sensor.',          84.50, NULL,   'Genuine OEM', 'cooling',    '06H 121 026 CQ', NULL,                            0.6, 'Composite housing, brass insert',                  TRUE,  54);
 
 INSERT INTO part_fitment (sku, vehicle_id) VALUES
-  ('TYT-WP-1ZZFE-OEM',     'cel-2003-18-1zz'),
-  ('TYT-GK-1ZZFE-OEM',     'cel-2003-18-1zz'),
-  ('TYT-GK-1ZZFE-OEM',     'cor-2019-18'),
-  ('TYT-BELT-1ZZFE-OEM',   'cel-2003-18-1zz'),
-  ('TYT-BELT-1ZZFE-OEM',   'cel-2003-18-2zz'),
-  ('TYT-BP-CAM-FRONT-OEM', 'cam-2020-25'),
-  ('TYT-BP-CAM-FRONT-OEM', 'cam-2020-35v6'),
-  ('TYT-ROTOR-CAM-FRONT',  'cam-2020-25'),
-  ('TYT-ROTOR-CAM-FRONT',  'cam-2020-35v6'),
-  ('TYT-STRUT-HIL-FRONT',  'hil-2022-28d'),
-  ('TYT-ALT-2AR-AFT',      'cam-2020-25'),
-  ('TYT-THERM-OEM',        'cel-2003-18-1zz'),
-  ('TYT-THERM-OEM',        'cel-2003-18-2zz'),
-  ('TYT-THERM-OEM',        'cor-2019-18');
+  ('AUD-WP-EA888-OEM',      'a4-2018-20-ea888'),
+  ('AUD-TCK-EA888-OEM',     'a4-2018-20-ea888'),
+  ('AUD-TCK-EA888-OEM',     'a4-2012-20-cdnc'),
+  ('AUD-PCV-EA888-OEM',     'a4-2018-20-ea888'),
+  ('AUD-PCV-EA888-OEM',     'a3-2019-20'),
+  ('AUD-PCV-EA888-OEM',     'q5-2021-20'),
+  ('AUD-BP-B9-FRONT-OEM',   'a4-2018-20-ea888'),
+  ('AUD-BP-B9-FRONT-OEM',   'a4-2020-20d-ea288'),
+  ('AUD-DISC-B9-FRONT-OEM', 'a4-2018-20-ea888'),
+  ('AUD-DISC-B9-FRONT-OEM', 'a4-2020-20d-ea288'),
+  ('AUD-STRUT-Q7-FRONT',    'q7-2022-30d'),
+  ('AUD-ALT-EA888-AFT',     'a4-2018-20-ea888'),
+  ('AUD-ALT-EA888-AFT',     'q5-2021-20'),
+  ('AUD-COIL-EA888-OEM',    'a4-2018-20-ea888'),
+  ('AUD-COIL-EA888-OEM',    'a3-2019-20'),
+  ('AUD-COIL-EA888-OEM',    'q5-2021-20'),
+  ('AUD-COIL-EA888-OEM',    'tt-2018-25t'),
+  ('AUD-THERM-EA888-OEM',   'a4-2018-20-ea888'),
+  ('AUD-THERM-EA888-OEM',   'a4-2012-20-cdnc'),
+  ('AUD-THERM-EA888-OEM',   'a3-2019-20');
 
 INSERT INTO related_parts (sku, related_sku, relation) VALUES
-  ('TYT-WP-1ZZFE-OEM',   'TYT-GK-1ZZFE-OEM',   'often_together'),
-  ('TYT-WP-1ZZFE-OEM',   'TYT-BELT-1ZZFE-OEM', 'often_together'),
-  ('TYT-WP-1ZZFE-OEM',   'TYT-THERM-OEM',       'often_together'),
-  ('TYT-GK-1ZZFE-OEM',   'TYT-WP-1ZZFE-OEM',   'often_together'),
-  ('TYT-GK-1ZZFE-OEM',   'TYT-BELT-1ZZFE-OEM', 'often_together'),
-  ('TYT-BP-CAM-FRONT-OEM','TYT-ROTOR-CAM-FRONT','often_together');
+  ('AUD-WP-EA888-OEM',      'AUD-TCK-EA888-OEM',      'often_together'),
+  ('AUD-WP-EA888-OEM',      'AUD-THERM-EA888-OEM',    'often_together'),
+  ('AUD-TCK-EA888-OEM',     'AUD-WP-EA888-OEM',       'often_together'),
+  ('AUD-TCK-EA888-OEM',     'AUD-PCV-EA888-OEM',      'often_together'),
+  ('AUD-PCV-EA888-OEM',     'AUD-TCK-EA888-OEM',      'often_together'),
+  ('AUD-BP-B9-FRONT-OEM',   'AUD-DISC-B9-FRONT-OEM',  'often_together'),
+  ('AUD-DISC-B9-FRONT-OEM', 'AUD-BP-B9-FRONT-OEM',    'often_together'),
+  ('AUD-ALT-EA888-AFT',     'AUD-COIL-EA888-OEM',     'often_together');

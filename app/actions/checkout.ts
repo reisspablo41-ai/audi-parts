@@ -73,7 +73,7 @@ export async function submitCheckoutForm(formData: FormData, items: CartItem[], 
     await resend.emails.send({
       from: FROM_EMAIL,
       to: customerData.email,
-      subject: `Order Confirmation - ToyotaParts Direct #${orderNumber}`,
+      subject: `Order Confirmation - AudiParts Direct #${orderNumber}`,
       react: OrderConfirmationEmail({
         orderNumber,
         customerName: customerData.firstName,

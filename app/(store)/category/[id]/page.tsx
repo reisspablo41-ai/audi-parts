@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import PartCard from '@/components/PartCard'
+import CategoryIcon from '@/components/CategoryIcon'
+import { Stagger, StaggerItem } from '@/components/motion'
 import SidebarFilters from '@/components/SidebarFilters'
 import FitmentBar from '@/components/FitmentBar'
 import { getCategoryById, getPartsByCategory, categories } from '@/lib/data'
@@ -18,7 +20,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   if (!category) return {}
   return {
     title: `${category.name} Parts`,
-    description: `Browse ${category.partCount} Toyota ${category.name.toLowerCase()} components. ${category.description}`,
+    description: `Browse ${category.partCount} Audi ${category.name.toLowerCase()} components. ${category.description}`,
   }
 }
 
@@ -49,10 +51,11 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       </Suspense>
 
       {/* Category hero */}
-      <div className="bg-gray-900 text-white py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="brushed-dark text-white py-12 relative overflow-hidden">
+        <div className="absolute inset-0 blueprint-grid opacity-30" aria-hidden />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4">
+          <nav className="flex items-center gap-2 text-xs text-audi-titanium mb-4">
             <Link href="/" className="hover:text-white">Home</Link>
             <span>/</span>
             <Link href="/shop" className="hover:text-white">Shop</Link>
@@ -60,17 +63,17 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             <span className="text-white font-medium">{category.name}</span>
           </nav>
           <div className="flex items-center gap-4">
-            <span className="text-5xl">{category.icon}</span>
+            <CategoryIcon categoryId={category.id} fallback={category.icon} className="w-12 h-12 text-audi-red flex-shrink-0" />
             <div>
-              <h1 className="text-3xl font-black">{category.name}</h1>
-              <p className="text-gray-300 mt-1 max-w-xl text-sm">{category.description}</p>
+              <h1 className="text-3xl font-bold">{category.name}</h1>
+              <p className="text-audi-silver mt-1 max-w-xl text-sm">{category.description}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Related categories */}
-      <div className="bg-gray-50 border-b border-gray-200">
+      <div className="bg-audi-mist border-b border-audi-fog">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 overflow-x-auto">
           <div className="flex gap-2 min-w-max">
             {categories.map((cat) => (
@@ -79,11 +82,11 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                 href={`/category/${cat.id}`}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap ${
                   cat.id === id
-                    ? 'bg-toyota-red text-white'
-                    : 'bg-white border border-gray-200 text-gray-600 hover:border-toyota-red hover:text-toyota-red'
+                    ? 'bg-audi-red text-white'
+                    : 'bg-white border border-audi-fog text-audi-steel hover:border-audi-red hover:text-audi-red'
                 }`}
               >
-                <span>{cat.icon}</span> {cat.name}
+                <CategoryIcon categoryId={cat.id} fallback={cat.icon} className="w-3.5 h-3.5" /> {cat.name}
               </Link>
             ))}
           </div>
@@ -105,32 +108,34 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
           {/* Grid */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-6">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-audi-steel">
                 {categoryParts.length} part{categoryParts.length !== 1 ? 's' : ''} in{' '}
-                <strong className="text-gray-700">{category.name}</strong>
+                <strong className="text-audi-slate">{category.name}</strong>
               </p>
             </div>
 
             {categoryParts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
-                <span className="text-5xl mb-4">{category.icon}</span>
-                <h2 className="text-xl font-bold text-gray-900">
+                <CategoryIcon categoryId={category.id} fallback={category.icon} className="w-10 h-10 mb-4 text-audi-titanium" />
+                <h2 className="text-xl font-bold text-audi-anthracite">
                   No parts match your filters
                 </h2>
-                <p className="text-gray-500 mt-2">Try clearing some filters or browsing all categories.</p>
+                <p className="text-audi-steel mt-2">Try clearing some filters or browsing all categories.</p>
                 <Link
                   href="/shop"
-                  className="mt-6 inline-flex h-10 px-5 bg-toyota-red text-white font-semibold rounded-lg text-sm items-center hover:bg-toyota-red-dark transition-colors"
+                  className="mt-6 inline-flex h-10 px-5 bg-audi-red text-white font-semibold rounded-lg text-sm items-center hover:bg-audi-red-dark transition-colors"
                 >
                   Browse All Parts
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              <Stagger className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5" gap={0.05}>
                 {categoryParts.map((part) => (
-                  <PartCard key={part.sku} part={part} />
+                  <StaggerItem key={part.sku} className="h-full">
+                    <PartCard part={part} />
+                  </StaggerItem>
                 ))}
-              </div>
+              </Stagger>
             )}
           </div>
         </div>

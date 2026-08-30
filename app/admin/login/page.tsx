@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { RingsMark } from '@/components/BrandMark'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -28,34 +29,32 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-audi-anthracite flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 bg-toyota-red rounded-xl flex items-center justify-center">
-              <span className="text-white font-black text-base">T</span>
-            </div>
+            <RingsMark className="h-5 w-auto text-white" />
             <div>
-              <p className="text-white font-black text-lg leading-tight">ToyotaParts</p>
-              <p className="text-gray-500 text-[11px] uppercase tracking-widest">Admin Portal</p>
+              <p className="text-white font-bold text-lg leading-tight">AudiParts</p>
+              <p className="text-audi-steel text-[11px] uppercase tracking-widest">Admin Portal</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
+        <div className="bg-audi-anthracite border border-audi-graphite rounded-lg p-8">
           <h1 className="text-xl font-bold text-white mb-1">Sign in</h1>
-          <p className="text-sm text-gray-400 mb-6">Access the ToyotaParts admin panel.</p>
+          <p className="text-sm text-audi-titanium mb-6">Access the AudiParts admin panel.</p>
 
           {/* Demo hint */}
-          <div className="bg-blue-950 border border-blue-800 rounded-lg p-3 mb-5">
-            <p className="text-xs text-blue-300 font-semibold mb-0.5">Demo credentials</p>
-            <p className="text-xs text-blue-400 font-mono">admin@toyotaparts.com / admin1234</p>
+          <div className="bg-audi-graphite border border-audi-slate rounded-lg p-3 mb-5">
+            <p className="text-xs text-audi-silver font-semibold mb-0.5">Demo credentials</p>
+            <p className="technical text-xs text-audi-red">admin@audiparts.com / admin1234</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-audi-titanium mb-1.5 uppercase tracking-wide">
                 Email
               </label>
               <input
@@ -64,12 +63,12 @@ export default function AdminLoginPage() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@toyotaparts.com"
-                className="w-full h-11 px-4 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-toyota-red transition-colors"
+                placeholder="admin@audiparts.com"
+                className="w-full h-11 px-4 bg-audi-graphite border border-audi-slate rounded-lg text-white text-sm placeholder-audi-steel focus:outline-none focus:border-audi-red transition-colors"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-audi-titanium mb-1.5 uppercase tracking-wide">
                 Password
               </label>
               <input
@@ -79,7 +78,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full h-11 px-4 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-toyota-red transition-colors"
+                className="w-full h-11 px-4 bg-audi-graphite border border-audi-slate rounded-lg text-white text-sm placeholder-audi-steel focus:outline-none focus:border-audi-red transition-colors"
               />
             </div>
 
@@ -95,7 +94,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-toyota-red text-white font-bold rounded-lg hover:bg-toyota-red-dark transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full h-11 bg-audi-red text-white font-bold rounded-lg hover:bg-audi-red-dark transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -109,7 +108,7 @@ export default function AdminLoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-xs text-gray-600 mt-6">
+        <p className="text-center text-xs text-audi-steel mt-6">
           Access is restricted to authorized administrator accounts.
         </p>
       </div>

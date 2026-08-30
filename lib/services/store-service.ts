@@ -45,7 +45,8 @@ function mapDbCategory(row: any): Category {
     name: row.name,
     slug: row.slug,
     description: row.description ?? '',
-    icon: row.icon ?? '⚙️',
+    icon: row.icon ?? '',
+    parentId: row.parent_id ?? null,
     partCount: row.parts?.[0]?.count ?? 0,
   }
 }
@@ -71,6 +72,29 @@ export interface StoreFilters {
 export interface StorePartsResult {
   parts: Part[]
   total: number
+}
+
+
+/**
+ * Expand a category id to itself plus its direct children.
+ *
+ * The taxonomy is two levels deep and parts always live on the leaves
+ * (a disc is filed under "brake-rotors", never under "Brakes"). Filtering on
+ * an exact category_id therefore returns nothing for any parent category,
+ * which is not what a visitor clicking "Brakes" expects.
+ */
+async function categoryWithDescendants(categoryId: string): Promise<string[]> {
+  const { data, error } = await db
+    .from('categories')
+    .select('id')
+    .eq('parent_id', categoryId)
+
+  if (error) {
+    console.error('[categoryWithDescendants]', error.message)
+    return [categoryId]
+  }
+
+  return [categoryId, ...(data ?? []).map((c: { id: string }) => c.id)]
 }
 
 export async function getStoreParts(filters: StoreFilters = {}): Promise<StorePartsResult> {
@@ -114,7 +138,10 @@ export async function getStoreParts(filters: StoreFilters = {}): Promise<StorePa
     .order('created_at', { ascending: false })
     .range(from, to)
 
-  if (category) q = q.eq('category_id', category)
+  if (category) {
+    const categoryIds = await categoryWithDescendants(category)
+    q = q.in('category_id', categoryIds)
+  }
   if (brand) q = q.eq('brand', brand as PartBrand)
   if (minPrice !== undefined && minPrice > 0) q = q.gte('price', minPrice)
   if (maxPrice !== undefined && maxPrice !== Infinity) q = q.lte('price', maxPrice)
@@ -135,21 +162,56 @@ export async function getStoreParts(filters: StoreFilters = {}): Promise<StorePa
   return { parts: (data ?? []).map(mapDbPart), total: count ?? 0 }
 }
 
+/**
+ * Set once we learn the database predates the `is_featured` column, so the
+ * probe is attempted at most once per process instead of on every render.
+ * Postgres reports a missing column as SQLSTATE 42703 (undefined_column).
+ */
+let featuredColumnMissing = false
+
 export async function getFeaturedParts(limit = 4): Promise<Part[]> {
-  const { data, error } = await db
-    .from('parts')
-    .select(PART_SELECT)
-    .eq('is_active', true)
-    .eq('in_stock', true)
+  // In-stock is preferred, not required: a catalogue whose parts are all on
+  // backorder or awaiting a price should still show a populated shelf rather
+  // than a blank band on the homepage.
+  const base = () =>
+    db.from('parts').select(PART_SELECT).eq('is_active', true)
+
+  if (!featuredColumnMissing) {
+    const { data, error } = await base()
+      .eq('is_featured', true)
+      .order('in_stock', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      if (error.code === '42703') {
+        // Expected on a database that has not run migration-add-featured.sql.
+        // Not a fault: note it once, then stop probing.
+        featuredColumnMissing = true
+        console.info(
+          '[getFeaturedParts] parts.is_featured not present — falling back to ' +
+            'newest-first. Run migration-add-featured.sql to curate the shelf.',
+        )
+      } else {
+        console.error('[getFeaturedParts]', error.message)
+      }
+    } else if (data && data.length > 0) {
+      return data.map(mapDbPart)
+    }
+  }
+
+  // Fallback: in-stock first, then newest, so the shelf is never empty.
+  const { data: fallback, error: fallbackError } = await base()
+    .order('in_stock', { ascending: false })
     .order('created_at', { ascending: false })
     .limit(limit)
 
-  if (error) {
-    console.error('[getFeaturedParts]', error.message)
+  if (fallbackError) {
+    console.error('[getFeaturedParts:fallback]', fallbackError.message)
     return []
   }
 
-  return (data ?? []).map(mapDbPart)
+  return (fallback ?? []).map(mapDbPart)
 }
 
 export async function getStorePartBySku(sku: string): Promise<Part | null> {
@@ -210,19 +272,50 @@ export async function getReviewsForSku(sku: string) {
   return data || []
 }
 
-export async function getStoreCategories(): Promise<Category[]> {
-  const { data, error } = await db
+export interface CategoryQuery {
+  /**
+   * Return only top-level categories (Brakes, Engine, …) rather than the whole
+   * tree. The taxonomy is two levels deep, so listing everything flat mixes
+   * parents in with leaves like "Headlights" and reads as noise.
+   */
+  topLevelOnly?: boolean
+  /** Return only the children of this category id. */
+  parentId?: string
+}
+
+export async function getStoreCategories(
+  query: CategoryQuery = {},
+): Promise<Category[]> {
+  let q = db
     .from('categories')
     .select('*, parts(count)')
     .eq('parts.is_active', true)
     .order('sort_order', { ascending: true })
+
+  if (query.parentId) q = q.eq('parent_id', query.parentId)
+
+  const { data, error } = await q
 
   if (error) {
     console.error('[getStoreCategories]', error.message)
     return []
   }
 
-  return (data ?? []).map(mapDbCategory)
+  const all = (data ?? []).map(mapDbCategory)
+
+  if (query.parentId || !query.topLevelOnly) return all
+
+  // Parts live on the leaves, so a parent's own count is always zero. Roll the
+  // children's counts up, otherwise every tile on the homepage reads "0 parts".
+  const rolledUp = new Map<string, number>()
+  for (const cat of all) {
+    const owner = cat.parentId ?? cat.id
+    rolledUp.set(owner, (rolledUp.get(owner) ?? 0) + cat.partCount)
+  }
+
+  return all
+    .filter((cat) => !cat.parentId)
+    .map((cat) => ({ ...cat, partCount: rolledUp.get(cat.id) ?? 0 }))
 }
 
 export async function getStoreStats() {

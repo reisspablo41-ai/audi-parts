@@ -23,16 +23,16 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Welcome banner */}
-      <div className="bg-gray-900 rounded-2xl p-6 flex items-center justify-between">
+      <div className="bg-audi-anthracite rounded-2xl p-6 flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white">Welcome back, Admin</h2>
-          <p className="text-gray-400 text-sm mt-1">
-            Manage your Toyota spare parts catalogue from here.
+          <p className="text-audi-titanium text-sm mt-1">
+            Manage your Audi spare parts catalogue from here.
           </p>
         </div>
         <Link
           href="/admin/products/new"
-          className="flex items-center gap-2 h-10 px-5 bg-toyota-red text-white font-semibold rounded-lg text-sm hover:bg-toyota-red-dark transition-colors"
+          className="flex items-center gap-2 h-10 px-5 bg-audi-red text-white font-semibold rounded-lg text-sm hover:bg-audi-red-dark transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -51,28 +51,28 @@ export default async function AdminDashboardPage() {
             <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg text-lg mb-3 ${stat.color}`}>
               {stat.icon}
             </div>
-            <p className="text-2xl font-black text-gray-900">{stat.value}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{stat.label}</p>
+            <p className="text-2xl font-bold text-audi-anthracite">{stat.value}</p>
+            <p className="text-xs text-audi-steel mt-0.5">{stat.label}</p>
           </div>
         ))}
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Recent products */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h3 className="font-bold text-gray-900">Recent Products</h3>
-            <Link href="/admin/products" className="text-xs text-toyota-red hover:underline font-medium">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-audi-fog">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-audi-fog">
+            <h3 className="font-bold text-audi-anthracite">Recent Products</h3>
+            <Link href="/admin/products" className="text-xs text-audi-red hover:underline font-medium">
               View all →
             </Link>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-audi-mist">
             {recentProducts.length === 0 ? (
-              <p className="px-5 py-8 text-center text-gray-400 text-sm">No products found.</p>
+              <p className="px-5 py-8 text-center text-audi-titanium text-sm">No products found.</p>
             ) : (
               recentProducts.map((part) => (
                 <div key={part.sku} className="flex items-center gap-4 px-5 py-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0 border border-gray-100">
+                  <div className="w-10 h-10 rounded-lg bg-audi-fog flex items-center justify-center overflow-hidden flex-shrink-0 border border-audi-fog">
                     {part.images && part.images.length > 0 ? (
                       <img 
                         src={part.images[0]} 
@@ -84,11 +84,11 @@ export default async function AdminDashboardPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate">{part.name}</p>
-                    <p className="text-xs text-gray-400 font-mono">{part.partNumber}</p>
+                    <p className="text-sm font-semibold text-audi-anthracite truncate">{part.name}</p>
+                    <p className="text-xs text-audi-titanium font-mono">{part.partNumber}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <p className="text-sm font-bold text-gray-900">${part.price.toFixed(2)}</p>
+                    <p className="text-sm font-bold text-audi-anthracite">${part.price.toFixed(2)}</p>
                     <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
                       part.inStock ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
                     }`}>
@@ -97,7 +97,7 @@ export default async function AdminDashboardPage() {
                   </div>
                   <Link
                     href={`/admin/products/${part.sku}/edit`}
-                    className="ml-2 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors flex-shrink-0"
+                    className="ml-2 w-8 h-8 flex items-center justify-center rounded-lg text-audi-titanium hover:bg-audi-fog hover:text-audi-slate transition-colors flex-shrink-0"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -110,9 +110,9 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Category breakdown */}
-        <div className="bg-white rounded-2xl border border-gray-200">
-          <div className="px-5 py-4 border-b border-gray-100">
-            <h3 className="font-bold text-gray-900">By Category</h3>
+        <div className="bg-white rounded-2xl border border-audi-fog">
+          <div className="px-5 py-4 border-b border-audi-fog">
+            <h3 className="font-bold text-audi-anthracite">By Category</h3>
           </div>
           <div className="p-5 space-y-3">
             {categories.map((cat) => {
@@ -121,13 +121,13 @@ export default async function AdminDashboardPage() {
               return (
                 <div key={cat.id}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-gray-700 flex items-center gap-1.5">
+                    <span className="text-sm text-audi-slate flex items-center gap-1.5">
                       {cat.icon} {cat.name}
                     </span>
                   </div>
-                  <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-audi-fog rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-toyota-red rounded-full transition-all"
+                      className="h-full bg-audi-red rounded-full transition-all"
                       style={{ width: `0%` }} // Placeholder as we don't have counts here
                     />
                   </div>
@@ -141,20 +141,20 @@ export default async function AdminDashboardPage() {
       {/* Quick actions */}
       <div className="grid sm:grid-cols-3 gap-4">
         {[
-          { label: 'Add New Product', desc: 'Upload a new spare part to the catalogue', href: '/admin/products/new', icon: '➕', color: 'text-toyota-red' },
+          { label: 'Add New Product', desc: 'Upload a new spare part to the catalogue', href: '/admin/products/new', icon: '➕', color: 'text-audi-red' },
           { label: 'Manage Categories', desc: 'Edit part categories and organisation', href: '/admin/categories', icon: '🗂️', color: 'text-purple-600' },
           { label: 'Review Testimonials', desc: 'Approve or reject customer feedback', href: '/admin/testimonials', icon: '💬', color: 'text-green-600' },
         ].map((action) => (
           <Link
             key={action.label}
             href={action.href}
-            className="bg-white rounded-xl border border-gray-200 p-5 hover:border-gray-300 hover:shadow-sm transition-all group"
+            className="bg-white rounded-xl border border-audi-fog p-5 hover:border-audi-silver hover:shadow-sm transition-all group"
           >
             <span className="text-2xl">{action.icon}</span>
             <p className={`font-bold text-sm mt-3 mb-1 group-hover:${action.color} transition-colors`}>
               {action.label}
             </p>
-            <p className="text-xs text-gray-400">{action.desc}</p>
+            <p className="text-xs text-audi-titanium">{action.desc}</p>
           </Link>
         ))}
       </div>

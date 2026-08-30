@@ -78,8 +78,8 @@ export default function ImageUploader({ value, onChange, maxImages = 8 }: ImageU
           onClick={() => inputRef.current?.click()}
           className={`relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
             dragging
-              ? 'border-toyota-red bg-red-50'
-              : 'border-gray-200 hover:border-gray-400 bg-gray-50 hover:bg-gray-100'
+              ? 'border-audi-red bg-red-50'
+              : 'border-audi-fog hover:border-audi-titanium bg-audi-mist hover:bg-audi-fog'
           }`}
         >
           <input
@@ -91,20 +91,20 @@ export default function ImageUploader({ value, onChange, maxImages = 8 }: ImageU
             onChange={(e) => e.target.files && addFiles(e.target.files)}
           />
           <div className="flex flex-col items-center gap-2">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${dragging ? 'bg-toyota-red text-white' : 'bg-white border border-gray-200 text-gray-400'}`}>
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${dragging ? 'bg-audi-red text-white' : 'bg-white border border-audi-fog text-audi-titanium'}`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-700">
+              <p className="text-sm font-semibold text-audi-slate">
                 {dragging ? 'Drop to upload' : 'Drag & drop images here'}
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">
-                or <span className="text-toyota-red font-medium">click to browse</span> · PNG, JPG, WebP · Max 5 MB each
+              <p className="text-xs text-audi-titanium mt-0.5">
+                or <span className="text-audi-red font-medium">click to browse</span> · PNG, JPG, WebP · Max 5 MB each
               </p>
             </div>
-            <p className="text-xs text-gray-300">
+            <p className="text-xs text-audi-silver">
               {value.length}/{maxImages} images uploaded
             </p>
           </div>
@@ -120,12 +120,12 @@ export default function ImageUploader({ value, onChange, maxImages = 8 }: ImageU
               <img
                 src={img.url}
                 alt={img.name}
-                className="w-full h-full object-cover rounded-lg border border-gray-200"
+                className="w-full h-full object-cover rounded-lg border border-audi-fog"
               />
 
               {/* Primary badge */}
               {i === 0 && (
-                <span className="absolute top-1.5 left-1.5 bg-toyota-red text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                <span className="absolute top-1.5 left-1.5 bg-audi-red text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
                   Primary
                 </span>
               )}
@@ -136,7 +136,7 @@ export default function ImageUploader({ value, onChange, maxImages = 8 }: ImageU
                   <button
                     type="button"
                     onClick={() => handleMakePrimary(img.id)}
-                    className="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-gray-700 hover:bg-toyota-red hover:text-white transition-colors"
+                    className="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-audi-slate hover:bg-audi-red hover:text-white transition-colors"
                     title="Set as primary"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +147,7 @@ export default function ImageUploader({ value, onChange, maxImages = 8 }: ImageU
                 <button
                   type="button"
                   onClick={() => handleRemove(img.id)}
-                  className="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-gray-700 hover:bg-red-500 hover:text-white transition-colors"
+                  className="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-audi-slate hover:bg-red-500 hover:text-white transition-colors"
                   title="Remove"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,7 +157,7 @@ export default function ImageUploader({ value, onChange, maxImages = 8 }: ImageU
               </div>
 
               {/* Size label */}
-              <p className="text-[9px] text-gray-400 text-center mt-0.5 truncate">{img.sizeKb} KB</p>
+              <p className="text-[9px] text-audi-titanium text-center mt-0.5 truncate">{img.sizeKb} KB</p>
             </div>
           ))}
         </div>

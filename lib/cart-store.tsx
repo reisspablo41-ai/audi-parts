@@ -37,6 +37,12 @@ const CartContext = createContext<{
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
+      // Last line of defence: an unpriced part must never reach the cart, no
+      // matter which surface tried to add it.
+      if (!(action.payload.price > 0)) {
+        console.warn('[cart] refused unpriced item', action.payload.sku)
+        return state
+      }
       const existingItem = state.items.find((item) => item.sku === action.payload.sku)
       if (existingItem) {
         return {
@@ -76,7 +82,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // Load from localStorage
   useEffect(() => {
-    const savedCart = localStorage.getItem('toyota_cart')
+    const savedCart = localStorage.getItem('audi_cart')
     if (savedCart) {
       try {
         dispatch({ type: 'SET_CART', payload: JSON.parse(savedCart) })
@@ -88,7 +94,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem('toyota_cart', JSON.stringify(state.items))
+    localStorage.setItem('audi_cart', JSON.stringify(state.items))
   }, [state.items])
 
   const totalCount = state.items.reduce((acc, item) => acc + item.quantity, 0)
