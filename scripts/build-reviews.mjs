@@ -91,10 +91,35 @@ const LAST = [
   'Marchetti', 'Osei', 'Vogel', 'Delgado', 'Krause', 'Bianchi', 'Haugen', 'Tran', 'Ellery', 'Zimmer',
 ]
 
+// Chassis code plus the years that generation was actually built. Drawing the
+// year independently of the code produced impossible cars -- a "2022 A3 8P"
+// when the 8P finished in 2013 -- which any Audi owner would spot instantly.
 const AUDI = [
-  'A3 8V', 'A3 8P', 'A4 B7', 'A4 B8', 'A4 B8.5', 'A4 B9', 'A5 8T', 'A5 F5', 'A6 C6', 'A6 C7',
-  'A6 C8', 'A7 4G', 'A8 D4', 'Q3 8U', 'Q5 8R', 'Q5 FY', 'Q7 4L', 'Q7 4M', 'TT 8J', 'TT 8S',
-  'S4 B8', 'S3 8V', 'RS4 B7', 'Q8 4M', 'A1 8X',
+  { code: 'A3 8P', from: 2003, to: 2013 },
+  { code: 'A3 8V', from: 2013, to: 2020 },
+  { code: 'A4 B7', from: 2005, to: 2008 },
+  { code: 'A4 B8', from: 2008, to: 2012 },
+  { code: 'A4 B8.5', from: 2012, to: 2015 },
+  { code: 'A4 B9', from: 2016, to: 2024 },
+  { code: 'A5 8T', from: 2008, to: 2016 },
+  { code: 'A5 F5', from: 2017, to: 2024 },
+  { code: 'A6 C6', from: 2005, to: 2011 },
+  { code: 'A6 C7', from: 2011, to: 2018 },
+  { code: 'A6 C8', from: 2019, to: 2024 },
+  { code: 'A7 4G', from: 2011, to: 2018 },
+  { code: 'A8 D4', from: 2010, to: 2017 },
+  { code: 'Q3 8U', from: 2011, to: 2018 },
+  { code: 'Q5 8R', from: 2009, to: 2017 },
+  { code: 'Q5 FY', from: 2017, to: 2024 },
+  { code: 'Q7 4L', from: 2006, to: 2015 },
+  { code: 'Q7 4M', from: 2016, to: 2024 },
+  { code: 'TT 8J', from: 2007, to: 2014 },
+  { code: 'TT 8S', from: 2015, to: 2023 },
+  { code: 'S4 B8', from: 2009, to: 2016 },
+  { code: 'S3 8V', from: 2013, to: 2020 },
+  { code: 'RS4 B7', from: 2006, to: 2008 },
+  { code: 'Q8 4M', from: 2019, to: 2024 },
+  { code: 'A1 8X', from: 2010, to: 2018 },
 ]
 const ENGINES = ['2.0 TFSI', '1.8 TFSI', '2.0 TDI', '3.0 TDI V6', '3.0 TFSI V6', '1.4 TFSI', '2.5 TFSI']
 
@@ -107,7 +132,6 @@ const FAMILIES = {
     titles: {
       good: ['Judder gone completely', 'Straight, true and quiet', 'Better than the dealer discs', 'Bedded in perfectly', 'Pedal feel transformed', 'Exactly the right spec', 'No more steering shudder', 'Solid replacement discs'],
       mixed: ['Fine once bedded, noisy first week', 'Good discs, awkward delivery', 'Works, but check your part number', 'Decent for the money'],
-      bad: ['Warped inside 3000 miles', 'Wrong offset for my car', 'Surface rust out of the box'],
     },
     install: [
       'swapped them on the driveway with basic tools in about two hours a side',
@@ -133,10 +157,11 @@ const FAMILIES = {
       'braking is quiet and progressive where before it grabbed',
       'no vibration through the pedal even on a long downhill run',
     ],
-    complaint: [
-      'they developed a pulsing through the pedal well before they should have',
-      'one disc had visible corrosion on the friction surface when I opened the box',
-      'they never fully stopped squealing no matter how carefully I bedded them',
+    complaints: [
+      { title: 'Warped inside 3000 miles', mixedTitle: 'Fine at first, pulsing later', text: 'they developed a pulsing through the pedal well before they should have' },
+      { title: 'Surface rust out of the box', mixedTitle: 'Good discs, arrived marked', text: 'one disc had visible corrosion on the friction surface when I opened the box' },
+      { title: 'Never stopped squealing', mixedTitle: 'Noisy for the first week', text: 'they never fully stopped squealing no matter how carefully I bedded them' },
+      { title: 'Wrong offset for my car', mixedTitle: 'Right diameter, check the offset', text: 'the offset was not what the listing stated and it fouled the caliper carrier' },
     ],
   },
 
@@ -145,7 +170,6 @@ const FAMILIES = {
     titles: {
       good: ['Misfire cleared instantly', 'Idle is smooth again', 'Cured my P0303', 'No more limp mode', 'Straight fix for a rough idle', 'Exactly like the originals', 'Engine light off first drive'],
       mixed: ['Fixed it, but buy the full set', 'Good coil, slow shipping', 'Works fine, boots are stiff'],
-      bad: ['Failed after two months', 'Boot split on installation'],
     },
     install: [
       'coil pack out, new one in, ten minutes with a T30 and the engine cover off',
@@ -167,9 +191,9 @@ const FAMILIES = {
       'cold starts are smooth instead of shaking the whole car',
       'no stored codes after a month of daily driving',
     ],
-    complaint: [
-      'it started misfiring on the same cylinder again after about eight weeks',
-      'the boot tore as I seated it, which suggests the rubber compound is not right',
+    complaints: [
+      { title: 'Failed after two months', mixedTitle: 'Fixed it, but not for long', text: 'it started misfiring on the same cylinder again after about eight weeks' },
+      { title: 'Boot split on installation', mixedTitle: 'Works fine, boots are stiff', text: 'the boot tore as I seated it, which suggests the rubber compound is not right' },
     ],
   },
 
@@ -178,7 +202,6 @@ const FAMILIES = {
     titles: {
       good: ['Correct kit, no surprises', 'Quiet engine again', 'Rattle on start-up gone', 'Everything lined up', 'Peace of mind on an interference engine', 'Complete and correct'],
       mixed: ['Good part, order the water pump too', 'Right belt, sparse instructions', 'Fine, but not a DIY job'],
-      bad: ['Missing a tensioner bolt', 'Chain stretched sooner than expected'],
     },
     install: [
       'I booked it in with a specialist rather than risk an interference engine on the driveway',
@@ -199,9 +222,9 @@ const FAMILIES = {
       'timing has held perfectly through 12,000 miles since fitting',
       'no more chain slap on start-up, which was what prompted the job',
     ],
-    complaint: [
-      'one of the tensioner bolts was missing from the kit and held the job up a day',
-      'it developed a light rattle again far sooner than a timing job should need redoing',
+    complaints: [
+      { title: 'Missing a tensioner bolt', mixedTitle: 'Good kit, check the contents', text: 'one of the tensioner bolts was missing from the kit and held the job up a day' },
+      { title: 'Stretched sooner than expected', mixedTitle: 'Fine, but I expected longer life', text: 'it developed a light rattle again far sooner than a timing job should need redoing' },
     ],
   },
 
@@ -210,7 +233,6 @@ const FAMILIES = {
     titles: {
       good: ['Temps back to normal', 'Perfect fit, no modification', 'Solved my overheating', 'Better core than the original', 'Holds pressure beautifully', 'Straight swap'],
       mixed: ['Good rad, mounting tabs tight', 'Works well, packaging was thin', 'Fits, but budget a new fan shroud'],
-      bad: ['Seeped from the end tank', 'Fins bent in transit'],
     },
     install: [
       'front end off, old one out, this one in over a long Saturday',
@@ -231,9 +253,9 @@ const FAMILIES = {
       'the coolant level has not moved in four months',
       'intake temps dropped noticeably on a long motorway pull',
     ],
-    complaint: [
-      'a weep appeared at the end tank seam after a few heat cycles',
-      'several fins arrived flattened because the box had almost no internal padding',
+    complaints: [
+      { title: 'Seeped from the end tank', mixedTitle: 'Works, but watch the seams', text: 'a weep appeared at the end tank seam after a few heat cycles' },
+      { title: 'Fins bent in transit', mixedTitle: 'Good rad, poor packaging', text: 'several fins arrived flattened because the box had almost no internal padding' },
     ],
   },
 
@@ -242,7 +264,6 @@ const FAMILIES = {
     titles: {
       good: ['Ride is composed again', 'Night and day difference', 'Crashing over potholes has stopped', 'Correct damping rate', 'Car feels new again', 'Well damped, not harsh'],
       mixed: ['Good dampers, buy the top mounts too', 'Firmer than standard, took adjusting to', 'Fine, but get an alignment after'],
-      bad: ['Leaked within a month', 'Sat noticeably lower than the other side'],
     },
     install: [
       'spring compressors out and the strut rebuilt on the bench in an afternoon',
@@ -264,9 +285,9 @@ const FAMILIES = {
       'the clonk over speed bumps that started this job has completely gone',
       'it tracks straight on the motorway instead of wandering',
     ],
-    complaint: [
-      'one unit was visibly weeping oil down the body within a few weeks',
-      'the car sat about 15mm lower on one side, which suggests a spring rate problem',
+    complaints: [
+      { title: 'Leaked within a month', mixedTitle: 'One weeped, the other is fine', text: 'one unit was visibly weeping oil down the body within a few weeks' },
+      { title: 'Sat lower on one side', mixedTitle: 'Good damping, ride height is off', text: 'the car sat about 15mm lower on one side, which suggests a spring rate problem' },
     ],
   },
 
@@ -275,7 +296,6 @@ const FAMILIES = {
     titles: {
       good: ['Correct fit, sealed properly', 'Genuine quality for less', 'Right filter every time', 'Good pleat count', 'Exactly what the service needed', 'No leaks, no fuss'],
       mixed: ['Fine filter, seal was dry', 'Good value, thin gasket', 'Does the job, packaging poor'],
-      bad: ['Seal did not seat', 'Wrong housing diameter'],
     },
     install: [
       'it dropped straight into the housing and the cap torqued to spec first go',
@@ -297,9 +317,9 @@ const FAMILIES = {
       'throttle response feels crisper than it did on the clogged original',
       'shifts are smoother now the transmission has clean fluid and a fresh filter',
     ],
-    complaint: [
-      'the gasket was dry and flat out of the packet and would not seat cleanly',
-      'the outer diameter was a couple of millimetres off and it would not sit square in the housing',
+    complaints: [
+      { title: 'Seal did not seat', mixedTitle: 'Fine filter, seal was dry', text: 'the gasket was dry and flat out of the packet and would not seat cleanly' },
+      { title: 'Wrong housing diameter', mixedTitle: 'Right filter, tight in the housing', text: 'the outer diameter was a couple of millimetres off and it would not sit square in the housing' },
     ],
   },
 
@@ -308,7 +328,6 @@ const FAMILIES = {
     titles: {
       good: ['Finish is flawless', 'Balanced with almost no weight', 'Transformed the look', 'Correct offset, no rubbing', 'Straight and true', 'Better than I expected'],
       mixed: ['Lovely wheel, needs spigot rings', 'Good finish, one had a mark', 'Right size, check your bolt length'],
-      bad: ['Buckled on a mild pothole', 'Finish lifted in one winter'],
     },
     install: [
       'they bolted straight on with the factory bolts and centred perfectly on the hub',
@@ -328,9 +347,9 @@ const FAMILIES = {
       'it clears the front calipers with room to spare',
       'the car sits exactly right with no arch rub on full lock',
     ],
-    complaint: [
-      'one wheel picked up a buckle from a pothole that should not have troubled it',
-      'the lacquer started lifting at the rim edge after a single winter',
+    complaints: [
+      { title: 'Buckled on a mild pothole', mixedTitle: 'Lovely wheel, softer than I hoped', text: 'one wheel picked up a buckle from a pothole that should not have troubled it' },
+      { title: 'Finish lifted in one winter', mixedTitle: 'Great look, finish needs care', text: 'the lacquer started lifting at the rim edge after a single winter' },
     ],
   },
 
@@ -339,7 +358,6 @@ const FAMILIES = {
     titles: {
       good: ['Panel gaps came out perfect', 'Bodyshop was impressed', 'Saved a fortune on the repair', 'Contours match exactly', 'Primed and ready to paint', 'Lined up first time'],
       mixed: ['Good panel, needed minor adjustment', 'Fits well, arrived slightly marked', 'Right part, allow for prep time'],
-      bad: ['Creased in transit', 'Mounting tab snapped off'],
     },
     install: [
       'the bodyshop test-fitted it before paint and needed almost no adjustment',
@@ -359,9 +377,9 @@ const FAMILIES = {
       'the paint match came out perfectly with no ripple in the reflection',
       'the finished repair cost a fraction of a dealer panel',
     ],
-    complaint: [
-      'it arrived with a crease along one edge because the packaging was inadequate',
-      'one of the mounting tabs sheared as soon as it was put under any tension',
+    complaints: [
+      { title: 'Creased in transit', mixedTitle: 'Fits well, arrived slightly marked', text: 'it arrived with a crease along one edge because the packaging was inadequate' },
+      { title: 'Mounting tab snapped off', mixedTitle: 'Good panel, treat the tabs gently', text: 'one of the mounting tabs sheared as soon as it was put under any tension' },
     ],
   },
 
@@ -370,7 +388,6 @@ const FAMILIES = {
     titles: {
       good: ['Correct thread, correct grade', 'Exactly the right hardware', 'Saved a trip to the dealer', 'Proper OE spec', 'Right first time'],
       mixed: ['Right bolts, count was short', 'Good hardware, slow to arrive'],
-      bad: ['Thread pitch was wrong'],
     },
     install: [
       'they threaded in cleanly by hand before I put a socket anywhere near them',
@@ -387,7 +404,10 @@ const FAMILIES = {
       'no corrosion on them after a winter of road salt',
       'it came in cheaper than the dealer wanted for the same specification',
     ],
-    complaint: ['the pack was two bolts short of the quantity listed'],
+    complaints: [
+      { title: 'Pack arrived short', mixedTitle: 'Right bolts, count was short', text: 'the pack was two bolts short of the quantity listed' },
+      { title: 'Thread pitch was wrong', mixedTitle: 'Good steel, verify the pitch', text: 'the thread pitch did not match my originals and I had to source them elsewhere' },
+    ],
   },
 
   audio: {
@@ -395,7 +415,6 @@ const FAMILIES = {
     titles: {
       good: ['Clarity is a big step up', 'Direct fit, no adapters', 'Bass without the rattle', 'Worth doing'],
       mixed: ['Good sound, fiddly fitting', 'Better than stock, not audiophile'],
-      bad: ['One arrived with a torn surround'],
     },
     install: [
       'door card off, four screws, and the connector plugged straight in',
@@ -412,7 +431,10 @@ const FAMILIES = {
       'the door card buzz at higher volume has gone completely',
       'noticeably more detail without having to touch the head unit settings',
     ],
-    complaint: ['one of the pair had a small tear in the surround out of the box'],
+    complaints: [
+      { title: 'Torn surround out of the box', mixedTitle: 'Good sound, one was damaged', text: 'one of the pair had a small tear in the surround out of the box' },
+      { title: 'Mounting holes did not line up', mixedTitle: 'Good sound, fiddly fitting', text: 'the mounting holes did not quite line up and needed opening out slightly' },
+    ],
   },
 }
 
@@ -507,10 +529,12 @@ for (const part of parts) {
     const rating = rr < 0.5 ? 5 : rr < 0.79 ? 4 : rr < 0.92 ? 3 : rr < 0.975 ? 2 : 1
     const tier = rating >= 4 ? 'good' : rating === 3 ? 'mixed' : 'bad'
 
+    const car = pick(rnd, AUDI)
     const ctx = {
-      model: pick(rnd, AUDI),
+      model: car.code,
       engine: pick(rnd, ENGINES),
-      year: 2006 + Math.floor(rnd() * 19),
+      // Year drawn from that generation's own production run.
+      year: car.from + Math.floor(rnd() * (car.to - car.from + 1)),
       miles: 40 + Math.floor(rnd() * 130),
     }
 
@@ -526,16 +550,28 @@ for (const part of parts) {
     if (!author) break
     authorsUsed.add(author)
 
+    // A negative or mixed review is built around one specific fault, and the
+    // title has to name that same fault -- so the complaint is drawn first and
+    // the headline comes from it.
+    const complaint = tier === 'good' ? null : pick(rnd, fam.complaints)
+    // A mixed review either raises its complaint or dwells on build quality.
+    const mixedRaisesComplaint = tier === 'mixed' && rnd() < 0.6
+
+    let titlePool
+    if (tier === 'bad') titlePool = [complaint.title]
+    else if (mixedRaisesComplaint) titlePool = [complaint.mixedTitle]
+    else titlePool = fam.titles[tier === 'good' ? 'good' : 'mixed']
+
     // Title: unique within this part.
     let title = ''
     for (let t = 0; t < 40; t++) {
-      const candidate = pick(rnd, fam.titles[tier])
+      const candidate = pick(rnd, titlePool)
       if (!titlesUsed.has(candidate)) {
         title = candidate
         break
       }
     }
-    if (!title) title = `${pick(rnd, fam.titles[tier])} (${ctx.model})`
+    if (!title) title = `${pick(rnd, titlePool)} (${ctx.model})`
     titlesUsed.add(title)
 
     // Body: unique globally. Redraw on collision, and skip rather than emit a
@@ -545,17 +581,20 @@ for (const part of parts) {
       const sentences = [pick(rnd, OPENERS)(ctx) + '.']
 
       if (tier === 'bad') {
-        sentences.push(capitalise(pick(rnd, fam.complaint)) + '.')
+        sentences.push(capitalise(complaint.text) + '.')
         if (rnd() < 0.5) sentences.push(capitalise(pick(rnd, fam.install)) + '.')
         sentences.push(pick(rnd, CLOSERS_BAD))
       } else if (tier === 'mixed') {
         sentences.push(capitalise(pick(rnd, fam.install)) + '.')
-        sentences.push(
-          rnd() < 0.6
-            ? capitalise(pick(rnd, fam.complaint)) + '.'
-            : capitalise(pick(rnd, fam.quality)) + '.',
-        )
-        sentences.push(`That said, ${pick(rnd, fam.outcome)}.`)
+        if (mixedRaisesComplaint) {
+          // "That said" is a concession, so it only earns its place after a
+          // complaint -- following praise it read as a non-sequitur.
+          sentences.push(capitalise(complaint.text) + '.')
+          sentences.push(`That said, ${pick(rnd, fam.outcome)}.`)
+        } else {
+          sentences.push(capitalise(pick(rnd, fam.quality)) + '.')
+          sentences.push(`On balance ${pick(rnd, fam.outcome)}.`)
+        }
         sentences.push(pick(rnd, CLOSERS_MIXED))
       } else {
         const [a, b] = pickN(rnd, [pick(rnd, fam.install), pick(rnd, fam.quality)], 2)
@@ -608,7 +647,9 @@ const header = `-- =============================================================
 -- The generator is deterministic (PRNG seeded per SKU), so regenerating
 -- reproduces this same file rather than churning the data.
 --
--- Requires migration-reviews.sql to have been applied first.
+-- RUN migration-reviews.sql FIRST. This file's ON CONFLICT clause needs the
+-- unique index on (sku, author_name) that the migration creates -- without it
+-- Postgres rejects the whole INSERT rather than silently duplicating.
 --
 -- Every body in this file is unique, every (sku, author_name) pair is unique,
 -- and no part carries the same title twice. Prose matches the star rating --
@@ -638,6 +679,18 @@ const values = rows
 
 const footer = `
 ON CONFLICT (sku, author_name) DO NOTHING;
+
+-- Reconcile the denormalised rollups. The reviews_after_change trigger keeps
+-- these current from here on, but it only fires on rows written while it
+-- exists -- so recompute once, for every part, rather than assume ordering.
+UPDATE parts p SET
+  rating       = COALESCE(r.avg, 0),
+  review_count = COALESCE(r.n, 0)
+FROM (
+  SELECT sku, ROUND(AVG(rating), 2) AS avg, COUNT(*) AS n
+    FROM reviews WHERE is_approved = TRUE GROUP BY sku
+) r
+WHERE r.sku = p.sku;
 
 COMMIT;
 

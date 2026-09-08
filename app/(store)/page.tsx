@@ -8,7 +8,7 @@ import HeroCopy from '@/components/HeroCopy'
 import HeroVideo from '@/components/HeroVideo'
 import { Reveal, Stagger, StaggerItem } from '@/components/motion'
 import { testimonials } from '@/lib/data'
-import { getFeaturedParts, getStoreCategories, getStoreStats } from '@/lib/services/store-service'
+import { getFeaturedParts, getFitmentOptions, getStoreCategories, getStoreStats } from '@/lib/services/store-service'
 
 export const metadata: Metadata = {
   title: 'AudiParts Direct – Genuine & Aftermarket Audi Spare Parts',
@@ -42,10 +42,11 @@ const ARROW = (
 )
 
 export default async function HomePage() {
-  const [featuredParts, categories, stats] = await Promise.all([
+  const [featuredParts, categories, stats, fitmentModels] = await Promise.all([
     getFeaturedParts(4),
     getStoreCategories({ topLevelOnly: true }),
     getStoreStats(),
+    getFitmentOptions(),
   ])
 
   return (
@@ -66,7 +67,7 @@ export default async function HomePage() {
               totalModels={stats.totalModels}
             />
             <div>
-              <FitmentFilter />
+              <FitmentFilter models={fitmentModels} />
             </div>
           </div>
         </div>

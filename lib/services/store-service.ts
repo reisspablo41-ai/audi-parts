@@ -102,6 +102,134 @@ async function categoryWithDescendants(categoryId: string): Promise<string[]> {
   return [categoryId, ...(data ?? []).map((c: { id: string }) => c.id)]
 }
 
+/** PostgREST's per-response row cap. */
+const PAGE = 1000
+
+/**
+ * Read every row a query matches, not just the first page.
+ *
+ * PostgREST caps a response at 1000 rows and reports no error when it
+ * truncates, so an unpaginated select quietly starts losing data the moment a
+ * table outgrows the cap. `part_fitment` crossed it at ~7k rows: the fitment
+ * picker below saw only the first 1000, which left most generations looking
+ * like they had no parts and dropped every model except the A1 and A3 out of
+ * the dropdown.
+ *
+ * Takes a factory rather than a query because each page needs a fresh builder.
+ * Returns null on error, which every caller treats as "no data".
+ */
+async function allRows<T>(makeQuery: () => any, label: string): Promise<T[] | null> {
+  const out: T[] = []
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await makeQuery().range(from, from + PAGE - 1)
+    if (error) {
+      console.error(`[${label}]`, error.message)
+      return null
+    }
+    out.push(...((data ?? []) as T[]))
+    if (!data || data.length < PAGE) return out
+  }
+}
+
+/** One chassis generation of a model, e.g. the A4 B9. */
+export interface FitmentGeneration {
+  /** Chassis code as owners say it -- B9, 8V, C7. */
+  code: string
+  /** Years this generation actually has vehicle rows for, newest first. */
+  years: number[]
+}
+
+export interface FitmentModel {
+  /**
+   * Full model name including the make, e.g. "Audi A4" or "VW Polo". The
+   * catalogue carries shared-platform parts, so `models` spans Audi, VW and
+   * Porsche -- prefixing "Audi" in the UI produced "Audi Porsche Taycan".
+   */
+  name: string
+  generations: FitmentGeneration[]
+  /** Every year across the model's generations, newest first. */
+  years: number[]
+}
+
+/**
+ * Models, generations and years for the homepage fitment picker.
+ *
+ * Read from the database rather than a table hardcoded in the component. The
+ * hardcoded one listed A4 generations B5 and B6, which have no rows here at
+ * all, so a third of the year dropdown pointed at vehicles that do not exist
+ * and searching them could only ever return nothing.
+ *
+ * Years come from `vehicles`, not from generations.year_start/year_end, so the
+ * picker can only offer a year that has a vehicle row behind it.
+ */
+export async function getFitmentOptions(): Promise<FitmentModel[]> {
+  const [models, generations, vehicles, fitment] = await Promise.all([
+    allRows<{ id: string; name: string }>(
+      () => db.from('models').select('id, name, sort_order').order('sort_order'),
+      'getFitmentOptions:models',
+    ),
+    allRows<{ id: string; model_id: string; code: string }>(
+      () => db.from('generations').select('id, model_id, code'),
+      'getFitmentOptions:generations',
+    ),
+    allRows<{ id: string; generation_id: string; year: number }>(
+      () => db.from('vehicles').select('id, generation_id, year'),
+      'getFitmentOptions:vehicles',
+    ),
+    // ~7k rows — this is the one that has to be paged.
+    allRows<{ vehicle_id: string }>(
+      () => db.from('part_fitment').select('vehicle_id'),
+      'getFitmentOptions:fitment',
+    ),
+  ])
+
+  if (!models || !generations || !vehicles || !fitment) return []
+
+  // Vehicles that at least one part is confirmed to fit.
+  const fittedVehicles = new Set((fitment as { vehicle_id: string }[]).map((f) => f.vehicle_id))
+  // Generations reachable from those, so a model offering nothing can be dropped.
+  const generationHasParts = new Set(
+    (vehicles as { id: string; generation_id: string }[])
+      .filter((v) => fittedVehicles.has(v.id))
+      .map((v) => v.generation_id),
+  )
+
+  // generation id -> the years it actually has vehicles for
+  const yearsByGeneration = new Map<string, Set<number>>()
+  for (const v of vehicles as { id: string; generation_id: string; year: number }[]) {
+    if (!yearsByGeneration.has(v.generation_id)) yearsByGeneration.set(v.generation_id, new Set())
+    yearsByGeneration.get(v.generation_id)!.add(v.year)
+  }
+
+  const generationsByModel = new Map<string, (FitmentGeneration & { hasParts: boolean })[]>()
+  for (const g of generations as { id: string; model_id: string; code: string }[]) {
+    const years = [...(yearsByGeneration.get(g.id) ?? [])].sort((a, b) => b - a)
+    if (years.length === 0) continue // a generation with no vehicles cannot be searched
+    if (!generationsByModel.has(g.model_id)) generationsByModel.set(g.model_id, [])
+    generationsByModel
+      .get(g.model_id)!
+      .push({ code: g.code, years, hasParts: generationHasParts.has(g.id) })
+  }
+
+  const out: FitmentModel[] = []
+  for (const m of models as { id: string; name: string }[]) {
+    const gens = generationsByModel.get(m.id)
+    if (!gens || gens.length === 0) continue
+
+    // A model no part is confirmed against is a dead end: every search on it
+    // can only come back empty, so it is not worth offering.
+    if (!gens.some((g) => g.hasParts)) continue
+
+    // Newest generation first, matching how the year list reads.
+    gens.sort((a, b) => (b.years[0] ?? 0) - (a.years[0] ?? 0))
+
+    const years = [...new Set(gens.flatMap((g) => g.years))].sort((a, b) => b - a)
+    out.push({ name: m.name, generations: gens, years })
+  }
+
+  return out
+}
+
 export async function getStoreParts(filters: StoreFilters = {}): Promise<StorePartsResult> {
   const { category, brand, minPrice, maxPrice, inStockOnly, query, model, year, vehicleId, page = 1 } = filters
   const from = (page - 1) * STORE_PAGE_SIZE
@@ -144,17 +272,17 @@ export async function getStoreParts(filters: StoreFilters = {}): Promise<StorePa
     }
     if (!vehicles || vehicles.length === 0) return { parts: [], total: 0 }
 
-    const { data: fitment, error: fitmentError } = await db
-      .from('part_fitment')
-      .select('sku')
-      .in('vehicle_id', vehicles.map((v: { id: string }) => v.id))
+    // Paged: a popular model spans ~40 vehicles and well over 1000 fitment
+    // rows, and a truncated first page would silently drop parts from the
+    // results rather than fail.
+    const vehicleIds = vehicles.map((v: { id: string }) => v.id)
+    const fitment = await allRows<{ sku: string }>(
+      () => db.from('part_fitment').select('sku').in('vehicle_id', vehicleIds),
+      'getStoreParts:fitment',
+    )
+    if (!fitment) return { parts: [], total: 0 }
 
-    if (fitmentError) {
-      console.error('[getStoreParts] fitment lookup failed:', fitmentError.message)
-      return { parts: [], total: 0 }
-    }
-
-    skuFilter = [...new Set((fitment ?? []).map((f: { sku: string }) => f.sku))]
+    skuFilter = [...new Set(fitment.map((f) => f.sku))]
     if (skuFilter.length === 0) return { parts: [], total: 0 }
   }
 

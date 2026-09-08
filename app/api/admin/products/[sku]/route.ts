@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { requireAdmin } from '@/lib/admin'
+import { requireAdmin, brandIdFor } from '@/lib/admin'
 
 // PUT /api/admin/products/[sku] – update a product
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ sku: string }> }) {
@@ -24,7 +24,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       description: body.description?.trim(),
       price: body.price ? parseFloat(body.price) : undefined,
       compare_at_price: body.compareAtPrice !== undefined ? parseFloat(body.compareAtPrice) : undefined,
-      brand_id: body.brand === 'Aftermarket' ? 'meyle' : 'genuine-audi',
+      brand_id: brandIdFor(body.brand),
       category_id: body.categoryId,
       oe_number: body.partNumber?.trim(),
       oe_normalised: body.partNumber?.replace(/\s+/g, '').toUpperCase(),

@@ -21,6 +21,36 @@ export function isAdminUser(userId: string | null | undefined): boolean {
   return ADMIN_USER_IDS.includes(userId.toLowerCase())
 }
 
+/** The one `brands` row with tier 'oem'. */
+export const OEM_BRAND_ID = 'genuine-audi'
+
+/**
+ * Generic aftermarket brand. The product form offers only "Genuine OEM" or
+ * "Aftermarket", so everything non-genuine lands here.
+ */
+export const AFTERMARKET_BRAND_ID = 'aftermarket-oe'
+
+/**
+ * Map the product form's brand label to a `brands.id`.
+ *
+ * Both product routes used to inline `body.brand === 'Aftermarket' ? 'meyle'
+ * : 'genuine-audi'`. Two things were wrong with that:
+ *
+ *   1. 'meyle' exists only in the brand seed at the bottom of
+ *      schema-v2-proposal.sql, which was never applied — `brands` holds no
+ *      such row. Every aftermarket save failed parts_brand_id_fkey.
+ *   2. The ternary always returned a string, so it was never stripped by the
+ *      update route's undefined filter. Editing any field without also
+ *      sending `brand` quietly reset the product to Genuine OEM.
+ *
+ * Returning undefined for an absent label fixes the second: the caller's
+ * filter then leaves the stored brand alone.
+ */
+export function brandIdFor(brand: unknown): string | undefined {
+  if (typeof brand !== 'string' || brand === '') return undefined
+  return brand === 'Aftermarket' ? AFTERMARKET_BRAND_ID : OEM_BRAND_ID
+}
+
 export interface AdminAuthFailure {
   error: string
   status: number
