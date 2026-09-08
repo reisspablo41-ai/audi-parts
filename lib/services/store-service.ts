@@ -25,7 +25,9 @@ function mapDbPart(row: any): Part {
     brand: row.brand as PartBrand,
     category: row.categories?.name ?? '',
     categoryId: row.category_id,
-    partNumber: row.part_number,
+    // v2 renamed this to oe_number. Reading row.part_number returned undefined
+    // on every part, which is why part numbers rendered blank site-wide.
+    partNumber: row.oe_number ?? row.part_number ?? '',
     oemCrossReference: row.oem_cross_ref ?? '',
     weight: row.weight_kg ? `${row.weight_kg} kg` : undefined,
     material: row.material ?? '',
@@ -55,6 +57,9 @@ const PART_SELECT =
   '*, categories(name), part_images(url, is_primary, sort_order), part_fitment(vehicle_id)'
 
 export const STORE_PAGE_SIZE = 12
+
+/** The single `tier: 'oem'` row in `brands`. */
+const OEM_BRAND_ID = 'genuine-audi'
 
 export interface StoreFilters {
   category?: string
@@ -107,25 +112,47 @@ export async function getStoreParts(filters: StoreFilters = {}): Promise<StorePa
 
   if (vehicleId) {
     // Exact vehicle — look up parts for that specific vehicle ID
-    const { data: fitment } = await db
+    const { data: fitment, error: fitmentError } = await db
       .from('part_fitment')
       .select('sku')
       .eq('vehicle_id', vehicleId)
 
+    // Errors here used to be discarded, which turned a broken query into a
+    // silent "no parts found" — indistinguishable from a genuine empty result.
+    if (fitmentError) {
+      console.error('[getStoreParts] fitment lookup failed:', fitmentError.message)
+      return { parts: [], total: 0 }
+    }
+
     skuFilter = [...new Set((fitment ?? []).map((f: { sku: string }) => f.sku))]
     if (skuFilter.length === 0) return { parts: [], total: 0 }
   } else if (model) {
-    // Model (+ optional year) filter
-    let vq = db.from('vehicles').select('id').ilike('model', `%${model}%`)
+    // `vehicles` has no `model` column — the model name lives two joins away,
+    // in models via generations. Filtering on vehicles.model raised 42703 on
+    // every search, and the discarded error made it look like zero matches.
+    let vq = db
+      .from('vehicles')
+      .select('id, generations!inner(models!inner(name))')
+      .ilike('generations.models.name', `%${model}%`)
+
     if (year) vq = vq.eq('year', parseInt(year))
 
-    const { data: vehicles } = await vq
+    const { data: vehicles, error: vehicleError } = await vq
+    if (vehicleError) {
+      console.error('[getStoreParts] vehicle lookup failed:', vehicleError.message)
+      return { parts: [], total: 0 }
+    }
     if (!vehicles || vehicles.length === 0) return { parts: [], total: 0 }
 
-    const { data: fitment } = await db
+    const { data: fitment, error: fitmentError } = await db
       .from('part_fitment')
       .select('sku')
       .in('vehicle_id', vehicles.map((v: { id: string }) => v.id))
+
+    if (fitmentError) {
+      console.error('[getStoreParts] fitment lookup failed:', fitmentError.message)
+      return { parts: [], total: 0 }
+    }
 
     skuFilter = [...new Set((fitment ?? []).map((f: { sku: string }) => f.sku))]
     if (skuFilter.length === 0) return { parts: [], total: 0 }
@@ -142,14 +169,20 @@ export async function getStoreParts(filters: StoreFilters = {}): Promise<StorePa
     const categoryIds = await categoryWithDescendants(category)
     q = q.in('category_id', categoryIds)
   }
-  if (brand) q = q.eq('brand', brand as PartBrand)
+  // Same class of bug as the model filter above: `parts` has no `brand`
+  // column, only `brand_id`. 'Genuine OEM' is the one OEM brand row; anything
+  // else is aftermarket, expressed as "not that row" so new aftermarket
+  // brands are picked up without another change here.
+  if (brand === 'Genuine OEM') q = q.eq('brand_id', OEM_BRAND_ID)
+  else if (brand) q = q.neq('brand_id', OEM_BRAND_ID)
   if (minPrice !== undefined && minPrice > 0) q = q.gte('price', minPrice)
   if (maxPrice !== undefined && maxPrice !== Infinity) q = q.lte('price', maxPrice)
   if (inStockOnly) q = q.eq('in_stock', true)
   if (skuFilter !== null) q = q.in('sku', skuFilter)
   if (query) {
     q = q.or(
-      `name.ilike.%${query}%,part_number.ilike.%${query}%,sku.ilike.%${query}%,description.ilike.%${query}%`,
+      `name.ilike.%${query}%,oe_number.ilike.%${query}%,oe_normalised.ilike.%${query}%,`+
+      `sku.ilike.%${query}%,description.ilike.%${query}%`,
     )
   }
 
@@ -333,4 +366,27 @@ export async function getStoreStats() {
     totalParts: totalParts || 0,
     totalModels: uniqueModels || 0,
   }
+}
+
+
+/**
+ * Every indexable part, as bare SKUs — for app/sitemap.ts.
+ *
+ * Deliberately not getStoreParts(): that is paginated to STORE_PAGE_SIZE and
+ * joins images and fitment, none of which a sitemap needs. A sitemap that
+ * silently listed only the first page would be worse than no sitemap.
+ */
+export async function getSitemapParts(): Promise<Array<{ sku: string; updatedAt: string | null }>> {
+  const { data, error } = await db
+    .from('parts')
+    .select('sku, updated_at')
+    .eq('is_active', true)
+    .order('sku')
+
+  if (error) throw error
+
+  return (data ?? []).map((row: any) => ({
+    sku: row.sku,
+    updatedAt: row.updated_at ?? null,
+  }))
 }

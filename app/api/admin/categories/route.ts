@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { requireAdmin } from '@/lib/admin'
 
 // POST /api/admin/categories – create a new category
 export async function POST(request: NextRequest) {
+  // Verified server-side on every call: these routes run on the service-role
+  // key and bypass RLS, so a client-side guard alone would protect nothing.
+  const denied = await requireAdmin(request)
+  if (denied) return NextResponse.json({ error: denied.error }, { status: denied.status })
+
   if (!supabaseAdmin) {
     return NextResponse.json({ error: 'Supabase admin client not initialized' }, { status: 500 })
   }

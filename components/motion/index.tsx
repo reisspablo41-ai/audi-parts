@@ -21,7 +21,7 @@ import {
   type Variants,
   type Transition,
 } from 'framer-motion'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode, type Ref } from 'react'
 
 /** Expo-out — decisive start, long settle. Used for every entrance. */
 export const EASE = [0.16, 1, 0.3, 1] as const
@@ -107,19 +107,32 @@ interface StaggerProps {
   as?: 'div' | 'ul' | 'section'
 }
 
-/** Parent for a grid or list whose children animate in one after another. */
+/**
+ * Parent for a grid or list whose children animate in one after another.
+ *
+ * Deliberately driven by `useInView` + `animate` rather than `whileInView`.
+ * On a client-side navigation (a new shop page, a different category) this
+ * element is reconciled rather than remounted, but its children are replaced.
+ * `whileInView` is not propagated through motion context, so those fresh
+ * children would inherit `initial="hidden"` with nothing to animate them to
+ * `show` — the grid stayed at opacity 0 until a full page reload. `animate`
+ * *is* propagated, so late-mounting children pick up the current variant.
+ */
 export function Stagger({ children, className, delay = 0, gap = 0.07, as = 'div' }: StaggerProps) {
   const Tag = motion[as]
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.15, margin: '0px 0px -60px 0px' })
+
   return (
     <Tag
+      ref={ref as Ref<any>}
       className={className}
       variants={{
         hidden: {},
         show: { transition: { staggerChildren: gap, delayChildren: delay } },
       }}
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.15, margin: '0px 0px -60px 0px' }}
+      animate={inView ? 'show' : 'hidden'}
     >
       {children}
     </Tag>

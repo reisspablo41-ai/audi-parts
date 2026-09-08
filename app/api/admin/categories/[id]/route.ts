@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { requireAdmin } from '@/lib/admin'
 
 // PUT /api/admin/categories/[id] – update a category
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // Verified server-side on every call: these routes run on the service-role
+  // key and bypass RLS, so a client-side guard alone would protect nothing.
+  const denied = await requireAdmin(request)
+  if (denied) return NextResponse.json({ error: denied.error }, { status: denied.status })
+
   if (!supabaseAdmin) {
     return NextResponse.json({ error: 'Supabase admin client not initialized' }, { status: 500 })
   }
@@ -34,7 +40,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 // DELETE /api/admin/categories/[id]
-export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // Verified server-side on every call: these routes run on the service-role
+  // key and bypass RLS, so a client-side guard alone would protect nothing.
+  const denied = await requireAdmin(request)
+  if (denied) return NextResponse.json({ error: denied.error }, { status: denied.status })
+
   if (!supabaseAdmin) {
     return NextResponse.json({ error: 'Supabase admin client not initialized' }, { status: 500 })
   }

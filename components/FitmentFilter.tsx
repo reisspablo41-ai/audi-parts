@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { AUDI_MODELS, AUDI_YEARS, ENGINE_OPTIONS } from '@/lib/data'
 import { motion, AnimatePresence, EASE } from './motion'
 
 interface Generation {
@@ -13,8 +14,10 @@ interface Generation {
 }
 
 /**
- * The A4 is the house model. Generations run newest first so the years most
- * likely to be selected sit at the top of the dropdown.
+ * The A4 is the house model, and the only one whose generation ladder is
+ * enumerated to the chassis code. Picking an A4 year therefore narrows to an
+ * exact vehicle ID (`a4-2018-20-ea888`); every other model filters on model and
+ * year, which is all the fitment data supports for them.
  */
 const A4_GENERATIONS: Generation[] = [
   {
@@ -74,6 +77,45 @@ function generationForYear(year: string): Generation | undefined {
   return A4_GENERATIONS.find((g) => g.years.includes(y))
 }
 
+/**
+ * An engine the visitor can pick. `disp` is only present where we can resolve
+ * the choice to an exact vehicle ID; without it the search falls back to
+ * model + year.
+ */
+interface EngineOption {
+  label: string
+  value: string
+  disp?: string
+}
+
+/**
+ * Engines offered for a model. The A4 narrows by generation, so its list
+ * depends on the year as well; every other model draws on the shared
+ * ENGINE_OPTIONS table and is available as soon as the model is chosen.
+ */
+function enginesFor(model: string, year: string): EngineOption[] {
+  if (!model) return []
+
+  if (model === 'A4') {
+    const generation = year ? generationForYear(year) : undefined
+    // Before a year is picked there is no single generation to draw from, so
+    // offer the full A4 engine range rather than an empty list.
+    const source = generation ? generation.engines : A4_GENERATIONS.flatMap((g) => g.engines)
+    const seen = new Set<string>()
+    return source
+      .filter((e) => !seen.has(e.code) && seen.add(e.code))
+      .map((e) => ({ label: e.label, value: e.code, disp: e.disp }))
+  }
+
+  return (ENGINE_OPTIONS[model] ?? []).map((label) => ({ label, value: label }))
+}
+
+/** Years offered for a model — A4 grouped by chassis generation, others flat. */
+function yearsFor(model: string): number[] {
+  if (model === 'A4') return A4_GENERATIONS.flatMap((g) => g.years)
+  return AUDI_YEARS
+}
+
 const selectCls =
   'w-full h-11 pl-3 pr-9 border border-audi-fog rounded-md text-sm bg-white text-audi-anthracite ' +
   'focus:outline-none focus:border-audi-red focus:ring-2 focus:ring-audi-red/15 transition-colors ' +
@@ -95,30 +137,60 @@ function SelectChevron() {
 
 export default function FitmentFilter() {
   const router = useRouter()
+  const [model, setModel] = useState('')
   const [year, setYear] = useState('')
-  const [engineCode, setEngineCode] = useState('')
+  const [engineValue, setEngineValue] = useState('')
 
-  const generation = year ? generationForYear(year) : undefined
-  const availableEngines = generation?.engines ?? []
+  const generation = model === 'A4' && year ? generationForYear(year) : undefined
+  const availableEngines = enginesFor(model, year)
+  const availableYears = yearsFor(model)
+
+  // Model drives both of the selects below it, so changing it clears them.
+  function handleModelChange(value: string) {
+    setModel(value)
+    setYear('')
+    setEngineValue('')
+  }
+
+  // A4 engines are generation-specific: a year change can invalidate the
+  // current pick, so drop any engine that is no longer offered.
+  function handleYearChange(value: string) {
+    setYear(value)
+    if (engineValue && !enginesFor(model, value).some((e) => e.value === engineValue)) {
+      setEngineValue('')
+    }
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!year) return
+    if (!model) return
 
     const params = new URLSearchParams()
-    const selectedEngine = availableEngines.find((eng) => eng.code === engineCode)
+    const selectedEngine = availableEngines.find((eng) => eng.value === engineValue)
 
-    if (engineCode && selectedEngine) {
-      params.set('vehicle', `a4-${year}-${selectedEngine.disp}-${engineCode}`)
+    // Vehicle IDs in the database are `{model slug}-{generation code}-{year}`,
+    // e.g. `a4-b9-2018`. This previously built `a4-2018-20-ea888` from the
+    // displacement and engine code, which matches no row, so picking an A4
+    // with an engine returned nothing at all.
+    //
+    // Engine is not part of the identity: every vehicle row carries
+    // engine_id 'unspecified', so the picker narrows the label shown to the
+    // visitor, not the query. Fitment for a generation+year is as precise as
+    // the data currently gets.
+    if (model === 'A4' && year && generation) {
+      params.set('vehicle', `a4-${generation.code.toLowerCase()}-${year}`)
     } else {
-      params.set('model', 'A4')
-      params.set('year', year)
+      params.set('model', model)
+      if (year) params.set('year', year)
     }
 
     const engineLabel = selectedEngine?.label ?? ''
-    const label = engineLabel
-      ? `${year} Audi A4 ${generation?.code ?? ''} (${engineLabel.match(/\((.+)\)/)?.[1] ?? engineLabel})`.replace(/\s+/g, ' ')
-      : `${year} Audi A4 ${generation?.code ?? ''}`.trim()
+    const engineSuffix = engineLabel
+      ? ` (${engineLabel.match(/\((.+)\)/)?.[1] ?? engineLabel})`
+      : ''
+    const label = `${year ? `${year} ` : ''}Audi ${model}${
+      generation ? ` ${generation.code}` : ''
+    }${engineSuffix}`.replace(/\s+/g, ' ').trim()
 
     localStorage.setItem('garage_vehicle_label', label)
     router.push(`/shop?${params.toString()}`)
@@ -134,63 +206,87 @@ export default function FitmentFilter() {
     >
       <div className="flex items-center gap-2 mb-1">
         <span className="w-1 h-4 bg-audi-red rounded-full" />
-        <h2 className="text-lg font-bold text-audi-anthracite">Find parts for your A4</h2>
+        <h2 className="text-lg font-bold text-audi-anthracite">Find parts for your Audi</h2>
       </div>
       <p className="text-[13px] text-audi-steel mb-5 leading-relaxed">
-        Pick your year and engine code — B5 through B9 — and we&apos;ll show only the parts
-        confirmed to fit.
+        Pick your model, year and engine code and we&apos;ll show only the parts confirmed to
+        fit.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-        {/* Year */}
+        {/* Model */}
         <div>
-          <label htmlFor="fitment-year" className="block eyebrow text-audi-titanium mb-1.5">
-            Year
+          <label htmlFor="fitment-model" className="block eyebrow text-audi-titanium mb-1.5">
+            Model
           </label>
           <div className="relative">
             <select
-              id="fitment-year"
-              value={year}
-              onChange={(e) => {
-                setYear(e.target.value)
-                setEngineCode('')
-              }}
+              id="fitment-model"
+              value={model}
+              onChange={(e) => handleModelChange(e.target.value)}
               className={selectCls}
             >
-              <option value="">Select year</option>
-              {A4_GENERATIONS.map((gen) => (
-                <optgroup key={gen.code} label={`${gen.label} · ${gen.years.at(-1)}–${gen.years[0]}`}>
-                  {gen.years.map((y) => (
-                    <option key={y} value={String(y)}>
-                      {y}
-                    </option>
-                  ))}
-                </optgroup>
+              <option value="">Select model</option>
+              {AUDI_MODELS.map((m) => (
+                <option key={m} value={m}>
+                  Audi {m}
+                </option>
               ))}
             </select>
             <SelectChevron />
           </div>
         </div>
 
-        {/* Model — fixed, display only */}
+        {/* Year */}
         <div>
-          <label className="block eyebrow text-audi-titanium mb-1.5">Model</label>
-          <div className="w-full h-11 px-3 border border-audi-fog rounded-md text-sm bg-audi-mist text-audi-anthracite flex items-center justify-between font-semibold">
-            <span>Audi A4</span>
-            <AnimatePresence mode="wait">
-              {generation && (
-                <motion.span
-                  key={generation.code}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.85 }}
-                  transition={{ duration: 0.18, ease: EASE }}
-                  className="technical text-[11px] font-semibold text-audi-red bg-audi-red-soft border border-audi-red/15 rounded px-1.5 py-0.5"
-                >
-                  {generation.code}
-                </motion.span>
-              )}
-            </AnimatePresence>
+          <label htmlFor="fitment-year" className="block eyebrow text-audi-titanium mb-1.5">
+            <span className="inline-flex items-center gap-1.5">
+              Year
+              <AnimatePresence mode="wait">
+                {generation && (
+                  <motion.span
+                    key={generation.code}
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.85 }}
+                    transition={{ duration: 0.18, ease: EASE }}
+                    className="technical text-[11px] font-semibold text-audi-red bg-audi-red-soft border border-audi-red/15 rounded px-1.5 py-0.5 normal-case tracking-normal"
+                  >
+                    {generation.code}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </span>
+          </label>
+          <div className="relative">
+            <select
+              id="fitment-year"
+              value={year}
+              onChange={(e) => handleYearChange(e.target.value)}
+              disabled={!model}
+              className={selectCls}
+            >
+              <option value="">{model ? 'All years' : 'Select model first'}</option>
+              {model === 'A4'
+                ? A4_GENERATIONS.map((gen) => (
+                    <optgroup
+                      key={gen.code}
+                      label={`${gen.label} · ${gen.years.at(-1)}–${gen.years[0]}`}
+                    >
+                      {gen.years.map((y) => (
+                        <option key={y} value={String(y)}>
+                          {y}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))
+                : availableYears.map((y) => (
+                    <option key={y} value={String(y)}>
+                      {y}
+                    </option>
+                  ))}
+            </select>
+            <SelectChevron />
           </div>
         </div>
 
@@ -202,14 +298,14 @@ export default function FitmentFilter() {
           <div className="relative">
             <select
               id="fitment-engine"
-              value={engineCode}
-              onChange={(e) => setEngineCode(e.target.value)}
-              disabled={!year}
+              value={engineValue}
+              onChange={(e) => setEngineValue(e.target.value)}
+              disabled={!model || availableEngines.length === 0}
               className={selectCls}
             >
               <option value="">All engines</option>
               {availableEngines.map((eng) => (
-                <option key={eng.code} value={eng.code}>
+                <option key={eng.value} value={eng.value}>
                   {eng.label}
                 </option>
               ))}
@@ -221,9 +317,9 @@ export default function FitmentFilter() {
 
       <motion.button
         type="submit"
-        disabled={!year}
-        whileHover={year ? { y: -2 } : undefined}
-        whileTap={year ? { y: 0, scale: 0.99 } : undefined}
+        disabled={!model}
+        whileHover={model ? { y: -2 } : undefined}
+        whileTap={model ? { y: 0, scale: 0.99 } : undefined}
         transition={{ duration: 0.2, ease: EASE }}
         className="w-full h-12 bg-audi-anthracite text-white font-semibold rounded-md text-[15px] hover:bg-audi-graphite transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >

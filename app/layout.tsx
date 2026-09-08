@@ -4,6 +4,7 @@ import Script from 'next/script'
 import './globals.css'
 import { CartProvider } from '@/lib/cart-store'
 import { MotionProvider } from '@/components/motion'
+import { SITE_NAME, SITE_URL, absoluteUrl } from '@/lib/site'
 
 const geist = Geist({
   variable: '--font-geist-sans',
@@ -17,15 +18,39 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+const DEFAULT_TITLE = 'AudiParts Direct – Genuine & Aftermarket Audi Spare Parts'
+const DEFAULT_DESCRIPTION =
+  'Find the exact Audi spare part for your car. Guaranteed fitment by year, model, and engine code. Genuine OEM and vetted aftermarket options for the A3, A4, A5, A6, Q5, Q7, TT, and more.'
+
 export const metadata: Metadata = {
+  // Without metadataBase every relative canonical and og:url resolves against
+  // localhost in production. Nothing below works without it.
+  metadataBase: new URL(SITE_URL),
   title: {
-    template: '%s | AudiParts Direct',
-    default: 'AudiParts Direct – Genuine & Aftermarket Audi Spare Parts',
+    template: `%s | ${SITE_NAME}`,
+    default: DEFAULT_TITLE,
   },
-  description:
-    'Find the exact Audi spare part for your car. Guaranteed fitment by year, model, and engine code. Genuine OEM and vetted aftermarket options for the A3, A4, A5, A6, Q5, Q7, TT, and more.',
+  description: DEFAULT_DESCRIPTION,
   keywords:
     'Audi spare parts, OEM Audi parts, Audi A4 parts, Audi A3 parts, Audi Q5 parts, TFSI parts, TDI parts, genuine Audi',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/'),
+    siteName: SITE_NAME,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+  },
 }
 
 export default function RootLayout({

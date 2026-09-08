@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { requireAdmin } from '@/lib/admin'
 
 // POST /api/admin/products – create a new product
 export async function POST(request: NextRequest) {
+  // Verified server-side on every call: these routes run on the service-role
+  // key and bypass RLS, so a client-side guard alone would protect nothing.
+  const denied = await requireAdmin(request)
+  if (denied) return NextResponse.json({ error: denied.error }, { status: denied.status })
+
   if (!supabaseAdmin) {
     return NextResponse.json({ error: 'Supabase admin client not initialized' }, { status: 500 })
   }
@@ -36,9 +42,10 @@ export async function POST(request: NextRequest) {
       description: body.description.trim(),
       price: parseFloat(body.price),
       compare_at_price: body.compareAtPrice ? parseFloat(body.compareAtPrice) : null,
-      brand: body.brand,
+      brand_id: body.brand === 'Aftermarket' ? 'meyle' : 'genuine-audi',
       category_id: body.categoryId,
-      part_number: body.partNumber.trim(),
+      oe_number: body.partNumber.trim(),
+      oe_normalised: body.partNumber.replace(/\s+/g, '').toUpperCase(),
       oem_cross_ref: body.oemCrossReference?.trim() || null,
       weight_kg: body.weight ? parseFloat(body.weight.replace(/[^\d.]/g, '')) : null,
       material: body.material?.trim() || null,

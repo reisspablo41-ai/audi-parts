@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Category } from '@/lib/types'
+import { supabase } from '@/lib/supabase'
 
 interface CategoryFormProps {
   initialData?: Partial<Category>
@@ -77,9 +78,14 @@ export default function CategoryForm({ initialData, mode }: CategoryFormProps) {
     const method = mode === 'edit' ? 'PUT' : 'POST'
 
     try {
+      // The admin API verifies this token server-side on every call.
+      const { data: { session } } = await supabase.auth.getSession()
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify(payload),
       })
 

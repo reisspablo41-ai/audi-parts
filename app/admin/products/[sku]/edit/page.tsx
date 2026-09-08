@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ProductForm from '@/components/admin/ProductForm'
-import { getPartBySku } from '@/lib/services/admin-service'
+import { getPartBySku, getAllCategories, getAllVehicles } from '@/lib/services/admin-service'
 
 interface Props {
   params: Promise<{ sku: string }>
@@ -18,8 +18,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function EditProductPage({ params }: Props) {
   const { sku: encodedSku } = await params
   const sku = decodeURIComponent(encodedSku)
-  const part = await getPartBySku(sku)
-  
+  const [part, categories, vehicles] = await Promise.all([
+    getPartBySku(sku), getAllCategories(), getAllVehicles(),
+  ])
+
   if (!part) notFound()
 
   return (
@@ -52,7 +54,7 @@ export default async function EditProductPage({ params }: Props) {
         </Link>
       </div>
 
-      <ProductForm mode="edit" initialData={part} />
+      <ProductForm mode="edit" initialData={part} categories={categories} vehicles={vehicles} />
     </div>
   )
 }

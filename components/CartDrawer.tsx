@@ -3,10 +3,12 @@
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { useCart } from '@/lib/cart-store'
+import { useCurrency } from '@/lib/currency-store'
 import { motion, AnimatePresence, EASE } from './motion'
 
 export default function CartDrawer() {
   const { state, toggleCart, removeItem, updateQuantity, subtotal, totalCount } = useCart()
+  const { format } = useCurrency()
 
   // Close on Escape, and lock body scroll while the drawer is open.
   useEffect(() => {
@@ -147,7 +149,7 @@ export default function CartDrawer() {
                               </button>
                             </div>
                             <span className="text-sm font-bold text-audi-anthracite technical">
-                              ${(item.price * item.quantity).toFixed(2)}
+                              {format(item.price * item.quantity)}
                             </span>
                           </div>
                         </div>
@@ -169,7 +171,7 @@ export default function CartDrawer() {
                     animate={{ opacity: 1 }}
                     className="text-xl font-bold text-audi-anthracite technical"
                   >
-                    ${subtotal.toFixed(2)}
+                    {format(subtotal)}
                   </motion.span>
                 </div>
                 <p className="text-[11px] text-audi-titanium mb-5">

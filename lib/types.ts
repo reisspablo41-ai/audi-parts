@@ -89,3 +89,69 @@ export interface Testimonial {
   avatarInitials: string
   avatarColor: string
 }
+
+/** The six states in the orders.status CHECK constraint (supabase-schema.sql). */
+export const ORDER_STATUSES = [
+  'pending',
+  'processing',
+  'shipped',
+  'delivered',
+  'cancelled',
+  'refunded',
+] as const
+
+export type OrderStatus = (typeof ORDER_STATUSES)[number]
+
+export interface OrderItem {
+  id: number
+  sku: string
+  quantity: number
+  unitPrice: number
+  totalPrice: number
+  /** Name and number captured at purchase time, so renames don't rewrite history. */
+  name: string
+}
+
+export interface Order {
+  id: number
+  orderNumber: string
+  email: string
+  status: OrderStatus
+  subtotal: number
+  shippingCost: number
+  tax: number
+  discount: number
+  total: number
+  currency: string
+  trackingNumber: string | null
+  carrier: string | null
+  /** Checkout writes the shipping address and phone here as free text. */
+  notes: string | null
+  placedAt: string
+  items: OrderItem[]
+  itemCount: number
+}
+
+export const BLOG_STATUSES = ['draft', 'published'] as const
+export type BlogStatus = (typeof BLOG_STATUSES)[number]
+
+export interface BlogPost {
+  id: number
+  slug: string
+  title: string
+  excerpt: string
+  /** Markdown — see components/Markdown.tsx for the supported subset. */
+  body: string
+  coverImageUrl: string | null
+  authorName: string
+  status: BlogStatus
+  /** Falls back to `title` when unset. */
+  metaTitle: string
+  /** Falls back to `excerpt` when unset. */
+  metaDescription: string
+  tags: string[]
+  /** SKUs this post links to, for internal linking to product pages. */
+  relatedSkus: string[]
+  publishedAt: string | null
+  updatedAt: string
+}

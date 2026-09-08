@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ProductForm from '@/components/admin/ProductForm'
+import { getAllCategories, getAllVehicles } from '@/lib/services/admin-service'
 
 export const metadata: Metadata = { title: 'New Product' }
 
-export default function NewProductPage() {
+export default async function NewProductPage() {
+  const [categories, vehicles] = await Promise.all([getAllCategories(), getAllVehicles()])
+
   return (
     <div>
       {/* Breadcrumb */}
@@ -25,7 +28,7 @@ export default function NewProductPage() {
         </p>
       </div>
 
-      <ProductForm mode="create" />
+      <ProductForm mode="create" categories={categories} vehicles={vehicles} />
     </div>
   )
 }

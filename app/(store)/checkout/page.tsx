@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { useCart } from '@/lib/cart-store'
+import { useCurrency } from '@/lib/currency-store'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { submitCheckoutForm } from '@/app/actions/checkout'
 
 export default function CheckoutPage() {
   const { state, subtotal, totalCount, clearCart } = useCart()
+  const { format } = useCurrency()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -133,7 +135,7 @@ export default function CheckoutPage() {
                   loading || totalCount === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-audi-red-dark hover:-translate-y-1 active:translate-y-0'
                 }`}
               >
-                {loading ? 'Processing Order...' : `Place Order Request – $${total.toFixed(2)}`}
+                {loading ? 'Processing Order...' : `Place Order Request – ${format(total)}`}
               </button>
             </form>
           </div>
@@ -154,7 +156,7 @@ export default function CheckoutPage() {
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-bold truncate">{item.name}</h4>
                         <p className="text-xs text-audi-titanium mt-0.5">Qty: {item.quantity}</p>
-                        <p className="text-sm font-bold mt-1 text-audi-red">${(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-sm font-bold mt-1 text-audi-red">{format(item.price * item.quantity)}</p>
                       </div>
                     </div>
                   ))}
@@ -163,19 +165,19 @@ export default function CheckoutPage() {
                 <div className="mt-8 space-y-3 pt-6 border-t border-white/10">
                   <div className="flex justify-between text-sm">
                     <span className="text-audi-titanium font-medium">Subtotal</span>
-                    <span className="font-bold">${subtotal.toFixed(2)}</span>
+                    <span className="font-bold">{format(subtotal)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-audi-titanium font-medium">Shipping</span>
-                    <span className="font-bold">{shippingCost === 0 ? 'FREE' : `$${shippingCost.toFixed(2)}`}</span>
+                    <span className="font-bold">{shippingCost === 0 ? 'FREE' : format(shippingCost)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-audi-titanium font-medium">Estimated Tax</span>
-                    <span className="font-bold">${tax.toFixed(2)}</span>
+                    <span className="font-bold">{format(tax)}</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold pt-4 border-t border-white/10">
                     <span>Total</span>
-                    <span className="text-audi-red">${total.toFixed(2)}</span>
+                    <span className="text-audi-red">{format(total)}</span>
                   </div>
                 </div>
               </div>

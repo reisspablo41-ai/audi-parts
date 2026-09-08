@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { requireAdmin } from '@/lib/admin'
 
 // PUT /api/admin/products/[sku] – update a product
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ sku: string }> }) {
+  // Verified server-side on every call: these routes run on the service-role
+  // key and bypass RLS, so a client-side guard alone would protect nothing.
+  const denied = await requireAdmin(request)
+  if (denied) return NextResponse.json({ error: denied.error }, { status: denied.status })
+
   if (!supabaseAdmin) {
     return NextResponse.json({ error: 'Supabase admin client not initialized' }, { status: 500 })
   }
@@ -18,9 +24,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       description: body.description?.trim(),
       price: body.price ? parseFloat(body.price) : undefined,
       compare_at_price: body.compareAtPrice !== undefined ? parseFloat(body.compareAtPrice) : undefined,
-      brand: body.brand,
+      brand_id: body.brand === 'Aftermarket' ? 'meyle' : 'genuine-audi',
       category_id: body.categoryId,
-      part_number: body.partNumber?.trim(),
+      oe_number: body.partNumber?.trim(),
+      oe_normalised: body.partNumber?.replace(/\s+/g, '').toUpperCase(),
       oem_cross_ref: body.oemCrossReference !== undefined ? body.oemCrossReference?.trim() : undefined,
       weight_kg: body.weight ? parseFloat(body.weight.toString().replace(/[^\d.]/g, '')) : undefined,
       material: body.material !== undefined ? body.material?.trim() : undefined,
@@ -78,7 +85,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 // DELETE /api/admin/products/[sku]
-export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ sku: string }> }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ sku: string }> }) {
+  // Verified server-side on every call: these routes run on the service-role
+  // key and bypass RLS, so a client-side guard alone would protect nothing.
+  const denied = await requireAdmin(request)
+  if (denied) return NextResponse.json({ error: denied.error }, { status: denied.status })
+
   if (!supabaseAdmin) {
     return NextResponse.json({ error: 'Supabase admin client not initialized' }, { status: 500 })
   }

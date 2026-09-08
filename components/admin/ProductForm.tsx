@@ -3,11 +3,15 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ImageUploader, { type UploadedImage } from './ImageUploader'
-import { categories, vehicles } from '@/lib/data'
+import { categories as fallbackCategories, vehicles as fallbackVehicles } from '@/lib/data'
+import type { Category, Vehicle } from '@/lib/types'
 import { supabase } from '@/lib/supabase'
 import type { Part } from '@/lib/types'
 
-const BUCKET = 'bucket'
+// Supabase Storage bucket for product images. Created by
+// migration-storage-bucket.sql — this was the placeholder 'bucket',
+// which is why uploads failed with "Bucket not found".
+const BUCKET = process.env.NEXT_PUBLIC_SUPABASE_PARTS_BUCKET ?? 'part-images'
 
 async function uploadImagesToStorage(sku: string, images: UploadedImage[]): Promise<string[]> {
   const urls: string[] = []
@@ -30,6 +34,14 @@ async function uploadImagesToStorage(sku: string, images: UploadedImage[]): Prom
 }
 
 interface ProductFormProps {
+  /**
+   * Real categories from the database. Without these the form fell back to the
+   * 8 hard-coded ids in lib/data, none of which match the live taxonomy
+   * (brake-rotors, oil-filters, …) — so the select could never match a saved
+   * product and always read "Select a category".
+   */
+  categories?: Category[]
+  vehicles?: Vehicle[]
   initialData?: Partial<Part>
   mode: 'create' | 'edit'
 }
@@ -68,7 +80,12 @@ function Field({ label, required, hint, children }: { label: string; required?: 
 const inputCls = 'w-full h-10 px-3 border border-audi-fog rounded-lg text-sm bg-white focus:outline-none focus:border-audi-red focus:ring-1 focus:ring-audi-red/20 transition-colors'
 const textareaCls = 'w-full px-3 py-2.5 border border-audi-fog rounded-lg text-sm bg-white focus:outline-none focus:border-audi-red focus:ring-1 focus:ring-audi-red/20 transition-colors resize-none'
 
-export default function ProductForm({ initialData, mode }: ProductFormProps) {
+export default function ProductForm({
+  initialData,
+  mode,
+  categories = fallbackCategories,
+  vehicles = fallbackVehicles,
+}: ProductFormProps) {
   const router = useRouter()
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -173,9 +190,14 @@ export default function ProductForm({ initialData, mode }: ProductFormProps) {
       : '/api/admin/products'
     const method = mode === 'edit' ? 'PUT' : 'POST'
 
+    // The admin API verifies this token server-side on every call.
+    const { data: { session } } = await supabase.auth.getSession()
     const res = await fetch(url, {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(session ? { Authorization: `Bearer ${session.access_token}` } : {}),
+      },
       body: JSON.stringify(payload),
     })
 

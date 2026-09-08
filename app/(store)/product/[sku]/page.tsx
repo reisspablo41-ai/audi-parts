@@ -8,6 +8,8 @@ import { getStorePartBySku, getRelatedStoreParts, getReviewsForSku } from '@/lib
 import { getCategoryById } from '@/lib/services/admin-service'
 import AddToCart from '@/components/AddToCart'
 import ReviewForm from '@/components/ReviewForm'
+import { formatPrice, formatAmountShort } from '@/lib/currency'
+import { getRequestCurrency } from '@/lib/currency-server'
 
 interface ProductPageProps {
   params: Promise<{ sku: string }>
@@ -47,10 +49,11 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { sku } = await params
   
-  const [part, reviews, relatedParts] = await Promise.all([
+  const [part, reviews, relatedParts, currency] = await Promise.all([
     getStorePartBySku(sku),
     getReviewsForSku(sku),
     getRelatedStoreParts(sku),
+    getRequestCurrency(),
   ])
 
   if (!part) notFound()
@@ -110,13 +113,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {part.price <= 0 ? (
                 <span className="text-3xl font-semibold text-audi-slate">Price on request</span>
               ) : (
-              <span className="text-4xl font-bold text-audi-anthracite technical">${part.price.toFixed(2)}</span>
+              <span className="text-4xl font-bold text-audi-anthracite technical">{formatPrice(part.price, currency)}</span>
               )}
               {part.compareAtPrice && (
-                <span className="text-xl text-audi-titanium line-through">${part.compareAtPrice.toFixed(2)}</span>
+                <span className="text-xl text-audi-titanium line-through">{formatPrice(part.compareAtPrice, currency)}</span>
               )}
               {discount > 0 && (
-                <span className="text-sm font-bold text-audi-red">Save ${(part.compareAtPrice! - part.price).toFixed(2)}</span>
+                <span className="text-sm font-bold text-audi-red">Save {formatPrice(part.compareAtPrice! - part.price, currency)}</span>
               )}
             </div>
 
@@ -200,7 +203,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {[
                 {
                   title: 'Standard shipping',
-                  body: '3–5 business days. Free on orders over $150.',
+                  body: `3–5 business days. Free on orders over ${formatAmountShort(150, currency)}.`,
                   d: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
                 },
                 {

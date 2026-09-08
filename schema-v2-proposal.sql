@@ -355,6 +355,7 @@ INSERT INTO categories (id, parent_id, name, slug, icon, sort_order, is_featured
   ('air-springs',      'suspension','Air Springs',       'air-springs',         'suspension',   3, FALSE),
   ('coil-springs',     'suspension','Coil Springs',      'coil-springs',        'suspension',   4, FALSE),
   ('control-arms',     'suspension','Control Arms',      'control-arms',        'suspension',   5, FALSE),
+  ('bump-stops',       'suspension','Bump Stops & Bushings','bump-stops',        'suspension',   6, FALSE),
 
   -- Filters
   ('filters',          NULL,      'Filters',             'filters',             'filters',       5, FALSE),

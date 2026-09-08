@@ -1,44 +1,58 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { formatPrice, formatAmountShort } from '@/lib/currency'
+import { getRequestCurrency } from '@/lib/currency-server'
 
 export const metadata: Metadata = {
   title: 'Shipping Policy',
   description: 'AudiParts Direct shipping information. Next-day, standard, and international delivery options for Audi spare parts.',
 }
 
-const SHIPPING_OPTIONS = [
+interface ShippingOption {
+  name: string
+  /** Bare amount — the symbol is chosen per request from the visitor's region. */
+  price: number
+  /** Renders the price as "From $39.95" rather than a firm figure. */
+  from?: boolean
+  /** Order value above which this option is free, if any. */
+  freeOver?: number
+  time: string
+  icon: string
+  description: string
+}
+
+const SHIPPING_OPTIONS: ShippingOption[] = [
   {
     name: 'Standard Shipping',
-    price: '$9.95',
+    price: 9.95,
     time: '3–5 Business Days',
-    free: 'Free on orders over $150',
+    freeOver: 150,
     icon: '📦',
     description:
       'Delivered by your regional carrier. Tracking provided at time of dispatch. Available for all in-stock items.',
   },
   {
     name: 'Express (Next-Day)',
-    price: '$24.95',
+    price: 24.95,
     time: 'Next Business Day',
-    free: null,
     icon: '⚡',
     description:
       'Order before 2 PM Mon–Fri. Delivered the following business day. Not available for oversized items (engines, gearboxes, large body panels).',
   },
   {
     name: 'International Economy',
-    price: 'From $39.95',
+    price: 39.95,
+    from: true,
     time: '7–14 Business Days',
-    free: null,
     icon: '🌏',
     description:
       'Available to most countries worldwide. Duties, taxes, and import fees are the responsibility of the recipient. We declare all items accurately — we do not falsify customs documentation.',
   },
   {
     name: 'International Express',
-    price: 'From $79.95',
+    price: 79.95,
+    from: true,
     time: '3–5 Business Days',
-    free: null,
     icon: '✈️',
     description:
       'Priority international delivery via express courier. Tracking to final delivery. Subject to local customs processing times.',
@@ -54,7 +68,9 @@ const HEAVY_ITEMS = [
   'Adaptive air suspension struts and complete strut assemblies',
 ]
 
-export default function ShippingPage() {
+export default async function ShippingPage() {
+  const currency = await getRequestCurrency()
+
   return (
     <div className="bg-white">
       {/* Header */}
@@ -86,8 +102,14 @@ export default function ShippingPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-audi-anthracite">{opt.price}</p>
-                    {opt.free && <p className="text-xs text-audi-success font-medium">{opt.free}</p>}
+                    <p className="font-bold text-audi-anthracite">
+                      {opt.from ? 'From ' : ''}{formatPrice(opt.price, currency)}
+                    </p>
+                    {opt.freeOver && (
+                      <p className="text-xs text-audi-success font-medium">
+                        Free on orders over {formatAmountShort(opt.freeOver, currency)}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <p className="text-xs text-audi-steel leading-relaxed">{opt.description}</p>

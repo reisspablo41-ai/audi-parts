@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import CategoryIcon from './CategoryIcon'
 import { motion, AnimatePresence, EASE } from './motion'
+import { useCurrency } from '@/lib/currency-store'
 
 interface SearchResult {
   sku: string
@@ -28,6 +29,7 @@ interface Props {
 
 export default function SearchOverlay({ onClose, autoFocus = false }: Props) {
   const router = useRouter()
+  const { format } = useCurrency()
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(false)
@@ -173,7 +175,7 @@ export default function SearchOverlay({ onClose, autoFocus = false }: Props) {
 
                       {/* Price + stock */}
                       <div className="text-right flex-shrink-0">
-                        <p className="text-sm font-bold text-audi-anthracite technical">${result.price.toFixed(2)}</p>
+                        <p className="text-sm font-bold text-audi-anthracite technical">{format(result.price)}</p>
                         <p className={`text-[10px] font-semibold mt-0.5 ${result.inStock ? 'text-audi-success' : 'text-audi-steel'}`}>
                           {result.inStock ? 'In Stock' : 'Out of Stock'}
                         </p>

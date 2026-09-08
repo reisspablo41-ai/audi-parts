@@ -86,6 +86,24 @@ export default function FitmentChecker({ part }: FitmentCheckerProps) {
       <form onSubmit={handleCheck} className="space-y-3">
         <div className="grid grid-cols-2 gap-2">
           <div>
+            <label htmlFor="fc-model" className="block eyebrow text-audi-titanium mb-1.5">
+              Model
+            </label>
+            <select
+              id="fc-model"
+              value={model}
+              onChange={(e) => handleModelChange(e.target.value)}
+              className={selectCls}
+            >
+              <option value="">Model</option>
+              {AUDI_MODELS.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
             <label htmlFor="fc-year" className="block eyebrow text-audi-titanium mb-1.5">
               Year
             </label>
@@ -102,25 +120,6 @@ export default function FitmentChecker({ part }: FitmentCheckerProps) {
               {AUDI_YEARS.map((y) => (
                 <option key={y} value={String(y)}>
                   {y}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="fc-model" className="block eyebrow text-audi-titanium mb-1.5">
-              Model
-            </label>
-            <select
-              id="fc-model"
-              value={model}
-              onChange={(e) => handleModelChange(e.target.value)}
-              disabled={!year}
-              className={selectCls}
-            >
-              <option value="">Model</option>
-              {AUDI_MODELS.map((m) => (
-                <option key={m} value={m}>
-                  {m}
                 </option>
               ))}
             </select>

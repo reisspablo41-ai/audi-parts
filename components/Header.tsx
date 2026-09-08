@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { categories } from '@/lib/data'
 import { useCart } from '@/lib/cart-store'
+import { useCurrency } from '@/lib/currency-store'
 import CartDrawer from './CartDrawer'
 import SearchOverlay from './SearchOverlay'
 import CategoryIcon from './CategoryIcon'
@@ -12,6 +13,9 @@ import { motion, AnimatePresence, QUICK, EASE } from './motion'
 
 const NAV_LINKS = [
   { label: 'Shop All Parts', href: '/shop' },
+  // A blog nobody can navigate to from the header collects no traffic and no
+  // internal link equity, which defeats the point of writing it.
+  { label: 'Guides', href: '/blog' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ]
@@ -73,6 +77,7 @@ export default function Header() {
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { totalCount, toggleCart } = useCart()
+  const { formatShort } = useCurrency()
   const [garageVehicle, setGarageVehicle] = useState<string | null>(null)
   const megaRef = useRef<HTMLDivElement>(null)
 
@@ -95,7 +100,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full">
       {/* Announcement bar */}
       <div className="bg-audi-anthracite text-audi-titanium text-[11px] tracking-wide py-2 text-center px-4">
-        <span className="hidden sm:inline">Free delivery over $150</span>
+        <span className="hidden sm:inline">Free delivery over {formatShort(150)}</span>
         <span className="hidden sm:inline mx-3 text-audi-steel">·</span>
         Genuine OEM &amp; vetted aftermarket
         <span className="mx-3 text-audi-steel">·</span>

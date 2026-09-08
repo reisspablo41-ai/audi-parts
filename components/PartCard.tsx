@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import type { Part } from '@/lib/types'
 import { useCart } from '@/lib/cart-store'
+import { useCurrency } from '@/lib/currency-store'
 import CategoryIcon from './CategoryIcon'
 import { motion, AnimatePresence, EASE, QUICK } from './motion'
 
@@ -32,6 +33,7 @@ function StarRating({ rating }: { rating: number }) {
 
 export default function PartCard({ part, vehicleId }: PartCardProps) {
   const { addItem } = useCart()
+  const { format } = useCurrency()
   const [added, setAdded] = useState(false)
 
   const isFitment = vehicleId ? part.fitment.includes(vehicleId) : null
@@ -143,11 +145,11 @@ export default function PartCard({ part, vehicleId }: PartCardProps) {
               ) : (
                 <>
                   <span className="text-lg font-bold text-audi-anthracite technical">
-                    ${part.price.toFixed(2)}
+                    {format(part.price)}
                   </span>
                   {part.compareAtPrice && (
                     <span className="text-[11px] text-audi-titanium line-through technical">
-                      ${part.compareAtPrice.toFixed(2)}
+                      {format(part.compareAtPrice)}
                     </span>
                   )}
                 </>

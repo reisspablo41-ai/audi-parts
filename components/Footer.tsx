@@ -33,6 +33,7 @@ const INFO_LINKS = [
   { label: 'Returns Policy', href: '/returns' },
   { label: 'Shipping Policy', href: '/shipping' },
   { label: 'Shop All Parts', href: '/shop' },
+  { label: 'Guides & Articles', href: '/blog' },
 ]
 
 const TRUST_BADGES = [
