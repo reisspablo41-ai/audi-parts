@@ -121,7 +121,15 @@ interface StaggerProps {
 export function Stagger({ children, className, delay = 0, gap = 0.07, as = 'div' }: StaggerProps) {
   const Tag = motion[as]
   const ref = useRef<HTMLElement>(null)
-  const inView = useInView(ref, { once: true, amount: 0.15, margin: '0px 0px -60px 0px' })
+  // `amount: 'some'` (threshold 0), never a fraction. A fraction is a
+  // proportion of THIS element, and a one-column grid on a phone is far taller
+  // than the viewport: 12 cards at ~424px is a ~5,300px container, so the most
+  // of it that can ever intersect a ~715px viewport is about 12% -- under the
+  // 0.15 this used to ask for. IntersectionObserver therefore never fired and
+  // the grid sat at opacity 0 forever. Only mobile was affected, because at
+  // sm: and above the same 12 cards are two or three columns and comfortably
+  // clear the threshold.
+  const inView = useInView(ref, { once: true, amount: 'some', margin: '0px 0px -60px 0px' })
 
   return (
     <Tag
