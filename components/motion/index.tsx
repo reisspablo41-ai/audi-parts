@@ -121,14 +121,17 @@ interface StaggerProps {
 export function Stagger({ children, className, delay = 0, gap = 0.07, as = 'div' }: StaggerProps) {
   const Tag = motion[as]
   const ref = useRef<HTMLElement>(null)
-  // `amount: 'some'` (threshold 0), never a fraction. A fraction is a
-  // proportion of THIS element, and a one-column grid on a phone is far taller
-  // than the viewport: 12 cards at ~424px is a ~5,300px container, so the most
-  // of it that can ever intersect a ~715px viewport is about 12% -- under the
-  // 0.15 this used to ask for. IntersectionObserver therefore never fired and
-  // the grid sat at opacity 0 forever. Only mobile was affected, because at
-  // sm: and above the same 12 cards are two or three columns and comfortably
-  // clear the threshold.
+  // `amount: 'some'` (threshold 0), never a fraction.
+  //
+  // A fractional amount is a proportion of THIS element, and at grid-cols-1 a
+  // page of products is far taller than the phone showing it: 12 cards at
+  // ~540px is a ~6,700px container, so the most of it that can ever intersect
+  // a ~715px viewport is around 11% -- permanently short of the 0.15 this used
+  // to ask for. IntersectionObserver never fired, `inView` stayed false, and
+  // the whole grid sat at opacity 0 with the products invisible.
+  //
+  // Only mobile broke: from sm: up the same 12 cards are two or three columns,
+  // a third of the height, and clear the threshold immediately.
   const inView = useInView(ref, { once: true, amount: 'some', margin: '0px 0px -60px 0px' })
 
   return (
