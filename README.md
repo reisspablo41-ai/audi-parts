@@ -17,19 +17,34 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Required environment variables
 
-Create a `.env.local` in the project root:
+Create a `.env` in the project root (`.env.local` also works — both are
+gitignored):
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<anon key>
 SUPBASE_SECRET_KEY=<service-role key>   # server-side, bypasses RLS
-RESEND_API_KEY=<resend key>
+RESEND_API_KEY=<resend key>             # https://resend.com/api-keys
 
-# Optional — both default to the audipartsdirect.com brand domain.
-# FROM_EMAIL's domain must be verified in Resend before mail will send.
-ADMIN_EMAIL=support@audipartsdirect.com
-FROM_EMAIL=orders@audipartsdirect.com
+# Inbox receiving contact-form enquiries, newsletter signups and new
+# order notifications.
+ADMIN_EMAIL=contact@audipartssales.com
+
+# From address on outbound mail. Its DOMAIN must be verified at
+# https://resend.com/domains — Resend rejects sends from an unverified
+# domain, and the server actions swallow the error, so mail just never
+# arrives.
+FROM_EMAIL=contact@audipartssales.com
+
+# Public support address printed on the contact page.
 NEXT_PUBLIC_SUPPORT_EMAIL=support@audipartsdirect.com
+```
+
+Check the mail path end to end:
+
+```bash
+node scripts/check-email.mjs          # key, admin inbox, domain verification
+node scripts/check-email.mjs --send   # also delivers a real test email
 ```
 
 ## Database
