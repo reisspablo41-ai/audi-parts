@@ -5,7 +5,7 @@ import { Reveal, Stagger, StaggerItem, CountUp } from '@/components/motion'
 export const metadata: Metadata = {
   title: 'About Us',
   description:
-    'AudiParts Direct — specialists in genuine OEM and vetted aftermarket Audi spare parts, with fitment verified down to the engine code.',
+    'Audi Parts Sales — specialists in genuine OEM and vetted aftermarket Audi spare parts, with fitment verified down to the engine code.',
 }
 
 const TEAM_VALUES = [
@@ -46,7 +46,7 @@ export default function AboutPage() {
             Audi parts specialists
           </h1>
           <p className="text-audi-silver/85 text-lg leading-relaxed max-w-2xl mx-auto">
-            We built AudiParts Direct because we were tired of ordering the wrong part. Every
+            We built Audi Parts Sales because we were tired of ordering the wrong part. Every
             component in our catalogue is verified for fitment before it goes live.
           </p>
         </Reveal>
@@ -62,7 +62,7 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-audi-steel text-[15px] leading-relaxed">
               <p>
-                AudiParts Direct was founded by a team of automotive professionals who grew tired of
+                Audi Parts Sales was founded by a team of automotive professionals who grew tired of
                 online suppliers listing components with no meaningful fitment data. Ordering a
                 water pump module only to find it is the pre-revision housing for a different engine
                 code is not merely inconvenient — it costs a workshop real money and a real day.
@@ -126,7 +126,7 @@ export default function AboutPage() {
         <Reveal className="border-l-2 border-audi-titanium bg-audi-mist rounded-r-lg p-6">
           <p className="eyebrow text-audi-steel mb-2">Disclaimer</p>
           <p className="text-sm text-audi-steel leading-relaxed">
-            AudiParts Direct is an independent spare parts retailer. We are not affiliated with,
+            Audi Parts Sales is an independent spare parts retailer. We are not affiliated with,
             authorised by, or endorsed by AUDI AG. Audi®, quattro®, TFSI®, TDI®, and the model
             designations A3, A4, A5, A6, A7, A8, Q3, Q5, Q7, Q8, TT and R8 are registered trademarks
             of AUDI AG. Genuine OEM part numbers are cited for compatibility reference only.

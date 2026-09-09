@@ -23,7 +23,7 @@ const EMPTY: BlogPostInput = {
   excerpt: '',
   body: '',
   coverImageUrl: '',
-  authorName: 'AudiParts Direct',
+  authorName: 'Audi Parts Sales',
   status: 'draft',
   metaTitle: '',
   metaDescription: '',

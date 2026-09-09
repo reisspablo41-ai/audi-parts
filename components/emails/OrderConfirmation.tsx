@@ -40,7 +40,7 @@ export const OrderConfirmationEmail = ({
 }: OrderConfirmationEmailProps) => (
   <Html>
     <Head />
-    <Preview>Order Confirmation - AudiParts Direct #{orderNumber}</Preview>
+    <Preview>Order Confirmation - Audi Parts Sales #{orderNumber}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={header}>
@@ -130,7 +130,7 @@ export const OrderConfirmationEmail = ({
           
           <Text style={footerText}>
             If you have any questions, please reply to this email or visit our{' '}
-            <Link href="https://audipartsdirect.com/contact" style={link}>
+            <Link href="https://audipartssales.com/contact" style={link}>
               contact page
             </Link>.
           </Text>
@@ -138,7 +138,7 @@ export const OrderConfirmationEmail = ({
         
         <Section style={footer}>
           <Text style={footerCopy}>
-            © {new Date().getFullYear()} AudiParts Direct. All rights reserved.
+            © {new Date().getFullYear()} Audi Parts Sales. All rights reserved.
           </Text>
         </Section>
       </Container>

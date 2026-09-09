@@ -11,7 +11,7 @@ import { testimonials } from '@/lib/data'
 import { getFeaturedParts, getFitmentOptions, getStoreCategories, getStoreStats } from '@/lib/services/store-service'
 
 export const metadata: Metadata = {
-  title: 'AudiParts Direct – Genuine & Aftermarket Audi Spare Parts',
+  title: 'Audi Parts Sales – Genuine & Aftermarket Audi Spare Parts',
   description:
     'Find exact-fit Audi spare parts by year, model, and engine code. Genuine OEM and vetted aftermarket options, with next-day shipping available.',
 }
@@ -150,7 +150,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 blueprint-grid opacity-25" aria-hidden />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="max-w-2xl mb-14">
-            <p className="eyebrow text-audi-red mb-2">Why AudiParts Direct</p>
+            <p className="eyebrow text-audi-red mb-2">Why Audi Parts Sales</p>
             <h2 className="text-3xl font-bold text-white">
               One reason to exist: the right part, first time.
             </h2>

@@ -8,7 +8,7 @@ if (!process.env.RESEND_API_KEY) {
 export const resend = new Resend(process.env.RESEND_API_KEY)
 
 /**
- * Both addresses default to the AudiParts Direct brand domain and are
+ * Both addresses default to the Audi Parts Sales brand domain and are
  * overridable by environment variable. FROM_EMAIL's domain must be verified in
  * Resend before any mail will actually send.
  */

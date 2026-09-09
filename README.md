@@ -1,4 +1,4 @@
-# AudiParts Direct
+# Audi Parts Sales
 
 An e-commerce storefront and admin panel for genuine OEM and vetted aftermarket
 **Audi** spare parts, with fitment guaranteed by year, model, and engine code.
@@ -37,7 +37,7 @@ ADMIN_EMAIL=contact@audipartssales.com
 FROM_EMAIL=contact@audipartssales.com
 
 # Public support address printed on the contact page.
-NEXT_PUBLIC_SUPPORT_EMAIL=support@audipartsdirect.com
+NEXT_PUBLIC_SUPPORT_EMAIL=support@audipartssales.com
 ```
 
 Check the mail path end to end:
@@ -91,7 +91,7 @@ lib/            data access, Supabase clients, brand constants, types
 
 ## Trademarks
 
-AudiParts Direct is an independent parts retailer and is not affiliated with,
+Audi Parts Sales is an independent parts retailer and is not affiliated with,
 authorised by, or endorsed by AUDI AG. Audi®, quattro®, TFSI®, and TDI® are
 registered trademarks of AUDI AG. OEM part numbers are cited for compatibility
 reference only.

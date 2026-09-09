@@ -106,7 +106,7 @@ It cannot tell you which engine variant you have, and on most platforms that mat
 That is why we ask for the engine code as well as the year and model, and why the fitment data on each product page is keyed to a chassis generation rather than just a model year. There is more on that in [chassis codes and engine codes](/blog/audi-chassis-codes-and-engine-codes).
 
 If you have the number from the old part and you are still unsure, send it to us with your VIN. Reading these is most of what we do.$md$,
-  'AudiParts Direct',
+  'Audi Parts Sales',
   'published',
   'How to Read an Audi OE Part Number',
   'Audi part numbers encode the platform, system, component and revision. A practical guide to reading one so you can check fitment yourself.',
@@ -166,7 +166,7 @@ Note that an auxiliary radiator is often *not* cheaper than a main one. A low-vo
 - Confirm the engine variant. Cooling packs differ between engines on the same platform more than almost any other system.
 
 Our full range is under [radiators and cooling](/category/radiators). If you have the number off the old core and want it checked before you commit, send it over — this is exactly the sort of thing worth thirty seconds of a technician's time.$md$,
-  'AudiParts Direct',
+  'Audi Parts Sales',
   'published',
   'Audi Radiator vs Auxiliary Radiator: 251, 253 and 212',
   'Sub-group 251 is the main radiator, 212 is auxiliary, and 145 804 is an intercooler. How to tell them apart before you order the wrong one.',
@@ -230,7 +230,7 @@ If a vehicle filter returns fewer parts than you expect, browse the [full catalo
 - The number on the old part beats all of the above for speed and accuracy.
 
 Send us a VIN and a part number and we will confirm it before you spend anything.$md$,
-  'AudiParts Direct',
+  'Audi Parts Sales',
   'published',
   'Audi Fitment: Chassis Codes and Engine Codes Explained',
   'A 2016 A4 could be a B8.5 or a B9. Why chassis generation and engine code determine fitment, and where to find both on your car.',
@@ -290,7 +290,7 @@ For iron discs, measure the diameter and the thickness. Both matter, and both ar
 5. Bed them in properly before any hard stop.
 
 The full range is under [brake discs and rotors](/category/brake-rotors). If the number on your old disc is legible, send it and we will match it exactly.$md$,
-  'AudiParts Direct',
+  'Audi Parts Sales',
   'published',
   'Audi Brake Disc Buying Guide: Sizes, Axles and Price',
   'Audi discs are sold singly, sub-group 301/302 is front and 601 is rear, and prices span iron to carbon ceramic. What to check before ordering.',
@@ -345,7 +345,7 @@ Section repair panels — partial pressings covering just an arch or a lower sec
 We sell genuine panels because that is what our fitment guarantee can stand behind. If a section repair is the better call for your car, a good bodyshop will tell you so, and we would rather you heard it before you spent four figures with us.
 
 If you need a genuine panel, send the VIN. Body parts vary by body style far more than most systems, and this is not a part you want to order twice.$md$,
-  'AudiParts Direct',
+  'Audi Parts Sales',
   'published',
   'Audi Quarter Panel Cost: Repair or Replace?',
   'Genuine Audi quarter panels list in the four figures because they are structural welded stampings. What drives the cost and when repair is smarter.',
@@ -402,7 +402,7 @@ This is worth checking against your VIN before ordering. The two are not interch
 Read the prefix on the number, not the name in the listing. If you have the old part, its number settles the question immediately — see [how to read an Audi OE part number](/blog/how-to-read-an-audi-oe-part-number).
 
 Unsure which car you have parts-wise? Send us the VIN. On the electric range in particular, this is worth confirming before anything ships.$md$,
-  'AudiParts Direct',
+  'Audi Parts Sales',
   'published',
   'Audi e-tron vs e-tron GT: Why the Parts Are Different',
   'The e-tron GT shares its J1 platform with the Porsche Taycan, not the e-tron SUV. How to read 4KE, 9J1 and 1EA prefixes and avoid ordering the wrong part.',

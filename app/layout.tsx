@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-const DEFAULT_TITLE = 'AudiParts Direct – Genuine & Aftermarket Audi Spare Parts'
+const DEFAULT_TITLE = 'Audi Parts Sales – Genuine & Aftermarket Audi Spare Parts'
 const DEFAULT_DESCRIPTION =
   'Find the exact Audi spare part for your car. Guaranteed fitment by year, model, and engine code. Genuine OEM and vetted aftermarket options for the A3, A4, A5, A6, Q5, Q7, TT, and more.'
 
@@ -65,7 +65,7 @@ export default function RootLayout({
         <MotionProvider>
           <CartProvider>{children}</CartProvider>
         </MotionProvider>
-        <Script src="//code.jivosite.com/widget/L6O6sgHrsT" strategy="afterInteractive" />
+        <Script src="//code.jivosite.com/widget/WUYLhQ67Jq" strategy="afterInteractive" />
       </body>
     </html>
   )

@@ -1,5 +1,5 @@
 -- =============================================================================
--- AudiParts Direct — Catalogue Schema v2 (PROPOSAL)
+-- Audi Parts Sales — Catalogue Schema v2 (PROPOSAL)
 --
 -- Supersedes the flat structure in supabase-schema.sql. Run against an EMPTY
 -- schema; this is not an in-place migration (see the notes at the bottom).

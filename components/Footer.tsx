@@ -201,7 +201,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-white/8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-audi-steel">
-          <p>© {new Date().getFullYear()} AudiParts Direct. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Audi Parts Sales. All rights reserved.</p>
           <p className="text-center sm:text-right max-w-xl leading-relaxed">
             Audi® and quattro® are registered trademarks of AUDI AG. We are an independent parts
             retailer and are not affiliated with, authorised by, or endorsed by AUDI AG.

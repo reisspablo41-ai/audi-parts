@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
           <div className="flex items-center gap-2.5">
             <RingsMark className="h-5 w-auto text-white" />
             <div>
-              <p className="text-white font-bold text-lg leading-tight">AudiParts</p>
+              <p className="text-white font-bold text-lg leading-tight">Audi Parts</p>
               <p className="text-audi-steel text-[11px] uppercase tracking-widest">Admin Portal</p>
             </div>
           </div>
@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
 
         <div className="bg-audi-anthracite border border-audi-graphite rounded-lg p-8">
           <h1 className="text-xl font-bold text-white mb-1">Sign in</h1>
-          <p className="text-sm text-audi-titanium mb-6">Access the AudiParts admin panel.</p>
+          <p className="text-sm text-audi-titanium mb-6">Access the Audi Parts admin panel.</p>
 
           {/* Demo hint */}
           <div className="bg-audi-graphite border border-audi-slate rounded-lg p-3 mb-5">

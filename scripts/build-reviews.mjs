@@ -2,8 +2,11 @@
 /**
  * Generate seed-reviews.sql -- reviews for every part in the catalogue.
  *
- *   node scripts/build-reviews.mjs            # writes seed-reviews.sql
+ *   node scripts/build-reviews.mjs            # every part, 0-5 reviews each
  *   node scripts/build-reviews.mjs --stats    # also prints a distribution report
+ *
+ *   # exactly 100 parts, 3-8 reviews on each, spread across every category:
+ *   node scripts/build-reviews.mjs --products 100 --min 3 --max 8
  *
  * WHY A GENERATOR AND NOT A HAND-WRITTEN .sql
  * 260 parts across 22 categories need a few hundred reviews. Written by hand
@@ -29,6 +32,29 @@ import { readFileSync, writeFileSync } from 'node:fs'
 
 const STATS = process.argv.includes('--stats')
 const OUT = 'seed-reviews.sql'
+
+/** Read `--flag <n>`, or null when the flag is absent. */
+function intArg(flag) {
+  const i = process.argv.indexOf(flag)
+  if (i === -1) return null
+  const v = Number(process.argv[i + 1])
+  if (!Number.isInteger(v) || v < 0) {
+    throw new Error(`${flag} needs a whole number, got ${JSON.stringify(process.argv[i + 1])}`)
+  }
+  return v
+}
+
+// Cap how many parts get reviewed, and force a per-part count range. With no
+// flags the generator keeps its original behaviour: every part, 0-5 reviews on
+// a long tail. `--products 100 --min 3 --max 8` instead covers exactly 100
+// parts and guarantees each carries between 3 and 8.
+const PRODUCTS = intArg('--products')
+const MIN = intArg('--min')
+const MAX = intArg('--max')
+
+if ((MIN === null) !== (MAX === null)) throw new Error('pass --min and --max together, or neither')
+if (MIN !== null && MIN > MAX) throw new Error(`--min ${MIN} is greater than --max ${MAX}`)
+if (MIN === 0) throw new Error('--min 0 would leave parts with no reviews; use --products to narrow instead')
 
 // -- env ---------------------------------------------------------------
 const env = Object.fromEntries(
@@ -436,6 +462,77 @@ const FAMILIES = {
       { title: 'Mounting holes did not line up', mixedTitle: 'Good sound, fiddly fitting', text: 'the mounting holes did not quite line up and needed opening out slightly' },
     ],
   },
+
+  // Forward-facing lamps. Kept apart from the rear lamps below because the
+  // things an owner judges are different: a headlight or fog light is about
+  // beam shape, cut-off and levelling, none of which a tail light has.
+  headlamps: {
+    match: ['headlights', 'fog-lights'],
+    titles: {
+      good: ['Beam pattern matches the original', 'Plugged straight in', 'Clear lens, proper seal', 'Correct fit first time', 'Ended my condensation problem'],
+      mixed: ['Good light, awkward to align', 'Fits, but needed adjusting', 'Right part, average finish'],
+    },
+    install: [
+      'the bumper had to come off, but the mounting tabs lined up exactly',
+      'it plugged into the factory connector without an adapter',
+      'the three bolts went straight into the original captive nuts',
+      'the levelling motor transferred across from the old unit without trouble',
+      'no coding was needed, the car picked it up straight away',
+      'swapping it over took an afternoon working carefully',
+    ],
+    quality: [
+      'the lens is properly clear rather than the slightly milky finish of the cheap copies',
+      'the housing seal feels substantial and the breather sits in the factory position',
+      'the mounting tabs are moulded thick enough that they do not flex when bolted down',
+      'the connector is a correct-spec plug rather than a loose generic one',
+      'the internal reflector finish looks the same as the unit that came off',
+    ],
+    outcome: [
+      'the cut-off is sharp and sits exactly where the old one did',
+      'no condensation at all through a wet winter',
+      'the indicator and daytime running light behave exactly like the factory part',
+      'the output is far better than the yellowed original it replaced',
+      'it has passed an MOT since with no comment on the beam',
+    ],
+    complaints: [
+      { title: 'Arrived with a cracked tab', mixedTitle: 'Good light, one tab cracked', text: 'one of the mounting tabs was cracked in transit and needed repairing before it would sit properly' },
+      { title: 'Condensation within a month', mixedTitle: 'Bright, but it fogs up', text: 'condensation appeared inside the lens within the first month' },
+      { title: 'Beam sat low', mixedTitle: 'Good build, needed realigning', text: 'the beam sat noticeably low and took a long time on the adjusters to bring up' },
+      { title: 'Wrong side supplied', mixedTitle: 'Right part in the end', text: 'the first one to arrive was the opposite side to the one ordered' },
+    ],
+  },
+
+  // Rear lamps: judged on lens colour, LED segments and the seal, never beam.
+  rearLamps: {
+    match: ['tail-lights'],
+    titles: {
+      good: ['Colour matches the other side', 'Straight swap', 'Every segment lights', 'Sealed properly'],
+      mixed: ['Good match, fiddly to seat', 'Works, gasket is thin'],
+    },
+    install: [
+      'two nuts behind the trim panel and the whole unit came away',
+      'the loom plugged in without any splicing',
+      'the locating pegs dropped into the body holes first time',
+      'it took about twenty minutes with the boot trim folded back',
+    ],
+    quality: [
+      'the red of the lens matches the untouched side exactly under daylight',
+      'the gasket is a proper moulded seal rather than a strip of foam',
+      'the housing feels rigid and does not creak when the bolts are tightened',
+      'the bulb holders click in positively instead of feeling loose',
+    ],
+    outcome: [
+      'every LED segment lights evenly with no dark patches',
+      'no moisture inside after months of use',
+      'the car threw no bulb-out warning on the dash',
+      'from a few paces back you cannot tell which side was replaced',
+    ],
+    complaints: [
+      { title: 'Slight colour mismatch', mixedTitle: 'Good fit, colour is off', text: 'the lens reads very slightly darker than the original on the other side in bright sun' },
+      { title: 'Gasket let water in', mixedTitle: 'Lights fine, seal is thin', text: 'the supplied gasket was too thin and let a little water into the housing' },
+      { title: 'One segment dead', mixedTitle: 'Mostly good, one dead segment', text: 'one of the LED segments failed within a few weeks of fitting' },
+    ],
+  },
 }
 
 const FAMILY_FOR = {}
@@ -490,6 +587,46 @@ const parts = await fetchAll(
 )
 parts.sort((a, b) => a.sku.localeCompare(b.sku))
 
+/**
+ * Choose which parts get reviews when --products caps the run.
+ *
+ * Round-robin across categories rather than taking the first N by SKU:
+ * alphabetical order clusters by prefix, so a cap would pour every review into
+ * two or three categories and leave the rest of the catalogue bare. Parts with
+ * a price come first within each category -- an unpriced part is not really on
+ * sale, so reviewing it is odd. Deterministic, like the rest of the generator.
+ */
+function selectParts(all, limit) {
+  const eligible = all.filter((p) => FAMILY_FOR[catSlug[p.category_id]])
+  if (limit === null || limit >= eligible.length) return eligible
+
+  const byCat = new Map()
+  for (const p of eligible) {
+    if (!byCat.has(p.category_id)) byCat.set(p.category_id, [])
+    byCat.get(p.category_id).push(p)
+  }
+  for (const list of byCat.values()) {
+    list.sort((a, b) => (b.price > 0) - (a.price > 0) || a.sku.localeCompare(b.sku))
+  }
+
+  const cats = [...byCat.keys()].sort()
+  const out = []
+  for (let round = 0; out.length < limit; round++) {
+    let progressed = false
+    for (const c of cats) {
+      const list = byCat.get(c)
+      if (round >= list.length) continue
+      out.push(list[round])
+      progressed = true
+      if (out.length >= limit) break
+    }
+    if (!progressed) break
+  }
+  return out.sort((a, b) => a.sku.localeCompare(b.sku))
+}
+
+const selected = selectParts(parts, PRODUCTS)
+
 // -- generate ----------------------------------------------------------
 const seenBodies = new Set()
 const rows = []
@@ -499,7 +636,7 @@ const DAY = 86400000
 const END = Date.parse('2026-08-20T00:00:00Z')
 const SPAN_DAYS = 540
 
-for (const part of parts) {
+for (const part of selected) {
   const slug = catSlug[part.category_id]
   const famName = FAMILY_FOR[slug]
   if (!famName) {
@@ -513,7 +650,10 @@ for (const part of parts) {
   // yet, so they stay quiet; priced parts get a realistic long tail.
   const roll = rnd()
   let n
-  if (part.price > 0) {
+  if (MIN !== null) {
+    // Explicit range: every selected part carries between MIN and MAX.
+    n = MIN + Math.floor(roll * (MAX - MIN + 1))
+  } else if (part.price > 0) {
     n = roll < 0.14 ? 0 : roll < 0.42 ? 1 : roll < 0.7 ? 2 : roll < 0.88 ? 3 : roll < 0.96 ? 4 : 5
   } else {
     n = roll < 0.72 ? 0 : 1
@@ -639,11 +779,22 @@ if (pairs.size !== rows.length) throw new Error(`duplicate (sku, author): ${rows
 const q = (s) => `'${String(s).replace(/'/g, "''")}'`
 const covered = new Set(rows.map((r) => r.sku)).size
 
+// Record the exact invocation, so the "regenerate" line in the file actually
+// reproduces the file. Without the flags it would rebuild in default mode and
+// produce something quite different.
+const REGEN = [
+  'node scripts/build-reviews.mjs',
+  PRODUCTS !== null ? `--products ${PRODUCTS}` : '',
+  MIN !== null ? `--min ${MIN} --max ${MAX}` : '',
+]
+  .filter(Boolean)
+  .join(' ')
+
 const header = `-- =============================================================================
 -- SEED: product reviews  (${rows.length} rows across ${covered} parts)
 --
 -- GENERATED FILE -- do not hand-edit. Regenerate with:
---   node scripts/build-reviews.mjs
+--   ${REGEN}
 -- The generator is deterministic (PRNG seeded per SKU), so regenerating
 -- reproduces this same file rather than churning the data.
 --

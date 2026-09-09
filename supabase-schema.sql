@@ -1,5 +1,5 @@
 -- =============================================================================
--- AudiParts Direct – Supabase Database Schema
+-- Audi Parts Sales – Supabase Database Schema
 -- =============================================================================
 -- Run this in the Supabase SQL Editor to create all tables.
 -- Supabase automatically creates a "public" schema and enables Row Level
@@ -292,7 +292,7 @@ CREATE POLICY "public_read_testimonials"
 
 -- Seed: matches lib/data.ts testimonials array
 INSERT INTO testimonials (author_name, author_location, vehicle, rating, quote, part_bought, avatar_initials, avatar_color, is_featured, is_approved, display_order, published_at) VALUES
-  ('Marcus T.',  'Atlanta, GA',    '2018 Audi A4 B9 2.0 TFSI',  5, 'I chased the right water pump module for my B9 for weeks. Every other site sent the pre-revision housing or couldn''t confirm which one my engine code took. AudiParts Direct listed the exact revised part number and it landed next day.', 'Water Pump & Thermostat Module – EA888', 'MT', '#a6192e', TRUE, TRUE, 1, '2026-03-01'),
+  ('Marcus T.',  'Atlanta, GA',    '2018 Audi A4 B9 2.0 TFSI',  5, 'I chased the right water pump module for my B9 for weeks. Every other site sent the pre-revision housing or couldn''t confirm which one my engine code took. Audi Parts Sales listed the exact revised part number and it landed next day.', 'Water Pump & Thermostat Module – EA888', 'MT', '#a6192e', TRUE, TRUE, 1, '2026-03-01'),
   ('Priya S.',   'Melbourne, AU',  '2020 Audi A4 B9 2.0 TDI',   5, 'Ordered the front pad and disc set for my B9. The fitment checker confirmed the 320 mm variant in seconds — that detail alone saved me a return. Parts arrived in genuine Audi packaging, exactly as described.',                       'Front Brake Pad + Disc Set – A4 B9',     'PS', '#2e353d', TRUE, TRUE, 2, '2026-02-01'),
   ('Ryan O.',    'Nairobi, KE',    '2022 Audi Q7 4M 3.0 TDI',   5, 'Sourcing a genuine front air strut for a Q7 4M locally is close to impossible — everything on offer is a pattern copy. I ordered the OEM unit here and it shipped internationally in six days, no damage.',                          'Front Air Suspension Strut – Q7 4M',     'RO', '#4a545f', TRUE, TRUE, 3, '2026-01-01'),
   ('Claire W.',  'Houston, TX',    '2019 Audi A3 2.0 TFSI',     5, 'The PCV valve for my A3 was exactly right. I was nervous ordering online because the wrong revision just brings the lean code straight back, but the fitment database matched it to my VIN and support replied in under two hours.',   'PCV Valve / Oil Separator – 2.0 TFSI',   'CW', '#7e1223', TRUE, TRUE, 4, '2026-03-10'),

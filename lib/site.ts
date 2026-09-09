@@ -21,7 +21,7 @@ function resolveSiteUrl(): string {
 
 export const SITE_URL = resolveSiteUrl()
 
-export const SITE_NAME = 'AudiParts Direct'
+export const SITE_NAME = 'Audi Parts Sales'
 
 /** Absolute URL for a site-relative path. */
 export function absoluteUrl(path: string): string {

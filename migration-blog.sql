@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS blog_posts (
   -- paragraphs, lists, links, bold/italic, blockquotes and code.
   body             TEXT        NOT NULL DEFAULT '',
   cover_image_url  TEXT,
-  author_name      TEXT        NOT NULL DEFAULT 'AudiParts Direct',
+  author_name      TEXT        NOT NULL DEFAULT 'Audi Parts Sales',
   status           TEXT        NOT NULL DEFAULT 'draft'
                      CHECK (status IN ('draft','published')),
   meta_title       TEXT,

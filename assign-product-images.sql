@@ -1,5 +1,5 @@
 -- =============================================================================
--- AudiParts Direct – Product Gallery Assignment
+-- Audi Parts Sales – Product Gallery Assignment
 --
 -- Attaches a multi-image gallery to individual parts. Image URLs below are
 -- placeholders following the /parts/<platform>/<oe-part-number>.jpg convention;

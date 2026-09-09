@@ -56,7 +56,7 @@ function toRow(input: BlogPostInput) {
     excerpt: input.excerpt.trim(),
     body: input.body,
     cover_image_url: input.coverImageUrl.trim() || null,
-    author_name: input.authorName.trim() || 'AudiParts Direct',
+    author_name: input.authorName.trim() || 'Audi Parts Sales',
     status: input.status,
     meta_title: input.metaTitle.trim() || null,
     meta_description: input.metaDescription.trim() || null,

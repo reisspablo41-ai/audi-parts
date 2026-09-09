@@ -362,7 +362,7 @@ export const testimonials: Testimonial[] = [
     vehicle: '2018 Audi A4 B9 2.0 TFSI',
     rating: 5,
     quote:
-      "I chased the right water pump module for my B9 for weeks. Every other site sent the pre-revision housing or couldn't confirm which one my engine code took. AudiParts Direct listed the exact revised part number, confirmed it against my EA888 Gen3, and it landed next day. Car is back on the road.",
+      "I chased the right water pump module for my B9 for weeks. Every other site sent the pre-revision housing or couldn't confirm which one my engine code took. Audi Parts Sales listed the exact revised part number, confirmed it against my EA888 Gen3, and it landed next day. Car is back on the road.",
     partBought: 'Water Pump & Thermostat Module – EA888',
     date: 'March 2026',
     avatarInitials: 'MT',

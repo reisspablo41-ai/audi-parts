@@ -1,5 +1,5 @@
 /**
- * The four-ring mark and the AudiParts Direct wordmark.
+ * The four-ring mark and the Audi Parts Sales wordmark.
  *
  * Drawn as a monoline SVG rather than an image so it stays crisp at every
  * size and inherits `currentColor` in both the light header and the dark
@@ -33,7 +33,7 @@ export function RingsMark({ className = 'h-5' }: { className?: string }) {
 interface WordmarkProps {
   /** `dark` inverts the wordmark for use on anthracite surfaces. */
   tone?: 'light' | 'dark'
-  /** Compact drops "Direct" and shrinks the mark for narrow viewports. */
+  /** Compact drops "Sales" and shrinks the mark for narrow viewports. */
   compact?: boolean
   className?: string
 }
@@ -47,10 +47,10 @@ export function Wordmark({ tone = 'light', compact = false, className = '' }: Wo
       <RingsMark className={`${compact ? 'h-3.5' : 'h-4'} ${primary} w-auto`} />
       <span className="flex items-baseline gap-1 leading-none">
         <span className={`font-bold tracking-tight ${primary} ${compact ? 'text-sm' : 'text-[15px]'}`}>
-          Audi<span className="text-audi-red">Parts</span>
+          Audi <span className="text-audi-red">Parts</span>
         </span>
         {!compact && (
-          <span className={`eyebrow ${secondary} text-[9px]`}>Direct</span>
+          <span className={`eyebrow ${secondary} text-[9px]`}>Sales</span>
         )}
       </span>
     </span>

@@ -85,7 +85,7 @@ export default function AdminSidebar() {
         <div className="flex items-center gap-2.5">
           <RingsMark className="h-3.5 w-auto text-white" />
           <div className="leading-tight">
-            <p className="text-white font-bold text-sm">AudiParts</p>
+            <p className="text-white font-bold text-sm">Audi Parts</p>
             <p className="text-audi-steel text-[10px] uppercase tracking-widest">Admin</p>
           </div>
         </div>

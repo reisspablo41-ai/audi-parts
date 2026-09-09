@@ -4,7 +4,7 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import AdminGuard from '@/components/admin/AdminGuard'
 
 export const metadata: Metadata = {
-  title: { template: '%s | Admin – AudiParts Direct', default: 'Admin – AudiParts Direct' },
+  title: { template: '%s | Admin – Audi Parts Sales', default: 'Admin – Audi Parts Sales' },
   robots: 'noindex, nofollow',
 }
 

@@ -5,7 +5,7 @@ import { getRequestCurrency } from '@/lib/currency-server'
 
 export const metadata: Metadata = {
   title: 'Shipping Policy',
-  description: 'AudiParts Direct shipping information. Next-day, standard, and international delivery options for Audi spare parts.',
+  description: 'Audi Parts Sales shipping information. Next-day, standard, and international delivery options for Audi spare parts.',
 }
 
 interface ShippingOption {

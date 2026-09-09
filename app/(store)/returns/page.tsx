@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Returns Policy',
-  description: 'AudiParts Direct returns and refund policy. 30-day returns on unused, uninstalled parts. Core charge and exchange information.',
+  description: 'Audi Parts Sales returns and refund policy. 30-day returns on unused, uninstalled parts. Core charge and exchange information.',
 }
 
 const SECTIONS = [

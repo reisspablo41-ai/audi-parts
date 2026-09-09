@@ -11,7 +11,7 @@ function mapPost(row: any): BlogPost {
     excerpt: row.excerpt ?? '',
     body: row.body ?? '',
     coverImageUrl: row.cover_image_url ?? null,
-    authorName: row.author_name ?? 'AudiParts Direct',
+    authorName: row.author_name ?? 'Audi Parts Sales',
     status: row.status as BlogStatus,
     // The SEO fields fall back to the editorial ones so a post is never
     // published with an empty <title> or meta description.
